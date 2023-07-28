@@ -1,0 +1,3 @@
+#!/bin/bash
+arduino-cli compile -b arduino:renesas_portenta:portenta_c33  --library "../../POSIXStorage" --library  "/home/c.dragomir/ArduinoWorkspace/arduino_UnifiedStorage"
+arduino-cli upload -b arduino:renesas_portenta:portenta_c33 

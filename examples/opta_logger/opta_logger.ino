@@ -1,0 +1,202 @@
+/*
+This example demonstrates the usage of the "UnifiedStorage" library for logging and backing up data to USB storage in case a USB Mass Storage device is inserted. 
+
+The code defines two main functions: "logData" and "performUpdate". 
+The "logData" function logs sensor data by reading an analog sensor and writing the data to the log file.
+
+The "performUpdate" function performs the update process by:
+*  reading the last update size from a file (number of bytes)
+*  copying the new data from the log file to a backup file 
+*  and updating the last update size.
+
+INSTRUCTIONS
+* Make sure the QSPI storage of your board is properly partitioned. 
+    * You can do that by flashing the QSPIFormat example that can be found in the STM32H747_System folder
+    * Open the serial monitor and select answer with "Y" when this appears "Do you want to use partition scheme 1? Y/[n]"
+    * Reboot the board
+* Connect a RS485-enabled device to see the debugging output. 
+* This sketch will log data, and check if there is any USB MSD Device connected to the USB Port of the Opta. 
+  The USB device is mounted and unmounted after every update operation. The first status LED is on when the USB drive is mounted. 
+  So as long as the status LED is off you can safely remove the drive. 
+  The skecth will log to internal storage in the meantime, and wait for the USB drive to be inserted again. 
+*/
+
+#include "UnifiedStorage.h"
+#include <vector>
+
+#define USB_MOUNTED_LED LED_BLUE
+
+constexpr auto baudrate { 115200 };
+
+
+
+
+InternalStorage internalStorage = InternalStorage();
+USBStorage usbStorage = USBStorage();
+std::vector<String> sensorDataBuffer;
+
+unsigned long bytesWritten = 0;
+unsigned long lastLog = 0;
+unsigned long lastMove = 0;
+unsigned long lastBackup = 0;
+
+
+bool backingUP = false;
+bool dontloop = false;
+
+// Function to run a given method periodically
+void runPeriodically(void (*method)(), unsigned long interval, unsigned long* variable) {
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - *variable >= interval) {
+    *variable = currentMillis;
+    method();  // Call the provided method
+  }
+}
+
+// Function to log sensor data
+void logDataToRAM() {
+  int timeStamp = millis();
+  int sensorReading = analogRead(A0);
+  String line = String(timeStamp) + "," + String(sensorReading) + "\n";
+  sensorDataBuffer.push_back(line);
+}
+
+void moveDataToQSPI() {
+  if(!backingUP){
+    UFile _logFile = internalStorage.getRootFolder().createFile("log.txt", FileMode::APPEND);
+    for (const auto& line : sensorDataBuffer) {
+      bytesWritten += _logFile.write(line);  // Write the log line to the file
+    }
+    _logFile.close();
+    sensorDataBuffer.clear();
+  }
+}
+
+
+
+
+// Function to perform the update process
+void performUpdate() {
+  Folder usbRoot = usbStorage.getRootFolder();  // Get the root folder of the USB storage
+  UFile logFile = internalStorage.getRootFolder().createFile("log.txt", FileMode::READ);
+  UFile backupFile = usbRoot.createFile("backup_file.txt", FileMode::APPEND);  // Create or open the backup file
+  UFile lastUpdateFile = usbRoot.createFile("diff.txt", FileMode::READ);  // Create or open the last update file
+
+  backingUP = true;
+  Serial.println("Opening diff file");
+  int lastUpdateBytes = lastUpdateFile.readAsString().toInt();  // Read the last update size from the file
+
+  Serial.println(lastUpdateBytes);
+  
+
+  if (lastUpdateBytes > bytesWritten) {
+    Serial.println("everytime");
+    lastUpdateFile.changeMode(FileMode::WRITE);  // Open the log file in write mode
+    lastUpdateFile.write(String(0));  // Reset the log file by writing 0 as the last update size
+    lastUpdateBytes = 0;
+  }
+
+  logFile.seek(lastUpdateBytes);  // Move the file pointer to the last update position
+  unsigned long bytesMoved = 0;
+  unsigned long totalBytesToMove = bytesWritten - lastUpdateBytes;
+  Serial.println(totalBytesToMove);
+  Serial.println("Ready to copy data");
+
+  while (logFile.available()) {
+    int data = logFile.read();  // Read a byte from the log file
+
+    if (data != -1) {
+      backupFile.write(data);  // Write the byte to the backup file
+      bytesMoved++;
+    }
+  }
+  Serial.println("Succesfully copied data");
+
+// Close the backup file
+
+  lastUpdateFile.changeMode(FileMode::WRITE);  // Open the last update file in write mode
+  lastUpdateFile.write(String(bytesWritten));  // Write the updated last update size to the file
+  
+  lastUpdateFile.close();
+  backupFile.close();  
+  logFile.close();
+
+  delay(100);
+
+  Serial.println("Succesfully updated diff file");
+
+  usbStorage.unmount();  // Unmount the USB storage
+
+  digitalWrite(USB_MOUNTED_LED, HIGH);
+  backingUP = false;
+}
+
+void disconnect(){
+
+}
+// Function to backup data to USB storage
+void backupToUSB() {
+  if (usbStorage.isAvailable()) {
+    Serial.println("USB Mass storage is available");
+    delay(100);
+    if (!usbStorage.isConnected()) {
+
+      Serial.println("Mounting USB Mass Storage");
+      
+   
+      if(usbStorage.begin()){
+
+        digitalWrite(USB_MOUNTED_LED, LOW);
+        performUpdate();
+
+      } else {
+      }
+
+
+
+    } else if (usbStorage.isConnected()) {
+      Serial.println("USB Mass storage is connected, performing update");
+      performUpdate();
+
+    } else if(dontloop){
+      Serial.println("waiting for device to be removed");
+    }
+  } else {
+    Serial.println("USB Mass storage is not available");
+  }
+
+  if(usbStorage.isConnected() && !usbStorage.isAvailable()){
+    Serial.println("we should never get here");
+  }
+
+}
+
+
+void setup() {
+  Serial.begin(115200);
+  while (!Serial);
+  pinMode(USB_MOUNTED_LED, OUTPUT);
+  Serial.println("Formatting internal storage...");
+  int formatted = internalStorage.format();
+  Serial.print("QSPI Format status: "); Serial.println(formatted);
+
+  //configureRS485(baudrate);
+  //Serial.println("RS485 goes brrr...");
+
+  if (!internalStorage.begin() == 0) {
+    Serial.println("Failed to initialize internal storage");
+    return;
+  } else {
+    Serial.println("Initialized storage");
+  }
+
+}
+
+void loop() {
+  usbStorage.checkConnection();
+  runPeriodically(logDataToRAM, 100, &lastLog);
+  runPeriodically(moveDataToQSPI, 1000, &lastMove);
+  runPeriodically(backupToUSB, 10000, &lastBackup);
+
+}
