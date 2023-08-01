@@ -134,7 +134,7 @@ void runRepeatedMountTest(UnifiedStorage * storage, String storageType, int n = 
     file.close();
 
     int umountResult = storage->unmount();
-    if(umountResult != 1) {
+    if(!umountResult) {
       Serial.println("Unmounting drive");
       Serial.println(umountResult);
       Serial.println(getErrno());

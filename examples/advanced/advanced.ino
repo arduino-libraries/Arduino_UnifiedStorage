@@ -13,7 +13,7 @@ After the file operations, the code prints the contents of both the USB storage 
 It recursively prints the directories (marked as "[D]") and files (marked as "[F]") using the "printFolderContents" function.
 */
 
-#include "src/UnifiedStorage.h"
+#include "UnifiedStorage.h"
 
 
 USBStorage usbStorage = USBStorage();
@@ -56,7 +56,7 @@ void setup() {
 
   // Mount the internal storage
   Serial.println("Reformatting internal storage to make sure we have a clean FS");
-  internalStorage.reformatQSPIPartition();
+  internalStorage.format();
 
   internalStorage.begin();
   Serial.println("Internal storage mounted.");
@@ -77,7 +77,7 @@ void setup() {
     Serial.println("File copied successfully from internal storage to USB storage.");
   } else {
     Serial.println("Failed to copy file from internal storage to USB storage.");
-    Serial.println(getErrInfo(errno));
+    Serial.println(getErrno());
   }
 
   // Move the subdirectory from internal storage to USB storage
@@ -86,7 +86,7 @@ void setup() {
     Serial.println("Subdirectory moved successfully from internal storage to USB storage.");
   } else {
     Serial.println("Failed to move subdirectory from internal storage to USB storage.");
-    Serial.println(getErrInfo(errno));
+    Serial.println(getErrno());
   }
 
   // Print the content of the USB storage

@@ -42,7 +42,7 @@ unsigned long lastBackup = 0;
 
 
 bool backingUP = false;
-bool dontloop = false;
+
 
 // Function to run a given method periodically
 void runPeriodically(void (*method)(), unsigned long interval, unsigned long* variable) {
@@ -116,16 +116,14 @@ void performUpdate() {
 // Close the backup file
 
   lastUpdateFile.changeMode(FileMode::WRITE);  // Open the last update file in write mode
-  lastUpdateFile.write(String(bytesWritten));  // Write the updated last update size to the file
-  
-  lastUpdateFile.close();
+  lastUpdateFile.write(String(bytesMoved));  // Write the updated last update size to the file
+
   backupFile.close();  
   logFile.close();
-
+  lastUpdateFile.close();
   delay(100);
 
   Serial.println("Succesfully updated diff file");
-
   usbStorage.unmount();  // Unmount the USB storage
 
   digitalWrite(USB_MOUNTED_LED, HIGH);
@@ -143,15 +141,10 @@ void backupToUSB() {
     if (!usbStorage.isConnected()) {
 
       Serial.println("Mounting USB Mass Storage");
-      
-   
+      digitalWrite(USB_MOUNTED_LED, LOW);
       if(usbStorage.begin()){
-
-        digitalWrite(USB_MOUNTED_LED, LOW);
         performUpdate();
-
-      } else {
-      }
+      } 
 
 
 
@@ -159,8 +152,6 @@ void backupToUSB() {
       Serial.println("USB Mass storage is connected, performing update");
       performUpdate();
 
-    } else if(dontloop){
-      Serial.println("waiting for device to be removed");
     }
   } else {
     Serial.println("USB Mass storage is not available");

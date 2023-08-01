@@ -7,6 +7,7 @@
 #define MAX_TRIES 10
 
 USBStorage::USBStorage(){
+
 }
 
 void USBStorage::usbCallback(){
@@ -25,14 +26,12 @@ int USBStorage::begin(){
         register_hotplug_callback(DEV_USB, this->usbCallback);
     #endif
 
-
     int attempts = 0;
     int err = mount(DEV_USB, FS_FAT, MNT_DEFAULT);
 
     while (0 != err && attempts < MAX_TRIES) {
         attempts +=1;
         err = mount(DEV_USB, FS_FAT, MNT_DEFAULT);
-        delay(10);
         Serial.println(errno);
     }
 
@@ -48,8 +47,6 @@ int USBStorage::begin(){
 
 int USBStorage::unmount(){
   auto unmountResult = umount(DEV_USB);
-
-
     
 
   if(unmountResult == 0){
@@ -121,7 +118,7 @@ void USBStorage::checkConnection(){
 
         
                     if ((dev = host->getDevice(0)) != NULL) {
-                     
+                         this->available = true;
 
                         uint8_t ceva =  dev->getNbIntf();
                         /*
@@ -133,16 +130,10 @@ void USBStorage::checkConnection(){
                         Serial.println(dev->getSubClass());
                  */
                            found = true;
+                        } else {
+                             this->available = false;
                         }
-
-                      if(found){
-                this->available = true;
-                
-            } else {
-                this->available = false;
-            }
-
-                    }
+    }
         
                 
          
