@@ -3,18 +3,18 @@
 ### Use QSPI Flash, SD cards, and USB mass storage devices
 This library allows you to easily switch between different storage mediums on supported boards, check the "Compatibility" section for more details about what storage medium is supported on what board. 
 
-To initialise the storage medium you need to create a `UnifiedStorage` object, and to mount it you need to call it's `begin()` method:
+To initialise the storage medium you need to create a `Arduino_UnifiedStorage` object, and to mount it you need to call it's `begin()` method:
 
 ```c
-UnifiedStorage storageMedium = USBStorage(); // or
-// UnifiedStorage sd = SDStorage();
-// UnifiedStorage internal = InternalStorage();
+Arduino_UnifiedStorage storageMedium = USBStorage(); // or
+// Arduino_UnifiedStorage sd = SDStorage();
+// Arduino_UnifiedStorage internal = InternalStorage();
 
 void setup(){
 	storageMedium.begin();
 }
 ```
-You can initialize a UnifiedStorage object of each type (QSPI, SD, USB), and copy files and folders from one medium to another.
+You can initialize a Arduino_UnifiedStorage object of each type (QSPI, SD, USB), and copy files and folders from one medium to another.
  
 ### Open, Write, and Read Files
  

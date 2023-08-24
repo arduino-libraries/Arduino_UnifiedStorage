@@ -3,7 +3,7 @@
 #ifndef InternalStorage_H
 #define InternalStorage_H
 
-#include "UnifiedStorage.h"
+#include "Arduino_UnifiedStorage.h"
 
 class InternalStorage : public UnifiedStorage {
 
