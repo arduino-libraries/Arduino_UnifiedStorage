@@ -28,7 +28,7 @@
         #include "FATFileSystem.h"
     #endif 
 
-class UnifiedStorage {
+class Arduino_UnifiedStorage {
     public:
         virtual int begin() = 0;
 
@@ -49,6 +49,8 @@ class UnifiedStorage {
     #include "InternalStorage.h"
 #endif
 
+
+extern Arduino_UnifiedStorage UnifiedStorage;
 
 #endif
 
