@@ -1,0 +1,23 @@
+#######################################
+# Syntax Coloring Map For Arduino_UnifiedStorage
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+UnifiedStorage	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin		    KEYWORD2
+unmount     	KEYWORD2
+getRootFolder	KEYWORD2
+format		    KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
