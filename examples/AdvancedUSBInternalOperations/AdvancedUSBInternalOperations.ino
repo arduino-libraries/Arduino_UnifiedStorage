@@ -1,25 +1,35 @@
 /*
-This example demonstrates the usage of the "Arduino_UnifiedStorage" library with USB storage and internal storage.
-The code includes the necessary library and defines instances of the "USBStorage" and "InternalStorage" classes.
+    AdvancedUSBInternalOperations
 
-In the setup function, the code initializes the serial communication and mounts the USB storage and internal storage.
-It also reformats the internal storage to ensure a clean file system. 
-Then, it creates a root directory in the internal storage and creates a subdirectory and a file inside it
+    Demonstrates advanced usage of the "Arduino_UnifiedStorage" library with USB & internal storage, including file operations.
+    Creates, copies, and moves files between storage types, and prints folder contents.
 
-The code writes some data to the file and demonstrates file operations. 
-It copies the file from internal storage to USB storage and moves the subdirectory from internal storage to USB storage.
+    In the setup function, the code initializes serial communication, mounts both USB & internal storage and 
+    reformats the internal storage for a clean file system. Then, it creates a root directory in the internal storage
+    and creates a subdirectory with a file inside it containing the string "Hello World!".
 
-After the file operations, the code prints the contents of both the USB storage and the internal storage. 
-It recursively prints the directories (marked as "[D]") and files (marked as "[F]") using the "printFolderContents" function.
+    Then, it copies the file from internal storage to USB storage and moves the subdirectory from internal storage to USB storage.
+
+    After the file operations, the code prints the contents of both the USB storage and the internal storage. 
+    It recursively prints the directories (marked as "[D]") and files (marked as "[F]") using the "printFolderContents" function.
+    
+    Created 28th July 2023
+    By Cristian Dragomir
+
+    Modified 24th August 2023
+    By Ali Jahangiri
+
+    https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/SimpleStorageWriteRead/SimpleStorageWriteRead.ino
+
 */
 
 #include "Arduino_UnifiedStorage.h"
 
-
+// Two instances are made for the USB and internal storage respectively
 USBStorage usbStorage = USBStorage();
 InternalStorage internalStorage = InternalStorage();
 
-
+// Helper function to prints the contents of a folder, including subdirectories (marked as "[D]") and files (marked as "[F]").
 void printFolderContents(Folder dir, int indentation = 0) {
   std::vector<Folder> directories = dir.getFolders();
   std::vector<UFile> files = dir.getFiles();
@@ -64,11 +74,11 @@ void setup() {
   // Create a root directory in the internal storage
   Folder root = internalStorage.getRootFolder();
 
-  // Create a subdirectory and a file inside the root directory
+  // Create a subdirectory and a file (file.txt) inside the root directory
   Folder subdir = root.createSubfolder("subdir");
   UFile file = root.createFile("file.txt", FileMode::WRITE);
 
-  // Write some data to the file
+  // Write "Hello World!" inside file.txt
   file.write("Hello, world!");
 
   // Copy the file from internal storage to USB storage
@@ -89,11 +99,11 @@ void setup() {
     Serial.println(getErrno());
   }
 
-  // Print the content of the USB storage
+  // Print contents of the USB storage
   Serial.println("USB storage contents:");
   printFolderContents(usbStorage.getRootFolder());
 
-  // Print the content of the internal storage
+  // Print contents of the internal storage
   Serial.println("Internal storage contents:");
   printFolderContents(internalStorage.getRootFolder());
 }
