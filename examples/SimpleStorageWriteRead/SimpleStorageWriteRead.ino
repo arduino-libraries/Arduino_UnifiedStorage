@@ -4,7 +4,7 @@
     Demonstrates basic usage of the "Arduino_UnifiedStorage" library to write and read data to storage.
     Supports SD card, USB storage, and internal storage (default, uncomment to choose).
 
-    n the setup function, the code initializes serial communication, mounts the storage medium,
+    In the setup function, the code initializes serial communication, mounts the storage medium,
     creates a root directory with three subdirectories, and writes data to three files in each subdirectory.
 
     Following this, the code showcases reading data from files by using "seek" and "available" methods,
