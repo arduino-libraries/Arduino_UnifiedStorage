@@ -24,14 +24,14 @@ INSTRUCTIONS
 #include "Arduino_UnifiedStorage.h"
 #include <vector>
 
+
+constexpr auto baudrate { 115200 };
+
 #if defined(ARDUINO_PORTENTA_H7_M7)
 #define USB_MOUNTED_LED LED_BLUE
 #elif defined(ARDUINO_PORTENTA_C33)
-#define USB_MOUNTED LED LEDB
+#define USB_MOUNTED_LED LEDB
 #endif 
-constexpr auto baudrate { 115200 };
-
-
 
 
 InternalStorage internalStorage = InternalStorage();

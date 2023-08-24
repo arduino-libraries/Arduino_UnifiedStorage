@@ -50,7 +50,6 @@ class Arduino_UnifiedStorage {
 #endif
 
 
-extern Arduino_UnifiedStorage UnifiedStorage;
 
 #endif
 

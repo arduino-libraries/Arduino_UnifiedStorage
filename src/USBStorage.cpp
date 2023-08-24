@@ -33,6 +33,7 @@ int USBStorage::begin(){
         attempts +=1;
         err = mount(DEV_USB, FS_FAT, MNT_DEFAULT);
         Serial.println(errno);
+        delay(1000);
     }
 
     if(err == 0){

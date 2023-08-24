@@ -3,7 +3,7 @@
 #ifndef USBStorage_H
 #define USBStorage_H
 
-class USBStorage : public UnifiedStorage {
+class USBStorage : public Arduino_UnifiedStorage {
     public:
         USBStorage();
         // Override begin() method for SD card initialization
