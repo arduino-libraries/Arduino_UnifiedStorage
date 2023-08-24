@@ -12,7 +12,7 @@ The "performUpdate" function performs the update process by:
 INSTRUCTIONS
 * Make sure the QSPI storage of your board is properly partitioned. 
     * You can do that by flashing the QSPIFormat example that can be found in the STM32H747_System folder
-    * Open the serial monitor and select answer with "Y" when this appears "Do you want to use partition scheme 1? Y/[n]"
+    * Open the //Serial monitor and select answer with "Y" when this appears "Do you want to use partition scheme 1? Y/[n]"
     * Reboot the board
 * Connect a RS485-enabled device to see the debugging output. 
 * This sketch will log data, and check if there is any USB MSD Device connected to the USB Port of the Opta. 
@@ -24,14 +24,8 @@ INSTRUCTIONS
 #include "Arduino_UnifiedStorage.h"
 #include <vector>
 
-#if defined(ARDUINO_PORTENTA_H7_M7)
-#define USB_MOUNTED_LED LED_BLUE
-#elif defined(ARDUINO_PORTENTA_C33)
-#define USB_MOUNTED LED LEDB
-#endif 
+
 constexpr auto baudrate { 115200 };
-
-
 
 
 InternalStorage internalStorage = InternalStorage();
@@ -86,10 +80,10 @@ void performUpdate() {
   backingUP = true;
   int lastUpdateBytes = lastUpdateFile.readAsString().toInt();  // Read the last update size from the file
 
-  Serial.print("Last update bytes: "); Serial.println(lastUpdateBytes);
+  //Serial.print("Last update bytes: "); //Serial.println(lastUpdateBytes);
 
   if (lastUpdateBytes >= bytesWritten) {
-    Serial.println("No new data to copy.");
+    //Serial.println("No new data to copy.");
     backupFile.close();
     lastUpdateFile.close();
     backingUP = false;
@@ -98,13 +92,13 @@ void performUpdate() {
 
   logFile.seek(lastUpdateBytes);  // Move the file pointer to the last update position
   unsigned long totalBytesToMove = bytesWritten - lastUpdateBytes;
-  Serial.print("New update bytes: "); Serial.println(totalBytesToMove);
+  //Serial.print("New update bytes: "); //Serial.println(totalBytesToMove);
 
   uint8_t buffer[totalBytesToMove];
   size_t bytesRead = logFile.read(buffer, totalBytesToMove);
   size_t bytesMoved = backupFile.write(buffer, bytesRead);  // Only write the bytes that haven't been backed up yet
 
-  Serial.println("Successfully copied " + String(bytesMoved) + " new bytes.");
+  //Serial.println("Successfully copied " + String(bytesMoved) + " new bytes.");
 
   lastUpdateFile.changeMode(FileMode::WRITE);  // Open the last update file in write mode
   lastUpdateFile.write(String(lastUpdateBytes + bytesMoved));  // Update the last update size
@@ -113,10 +107,10 @@ void performUpdate() {
   logFile.close();
   lastUpdateFile.close();
 
-  Serial.println();
+  //Serial.println();
   usbStorage.unmount();  // Unmount the USB storage
 
-  digitalWrite(USB_MOUNTED_LED, HIGH);
+  digitalWrite(LED_D0, HIGH);
   backingUP = false;
 }
 
@@ -127,12 +121,12 @@ void disconnect(){
 // Function to backup data to USB storage
 void backupToUSB() {
   if (usbStorage.isAvailable()) {
-    Serial.println("USB Mass storage is available");
+    //Serial.println("USB Mass storage is available");
     delay(100);
     if (!usbStorage.isConnected()) {
 
-      Serial.println("Mounting USB Mass Storage");
-      digitalWrite(USB_MOUNTED_LED, LOW);
+      //Serial.println("Mounting USB Mass Storage");
+      digitalWrite(LED_D0, LOW);
       if(usbStorage.begin()){
         performUpdate();
       } 
@@ -140,12 +134,12 @@ void backupToUSB() {
 
 
     } else if (usbStorage.isConnected()) {
-      Serial.println("USB Mass storage is connected, performing update");
+      //Serial.println("USB Mass storage is connected, performing update");
       performUpdate();
 
     }
   } else {
-    Serial.println("USB Mass storage is not available");
+    //Serial.println("USB Mass storage is not available");
   }
 
 
@@ -153,21 +147,20 @@ void backupToUSB() {
 
 
 void setup() {
-  Serial.begin(115200);
-  while (!Serial);
-  pinMode(USB_MOUNTED_LED, OUTPUT);
-  Serial.println("Formatting internal storage...");
+  //Serial.begin(115200);
+  pinMode(LED_D0, OUTPUT);
+  //Serial.println("Formatting internal storage...");
   int formatted = internalStorage.format();
-  Serial.print("QSPI Format status: "); Serial.println(formatted);
+  //Serial.print("QSPI Format status: "); //Serial.println(formatted);
 
   //configureRS485(baudrate);
-  //Serial.println("RS485 goes brrr...");
+  ////Serial.println("RS485 goes brrr...");
 
   if (!internalStorage.begin() == 0) {
-    Serial.println("Failed to initialize internal storage");
+    //Serial.println("Failed to initialize internal storage");
     return;
   } else {
-    Serial.println("Initialized storage");
+    //Serial.println("Initialized storage");
   }
 
 }

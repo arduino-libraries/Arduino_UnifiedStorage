@@ -173,7 +173,9 @@ void setup() {
 }
 
 void loop() {
-  usbStorage.checkConnection();
+  #if defined(ARDUINO_PORTENTA_H7_M7)
+    usbStorage.checkConnection();
+  #endif
   runPeriodically(logDataToRAM, 100, &lastLog);
   runPeriodically(moveDataToQSPI, 1000, &lastMove);
   runPeriodically(backupToUSB, 10000, &lastBackup);

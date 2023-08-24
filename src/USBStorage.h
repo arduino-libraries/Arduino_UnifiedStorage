@@ -3,6 +3,12 @@
 #ifndef USBStorage_H
 #define USBStorage_H
 
+static bool available = false;
+
+
+static bool available = false;
+
+
 class USBStorage : public Arduino_UnifiedStorage {
     public:
         USBStorage();
@@ -21,15 +27,12 @@ class USBStorage : public Arduino_UnifiedStorage {
 
         void checkConnection();
 
-        void disconnect();
 
 
     private:
-        void usbCallback();
+  
         bool connected = false;
-        bool available = false;
-        bool hasChanged = false;
-        bool isIdentical = false;
+   
         unsigned long previousMillis; 
         int interval = 500;
 };

@@ -7,24 +7,18 @@
 #define MAX_TRIES 10
 
 USBStorage::USBStorage(){
+ #if defined(ARDUINO_PORTENTA_C33)
+         register_hotplug_callback(DEV_USB,  [](){
+            Serial.println("caalllback");
+            available = !available;
 
-}
-
-void USBStorage::usbCallback(){
-    /*
-    if(this-> available){
-        this -> available = false;
-    } else {
-        this -> available = true; 
-    }
-    */
+        });
+#endif
 }
 
 int USBStorage::begin(){
 
-    #if defined(ARDUINO_PORTENTA_C33)
-        register_hotplug_callback(DEV_USB, this->usbCallback);
-    #endif
+ 
 
     int attempts = 0;
     int err = mount(DEV_USB, FS_FAT, MNT_DEFAULT);
@@ -64,22 +58,13 @@ Folder USBStorage::getRootFolder(){
 
 
 bool USBStorage::isAvailable(){
-    return this -> available;
+    return available;
 }
 
 bool USBStorage::isConnected(){
     return this -> connected;
 }
 
-void USBStorage::disconnect(){
-
-
-    USBHost * host;
-    USBDeviceConnected * dev;
-     host = USBHost::getHostInst();
-     host -> getDevice(0) -> disconnect();
-
-}
 
 /*
 
@@ -119,20 +104,12 @@ void USBStorage::checkConnection(){
 
         
                     if ((dev = host->getDevice(0)) != NULL) {
-                         this->available = true;
+                         available = true;
 
                         uint8_t ceva =  dev->getNbIntf();
-                        /*
-                
-                        Serial.println(dev->getName(ceva));
-                        Serial.println(dev->getVid());
-                        Serial.println(dev->getPid());
-                        Serial.println(dev->getClass());
-                        Serial.println(dev->getSubClass());
-                 */
                            found = true;
                         } else {
-                             this->available = false;
+                             available = false;
                         }
     }
         

@@ -3,7 +3,7 @@
 InternalStorage::InternalStorage(){
     #if defined(ARDUINO_PORTENTA_C33)
         this -> blockDevice = BlockDevice::get_default_instance();
-        this -> userData = new MBRBlockDevice(this->blockDevice, 2);
+        this -> userData = new MBRBlockDevice(this->blockDevice, this->partitionNumber);
         this -> userDataFileSystem = new FATFileSystem(this->partitionName);
     #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
         this -> blockDevice = QSPIFBlockDevice::get_default_instance();

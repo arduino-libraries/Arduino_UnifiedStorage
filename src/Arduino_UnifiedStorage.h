@@ -16,7 +16,6 @@
 
 
 
-
     #if defined(ARDUINO_PORTENTA_C33)
         #include "QSPIFlashBlockDevice.h"
         #include <BlockDevice.h>

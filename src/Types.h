@@ -75,6 +75,7 @@ static bool copyFolder(const char* source, const char* destination) {
     closedir(dir);
     return true;
 }
+
 static std::string replaceLastPathComponent(const std::string& path, const std::string& newComponent) {
     size_t lastSlashIndex = path.find_last_of('/');
     if (lastSlashIndex != std::string::npos) {

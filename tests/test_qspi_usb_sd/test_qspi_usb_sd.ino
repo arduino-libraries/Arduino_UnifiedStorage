@@ -138,6 +138,8 @@ void runRepeatedMountTest(UnifiedStorage * storage, String storageType, int n = 
       Serial.println("Unmounting drive");
       Serial.println(umountResult);
       Serial.println(getErrno());
+    } else {
+      Serial.println("Succesfully unmounted");
     }
   }
 }
@@ -151,23 +153,15 @@ void setup() {
     runRepeatedMountTest(&sd, "SD");
     runRepeatedMountTest(&internal, "QSPI");
 
-
-
-    #ifdef HAS_QSPI 
-    runTests(&internal, "Internal Storage (QSPI)");
-    #endif
-
-    #ifdef HAS_SD
-    runTests(&sd, "SD Storage");
-    #endif
-
-    #ifdef HAS_USB
     runTests(&usb, "USB Storage");
-    #endif
+    runTests(&internal, "Internal Storage (QSPI)");
+    runTests(&sd, "SD Storage");
 
 
-    bool thing = interStorageTests(&sd, &internal, "SD", "Internal"); // Test copying/moving from SD to Internal Storage
-    Serial.println(thing);
+
+    
+    interStorageTests(&sd, &internal, "SD", "Internal"); // Test copying/moving from SD to Internal Storage
+    delay(1000);
 
     interStorageTests(&usb, &sd, "USB", "SD"); // Test copying/moving from USB to SD
     delay(1000);
@@ -201,7 +195,7 @@ void runTests(UnifiedStorage * storage, String storageType) {
   if (storage->begin()) {
 
     Folder root = storage->getRootFolder();
-    clearData(root);
+  
     Serial.println("=== Testing " + storageType + " ===");
     
     Serial.println("========= UFile Tests =========");
@@ -231,7 +225,7 @@ void runTests(UnifiedStorage * storage, String storageType) {
     Serial.println("========= FS Contents after Folder Tests =========");
     printFolderContents(root);
     Serial.println("=============================\n");
-   // storage->unmount();
+    storage->unmount();
 
   } else {
     Serial.println(storageType + " not initialized!");
