@@ -3,7 +3,7 @@
 #ifndef SDStorage_H
 #define SDStorage_H
 
-#include "UnifiedStorage.h"
+#include "Arduino_UnifiedStorage.h"
 
 #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_C33) || !defined(ARDUINO_OPTA)
 

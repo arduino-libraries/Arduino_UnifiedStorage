@@ -1,5 +1,5 @@
 /*
-This example demonstrates the usage of the "UnifiedStorage" library for logging and backing up data to USB storage in case a USB Mass Storage device is inserted. 
+This example demonstrates the usage of the "Arduino_UnifiedStorage" library for logging and backing up data to USB storage in case a USB Mass Storage device is inserted. 
 
 The code defines two main functions: "logData" and "performUpdate". 
 The "logData" function logs sensor data by reading an analog sensor and writing the data to the log file.
@@ -21,7 +21,7 @@ INSTRUCTIONS
   The skecth will log to internal storage in the meantime, and wait for the USB drive to be inserted again. 
 */
 
-#include "UnifiedStorage.h"
+#include "Arduino_UnifiedStorage.h"
 #include <vector>
 
 #define USB_MOUNTED_LED LED_BLUE

@@ -5,7 +5,7 @@
 #define PATH_MAX 255
 
 #include "Arduino.h"
-#include "POSIXStorage.h"
+#include "Arduino_POSIXStorage.h"
 #include <iostream>
 #include <vector>
 

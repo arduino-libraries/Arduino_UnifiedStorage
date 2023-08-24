@@ -9,7 +9,7 @@
 #if defined(ARDUINO_PORTENTA_C33)
 #include "Types.h"
 #include "Arduino.h"
-#include "POSIXStorage.h"
+#include "Arduino_POSIXStorage.h"
 
 #endif
 

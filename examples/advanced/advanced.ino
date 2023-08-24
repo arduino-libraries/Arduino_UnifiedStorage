@@ -1,5 +1,5 @@
 /*
-This example demonstrates the usage of the "UnifiedStorage" library with USB storage and internal storage.
+This example demonstrates the usage of the "Arduino_UnifiedStorage" library with USB storage and internal storage.
 The code includes the necessary library and defines instances of the "USBStorage" and "InternalStorage" classes.
 
 In the setup function, the code initializes the serial communication and mounts the USB storage and internal storage.
@@ -13,7 +13,7 @@ After the file operations, the code prints the contents of both the USB storage 
 It recursively prints the directories (marked as "[D]") and files (marked as "[F]") using the "printFolderContents" function.
 */
 
-#include "UnifiedStorage.h"
+#include "Arduino_UnifiedStorage.h"
 
 
 USBStorage usbStorage = USBStorage();
