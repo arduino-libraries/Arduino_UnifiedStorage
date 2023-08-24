@@ -1,5 +1,5 @@
 /*
-This examples demonstrates the usage of the "UnifiedStorage" library,
+This examples demonstrates the usage of the "Arduino_UnifiedStorage" library,
 which allows the program to easily switch between different storage mediums.
 
 By uncommenting the appropriate lines, you can choose to use either an SD card, 
@@ -16,7 +16,7 @@ It changes the mode of the files to read mode, moves the file pointers to the be
 The read data is printed to the serial monitor.
 */
 
-#include "UnifiedStorage.h"
+#include "Arduino_UnifiedStorage.h"
 
 SDStorage unifiedStorage = SDStorage(); // or
 //USBStorage unifiedStorage = USBStorage() // or

@@ -9,7 +9,7 @@
 #if defined(ARDUINO_PORTENTA_C33)
 #include "Types.h"
 #include "Arduino.h"
-#include "POSIXStorage.h"
+#include "Arduino_POSIXStorage.h"
 
 #endif
 
@@ -28,7 +28,7 @@
         #include "FATFileSystem.h"
     #endif 
 
-class UnifiedStorage {
+class Arduino_UnifiedStorage {
     public:
         virtual int begin() = 0;
 
@@ -49,6 +49,8 @@ class UnifiedStorage {
     #include "InternalStorage.h"
 #endif
 
+
+extern Arduino_UnifiedStorage UnifiedStorage;
 
 #endif
 
