@@ -61,15 +61,20 @@ void setup() {
   while (!Serial);
 
   // Mount the USB storage
-  usbStorage.begin();
-  Serial.println("USB storage mounted.");
+  if(usbStorage.begin()){
+    Serial.println("USB storage mounted.");
+  } else {
+    Serial.println(errno);
+  }
 
   // Mount the internal storage
-  Serial.println("Reformatting internal storage to make sure we have a clean FS");
-  internalStorage.format();
-
-  internalStorage.begin();
-  Serial.println("Internal storage mounted.");
+  // Serial.println("Reformatting internal storage to make sure we have a clean FS");
+  // internalStorage.format();
+  if(internalStorage.begin()){
+      Serial.println("Internal storage mounted.");
+  } else {
+     Serial.println(errno);
+  }
 
   // Create a root directory in the internal storage
   Folder root = internalStorage.getRootFolder();
@@ -80,6 +85,7 @@ void setup() {
 
   // Write "Hello World!" inside file.txt
   file.write("Hello, world!");
+  file.close();
 
   // Copy the file from internal storage to USB storage
   bool success = file.copyTo(usbStorage.getRootFolder());
@@ -100,8 +106,8 @@ void setup() {
   }
 
   // Print contents of the USB storage
-  Serial.println("USB storage contents:");
-  printFolderContents(usbStorage.getRootFolder());
+  //Serial.println("USB storage contents:");
+  //printFolderContents(usbStorage.getRootFolder());
 
   // Print contents of the internal storage
   Serial.println("Internal storage contents:");
