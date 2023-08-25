@@ -1,36 +1,42 @@
 /*
-This examples demonstrates the usage of the "Arduino_UnifiedStorage" library,
-which allows the program to easily switch between different storage mediums.
+    SimpleStorageWriteRead
 
-By uncommenting the appropriate lines, you can choose to use either an SD card, 
-a USB storage device, or internal storage as the storage medium. 
+    Demonstrates basic usage of the "Arduino_UnifiedStorage" library to write and read data to storage.
+    Supports SD card, USB storage, and internal storage (default, uncomment to choose).
 
-The example code is set up to use an SD card by default.
+    In the setup function, the code initializes serial communication, mounts the storage medium,
+    creates a root directory with three subdirectories, and writes data to three files in each subdirectory.
 
-In the setup function, the code initializes the serial communication and checks if the storage medium is successfully mounted. 
-It then creates a root directory and three subdirectories within it.
-After creating the subdirectories, the code creates three files inside each subdirectory and writes data to them.
+    Following this, the code showcases reading data from files by using "seek" and "available" methods,
+    switching file modes to read, resetting file pointers to the start,
+    and printing the read data to the serial monitor using a while loop.
 
-Next, the code demonstrates how to read data from the files using the "seek" and "available" methods.
-It changes the mode of the files to read mode, moves the file pointers to the beginning, and reads the data from each file using a while loop.
-The read data is printed to the serial monitor.
+    Created 28th July 2023
+    By Cristian Dragomir
+
+    Modified 24th August 2023
+    By Ali Jahangiri
+
+    https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/SimpleStorageWriteRead/SimpleStorageWriteRead.ino
+
 */
 
 #include "Arduino_UnifiedStorage.h"
 
-SDStorage unifiedStorage = SDStorage(); // or
-//USBStorage unifiedStorage = USBStorage() // or
-//InternalStorage unifiedStorage = InternalStorage();
+// Uncomment one of the three lines below to select between SD card, USB or internal storage
+//SDStorage unifiedStorage = SDStorage();             // Create an instance for interacting with SD card storage
+//USBStorage unifiedStorage = USBStorage()            // Create an instance for interacting with USB storage
+InternalStorage unifiedStorage = InternalStorage();   // Create an instance for interacting with internal Flash storage (default)
 
 void setup() {
   Serial.begin(115200);
   while (!Serial);
 
   if(!unifiedStorage.begin()==0){
-    Serial.println("error mounting SD Card");
+    Serial.println("Error mounting storage device.");
   }
-  // Create a root directory
   
+  // Create a root directory in storage device
   Folder root = unifiedStorage.getRootFolder();
 
   // Create subdirectories inside the root directory
@@ -38,7 +44,7 @@ void setup() {
   Folder subdir2 = root.createSubfolder("subdir2");
   Folder subdir3 = root.createSubfolder("subdir3");
 
-  // Create files inside the subdirectories
+  // Create .txt files inside the subdirectories
   UFile file1 = subdir1.createFile("file1.txt", FileMode::WRITE);
   UFile file2 = subdir2.createFile("file2.txt", FileMode::WRITE);
   UFile file3 = subdir3.createFile("file3.txt", FileMode::WRITE);
