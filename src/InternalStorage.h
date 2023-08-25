@@ -11,6 +11,8 @@ class InternalStorage : public Arduino_UnifiedStorage {
     public:
         InternalStorage();
         // Override begin() method for SD card initialization
+        InternalStorage(int partition, const char * name);
+
         int begin() override;
 
         int unmount() override;

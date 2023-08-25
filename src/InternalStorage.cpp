@@ -1,22 +1,26 @@
 #include "Arduino_UnifiedStorage.h"
 
 InternalStorage::InternalStorage(){
+
+}
+
+InternalStorage::InternalStorage(int partition, const char * name ){
+    this -> setQSPIPartition(partition);
+    this -> setQSPIPartitionName(name);
+}
+
+
+int InternalStorage::begin(){
     #if defined(ARDUINO_PORTENTA_C33)
         this -> blockDevice = BlockDevice::get_default_instance();
         this -> userData = new MBRBlockDevice(this->blockDevice, this->partitionNumber);
         this -> userDataFileSystem = new FATFileSystem(this->partitionName);
+        int err = this -> userDataFileSystem -> mount(userData);
+        if(err == 0) return 1;
     #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
         this -> blockDevice = QSPIFBlockDevice::get_default_instance();
         this -> userData = new mbed::MBRBlockDevice(this->blockDevice, this->partitionNumber);
         this -> userDataFileSystem =  new mbed::FATFileSystem(this->partitionName);
-    #endif
-}
-
-int InternalStorage::begin(){
-    #if defined(ARDUINO_PORTENTA_C33)
-        int err = this -> userDataFileSystem -> mount(userData);
-        if(err == 0) return 1;
-    #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
         int err = this -> userDataFileSystem -> mount(this -> userData);
         if(err == 0) return 1;
     #endif

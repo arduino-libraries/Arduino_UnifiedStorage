@@ -41,7 +41,7 @@ bool Folder::remove() {
     if(this->exists()){
         std::vector<UFile> files = this->getFiles();
         for (UFile file : files) {
-            Serial.println(file.getPathString());
+ 
             file.remove();
 
         }
@@ -49,7 +49,6 @@ bool Folder::remove() {
         // Remove all subfolders in the directory
         std::vector<Folder> folders = this->getFolders();
         for (Folder directory : folders) {
-            Serial.println(directory.getPathString());
             directory.remove();
         }
 
