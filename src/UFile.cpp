@@ -54,7 +54,7 @@ bool UFile::open(String filename, FileMode mode) {
 void UFile::close() {
     // Close the file
     if (fp != nullptr) {
-        fflush(fp);
+        fflush(fp); // ?!?
         fclose(fp);
         fp = nullptr;
     }
@@ -162,17 +162,17 @@ size_t UFile::write(const uint8_t* buffer, size_t size) {
 
 bool UFile::remove() {
     // Remove the file;
-    if (!path.empty()) {
-        int result = ::remove(path.c_str());
-        if (result == 0) {
-            return true;
+    if(this->exists() && !path.empty()){
+            int result = ::remove(path.c_str());
+            if (result == 0) {
+                return true;
+            } else {
+                // Error occurred while removing the file
+                return false;
+            }
         } else {
-            // Error occurred while removing the file
-            return false;
+            return false; // Handle the case when the path is not valid
         }
-    } else {
-        return false; // Handle the case when the path is not valid
-    }
 }
 
 bool UFile::rename(const char* newFilename) {

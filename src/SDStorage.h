@@ -7,7 +7,7 @@
 
 #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_C33) || !defined(ARDUINO_OPTA)
 
-class SDStorage: public UnifiedStorage  {
+class SDStorage: public Arduino_UnifiedStorage  {
     public:
         SDStorage();
         // Override begin() method for SD card initialization

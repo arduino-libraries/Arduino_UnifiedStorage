@@ -16,7 +16,6 @@
 
 
 
-
     #if defined(ARDUINO_PORTENTA_C33)
         #include "QSPIFlashBlockDevice.h"
         #include <BlockDevice.h>
@@ -50,7 +49,6 @@ class Arduino_UnifiedStorage {
 #endif
 
 
-extern Arduino_UnifiedStorage UnifiedStorage;
 
 #endif
 

@@ -5,7 +5,7 @@
 
 #include "Arduino_UnifiedStorage.h"
 
-class InternalStorage : public UnifiedStorage {
+class InternalStorage : public Arduino_UnifiedStorage {
 
 
     public:
