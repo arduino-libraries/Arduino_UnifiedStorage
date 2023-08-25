@@ -1,0 +1,57 @@
+#######################################
+# Syntax Coloring Map For Arduino_UnifiedStorage
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+UnifiedStorage	KEYWORD1
+Folder          KEYWORD1
+InternalStorage KEYWORD1
+SDStorage       KEYWORD1
+Types           KEYWORD1
+UFile           KEYWORD1
+USBStorage      KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin		                KEYWORD2
+unmount     	            KEYWORD2
+getRootFolder	            KEYWORD2
+format		                KEYWORD2
+
+setQSPIPartition            KEYWORD2
+setQSPIPartitionName        KEYWORD2
+
+copyFolder                  KEYWORD2
+replaceLastPathComponent    KEYWORD2
+getLastPathComponent        KEYWORD2
+replaceFirstPathComponent   KEYWORD2
+
+changeMode                  KEYWORD2
+open                        KEYWORD2
+close                       KEYWORD2
+seek                        KEYWORD2
+read                        KEYWORD2
+readAsString                KEYWORD2
+write                       KEYWORD2
+remove                      KEYWORD2
+rename                      KEYWORD2
+exists                      KEYWORD2
+copyTo                      KEYWORD2
+moveTo                      KEYWORD2
+getParentFolder             KEYWORD2
+getPath                     KEYWORD2
+getPathString               KEYWORD2
+
+isConnected                 KEYWORD2
+isAvailable                 KEYWORD2
+checkConnection             KEYWORD2
+disconnect                  KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
