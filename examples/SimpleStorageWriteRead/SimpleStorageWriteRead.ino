@@ -23,21 +23,46 @@
 
 #include "Arduino_UnifiedStorage.h"
 
+void printFolderContents(Folder dir, int indentation = 0) {
+  std::vector<Folder> directories = dir.getFolders();
+  std::vector<UFile> files = dir.getFiles();
+
+  // Print directories
+  for (Folder subdir : directories) {
+    for (int i = 0; i < indentation; i++) {
+      Serial.print("  ");
+    }
+    Serial.print("[D] ");
+    Serial.println(subdir.getPath());
+    printFolderContents(subdir, indentation + 1);
+  }
+
+  // Print files
+  for (UFile file : files) {
+    for (int i = 0; i < indentation; i++) {
+      Serial.print("  ");
+    }
+    Serial.print("[F] ");
+    Serial.println(file.getPath());
+  }
+}
+
+
 // Uncomment one of the three lines below to select between SD card, USB or internal storage
 //SDStorage unifiedStorage = SDStorage();             // Create an instance for interacting with SD card storage
 //USBStorage unifiedStorage = USBStorage()            // Create an instance for interacting with USB storage
-InternalStorage unifiedStorage = InternalStorage();   // Create an instance for interacting with internal Flash storage (default)
+InternalStorage internalStorage = InternalStorage(2, "user");  // Create an instance for interacting with internal Flash storage (default)
 
 void setup() {
   Serial.begin(115200);
   while (!Serial);
 
-  if(!unifiedStorage.begin()==0){
+  if(!internalStorage.begin()){
     Serial.println("Error mounting storage device.");
   }
   
   // Create a root directory in storage device
-  Folder root = unifiedStorage.getRootFolder();
+  Folder root = internalStorage.getRootFolder();
 
   // Create subdirectories inside the root directory
   Folder subdir1 = root.createSubfolder("subdir1");
@@ -65,8 +90,9 @@ void setup() {
 
   // Read data from file1
   file1.seek(0); // Move the file pointer to the beginning
+  Serial.println(file1.available());
   while (file1.available()) {
-    char data = file1.read();
+  char data = file1.read();
     Serial.write(data);
   }
   Serial.println();
@@ -75,7 +101,7 @@ void setup() {
   file2.seek(0); // Move the file pointer to the beginning
   while (file2.available()) {
     char data = file2.read();
-    Serial.write(data);
+    Serial.print(data);
   }
   Serial.println();
 
@@ -83,9 +109,11 @@ void setup() {
   file3.seek(0); // Move the file pointer to the beginning
   while (file3.available()) {
     char data = file3.read();
-    Serial.write(data);
+    Serial.print(data);
   }
   Serial.println();
+
+  printFolderContents(internalStorage.getRootFolder());
 }
 
 void loop() {

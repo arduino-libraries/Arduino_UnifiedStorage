@@ -9,7 +9,7 @@
 USBStorage::USBStorage(){
  #if defined(ARDUINO_PORTENTA_C33)
          register_hotplug_callback(DEV_USB,  [](){
-            available = !available;
+            usb_available = !usb_available;
 
         });
 #endif
@@ -57,7 +57,7 @@ Folder USBStorage::getRootFolder(){
 
 
 bool USBStorage::isAvailable(){
-    return available;
+    return usb_available;
 }
 
 bool USBStorage::isConnected(){
@@ -103,12 +103,12 @@ void USBStorage::checkConnection(){
 
         
                     if ((dev = host->getDevice(0)) != NULL) {
-                         available = true;
+                         usb_available = true;
 
                         uint8_t ceva =  dev->getNbIntf();
                            found = true;
                         } else {
-                             available = false;
+                             usb_available = false;
                         }
     }
         

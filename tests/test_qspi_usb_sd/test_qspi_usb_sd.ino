@@ -17,78 +17,70 @@ SDStorage sd = SDStorage();
 InternalStorage internal = InternalStorage();
 #endif 
 
-
-bool interStorageTests(UnifiedStorage* storageA, UnifiedStorage* storageB, String storageTypeA, String storageTypeB) {
-  Serial.println("Invoked correctly");
- // bool AMounted = storageA->begin();
- // bool BMounted = storageB->begin();
-
- // Serial.println("Storage A mounted: " + String(AMounted));
-  //Serial.println("Storage B mounted: " + String(BMounted));
+void testMoveAndDelete(Arduino_UnifiedStorage* sourceStorage, Arduino_UnifiedStorage* destinationStorage, const char* storageTypeA, const char* storageTypeB) {
 
 
- // if (AMounted && BMounted) {
 
-    clearData(storageA->getRootFolder());
-    clearData(storageB->getRootFolder());
+String fileName = "/test_" + String(millis()) + ".txt";
+  // Create a file in the source storage
+  UFile fileToMove = sourceStorage->getRootFolder().createFile(fileName, FileMode::WRITE);
+  fileToMove.write(reinterpret_cast<const uint8_t*>("Test data"), 9);
+  fileToMove.close();
 
-    UFile fromAtoB_move = storageA->getRootFolder().createFile("file1.txt", FileMode::WRITE);
-    fromAtoB_move.write(reinterpret_cast<const uint8_t*>("File 1 data"), 11);
-    fromAtoB_move.close();
+  // Move the file to the destination storage
+  if (fileToMove.moveTo(destinationStorage->getRootFolder())) {
+    Serial.println("Moving from " + String(storageTypeA) + " to " + String(storageTypeB) + " successful");
 
-    UFile fromAtoB_copy = storageA->getRootFolder().createFile("file2.txt", FileMode::WRITE);
-    fromAtoB_copy.write(reinterpret_cast<const uint8_t*>("File 1 data"), 11);
-    fromAtoB_copy.close();
-
-    UFile fromBtoA_move = storageB->getRootFolder().createFile("file3.txt", FileMode::WRITE);
-    fromBtoA_move.write(reinterpret_cast<const uint8_t*>("File 2 data"), 11);
-    fromBtoA_move.close();
-
-    UFile fromBtoA_copy = storageB->getRootFolder().createFile("file4.txt", FileMode::WRITE);
-    fromBtoA_copy.write(reinterpret_cast<const uint8_t*>("File 2 data"), 11);
-    fromBtoA_copy.close();
-
-  
-    if(fromAtoB_copy.copyTo(storageB->getRootFolder())){
-      Serial.println(String("copying from ") + storageTypeA + String(" to ") + storageTypeB + String(" was succesful"));
+    // Delete the moved file from the destination storage
+    UFile movedFile;
+    movedFile.open(destinationStorage->getRootFolder().getPathString() + fileName, FileMode::READ);
+    if (movedFile.remove()) {
+      Serial.println("File deletion from " + String(storageTypeB) + " successful");
     } else {
-       Serial.println(String("copying from ") + storageTypeA + String(" to ") + storageTypeB + String(" failed "));
+      Serial.println("File deletion from " + String(storageTypeB) + " failed");
+      Serial.println(getErrno());
     }
-
-    if(fromAtoB_move.moveTo(storageB->getRootFolder())){
-      Serial.println(String("moving from ") + storageTypeA + String(" to ") + storageTypeB + String(" was succesful"));
-    } else {
-      Serial.println(String("moving from ") + storageTypeA + String(" to ") + storageTypeB + String(" failed "));
-    }
-
-    if(fromBtoA_move.copyTo(storageA->getRootFolder())){
-      Serial.println(String("copying from ") + storageTypeB + String(" to ") + storageTypeA + String(" was succesful"));
-    } else {
-       Serial.println(String("copying from ") + storageTypeB+ String(" to ") + storageTypeA + String(" failed "));
-    }
-
-    if(fromBtoA_copy.moveTo(storageA->getRootFolder())){
-      Serial.println(String("moving from ") + storageTypeB + String(" to ") + storageTypeA + String(" was succesful"));
-    } else {
-      Serial.println(String("moving from ") + storageTypeB + String(" to ") + storageTypeA + String(" failed "));
-    }
-
-/*
-    storageA -> unmount(); 
-    Serial.println("Unmounted " + storageTypeA);
-    storageB -> unmount();
-    Serial.println("Unmounted " + storageTypeB);
-*/
-    return true;
-
-/*
   } else {
-    Serial.println("Storage not initialized! Cannot perform the test.");
+    Serial.println("Moving from " + String(storageTypeA) + " to " + String(storageTypeB) + " failed");
+    Serial.println(getErrno());
   }
-  */
+
+  Serial.println();
 }
 
 
+void testCopyAndDelete(Arduino_UnifiedStorage* sourceStorage, Arduino_UnifiedStorage* destinationStorage, const char* storageTypeA, const char* storageTypeB) {
+
+
+
+String fileName = "/test_" + String(millis()) + ".txt";
+  // Create a file in the source storage
+  UFile fileToMove = sourceStorage->getRootFolder().createFile(fileName, FileMode::WRITE);
+  fileToMove.write(reinterpret_cast<const uint8_t*>("Test data"), 9);
+  fileToMove.close();
+
+  // Move the file to the destination storage
+  if (fileToMove.copyTo(destinationStorage->getRootFolder())) {
+    Serial.println("Copying from " + String(storageTypeA) + " to " + String(storageTypeB) + " successful");
+
+    // Delete the moved file from the destination storage
+    UFile movedFile;
+    movedFile.open(destinationStorage->getRootFolder().getPathString() + fileName, FileMode::READ);
+    if (movedFile.remove()) {
+      Serial.println("File deletion from " + String(storageTypeB) + " successful");
+    } else {
+      Serial.println("File deletion from " + String(storageTypeB) + " failed");
+      Serial.println(getErrno());
+    }
+  } else {
+    Serial.println("Moving from " + String(storageTypeA) + " to " + String(storageTypeB) + " failed");
+    Serial.println(getErrno());
+  }
+
+fileToMove.remove();
+  Serial.println();
+
+}
 
 void printFolderContents(Folder dir, int indentation = 0) {
   std::vector<Folder> directories = dir.getFolders();
@@ -114,7 +106,7 @@ void printFolderContents(Folder dir, int indentation = 0) {
   }
 }
 
-void runRepeatedMountTest(UnifiedStorage * storage, String storageType, int n = 10){
+void runRepeatedMountTest(Arduino_UnifiedStorage * storage, String storageType, int n = 10){
   Serial.println("Running repeated mount test for " + storageType);
 
   for(size_t i=0;i<n;i++){
@@ -132,6 +124,7 @@ void runRepeatedMountTest(UnifiedStorage * storage, String storageType, int n = 
     file.changeMode(FileMode::READ);
     Serial.println(file.readAsString());
     file.close();
+    file.remove();
 
     int umountResult = storage->unmount();
     if(!umountResult) {
@@ -149,6 +142,23 @@ void setup() {
     while (!Serial); 
 
 
+/* UNCOMMENT THIS PART IF YOU WANT TO ENABLE FORMATTING
+    internal.begin();
+    internal.unmount();
+
+    usb.begin();
+    usb.unmount();
+
+    sd.begin();
+    sd.unmount();
+
+    Serial.println("Formatting all attached drives...");
+    Serial.println("Formatting USB drive: " + String(usb.format()));
+    Serial.println("Formatting SD drive: " + String(sd.format()));
+    Serial.println("Formatting Internal drive: " + String(internal.format()));
+
+    */
+    
     runRepeatedMountTest(&usb, "USB");
     runRepeatedMountTest(&sd, "SD");
     runRepeatedMountTest(&internal, "QSPI");
@@ -158,16 +168,30 @@ void setup() {
     runTests(&sd, "SD Storage");
 
 
-
-    
-    interStorageTests(&sd, &internal, "SD", "Internal"); // Test copying/moving from SD to Internal Storage
     delay(1000);
 
-    interStorageTests(&usb, &sd, "USB", "SD"); // Test copying/moving from USB to SD
-    delay(1000);
+    usb.begin();
+    sd.begin();
+    internal.begin();
 
-    interStorageTests(&usb, &internal, "USB", "Internal"); // Test copying/moving from USB to Internal Storage
-    delay(1000);
+    testMoveAndDelete(&sd, &internal, "SD", "Internal");
+    testMoveAndDelete(&internal, &sd, "Internal", "SD");
+    testMoveAndDelete(&usb, &sd, "USB", "SD");
+    testMoveAndDelete(&sd, &usb, "SD", "USB");
+    testMoveAndDelete(&usb, &internal, "USB", "Internal");
+    testMoveAndDelete(&internal, &usb, "Internal", "USB");
+
+
+    testCopyAndDelete(&sd, &internal, "SD", "Internal");
+    testCopyAndDelete(&internal, &sd, "Internal", "SD");
+    testCopyAndDelete(&usb, &sd, "USB", "SD");
+    testCopyAndDelete(&sd, &usb, "SD", "USB");
+    testCopyAndDelete(&usb, &internal, "USB", "Internal");
+    testCopyAndDelete(&internal, &usb, "Internal", "USB");
+
+    usb.unmount();
+    sd.unmount();
+    internal.unmount();
 
 }
 
@@ -188,13 +212,15 @@ void clearData(Folder root){
 
 
 
-void runTests(UnifiedStorage * storage, String storageType) {
+void runTests(Arduino_UnifiedStorage * storage, String storageType) {
 
  
 
   if (storage->begin()) {
 
+    
     Folder root = storage->getRootFolder();
+   // clearData(root);
   
     Serial.println("=== Testing " + storageType + " ===");
     
@@ -225,7 +251,7 @@ void runTests(UnifiedStorage * storage, String storageType) {
     Serial.println("========= FS Contents after Folder Tests =========");
     printFolderContents(root);
     Serial.println("=============================\n");
-    storage->unmount();
+   storage->unmount();
 
   } else {
     Serial.println(storageType + " not initialized!");
@@ -528,6 +554,8 @@ bool testCopyingFolder(Folder root) {
 }
 
 bool testMovingFolder(Folder root) {
+
+
   Folder sourceFolderMove = root.createSubfolder("source_folder_move");
   Folder moveDestination = root.createSubfolder("move_destination");
 
@@ -538,6 +566,7 @@ bool testMovingFolder(Folder root) {
     if (sourceFolderMove.moveTo(moveDestination)) {
       Serial.println("Folder moved successfully!");
       sourceFolderMove.remove();
+      moveDestination.remove();
       return true;
     } else {
       Serial.println("Folder moving failed. Error: " + String(getErrno()));
@@ -547,5 +576,7 @@ bool testMovingFolder(Folder root) {
     Serial.println("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
+
+
 }
 

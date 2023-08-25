@@ -157,7 +157,11 @@ void setup() {
   while (!Serial);
   pinMode(USB_MOUNTED_LED, OUTPUT);
   Serial.println("Formatting internal storage...");
+  internalStorage.begin();
+  internalStorage.unmount();
   int formatted = internalStorage.format();
+  internalStorage.begin();
+
   Serial.print("QSPI Format status: "); Serial.println(formatted);
 
   //configureRS485(baudrate);
@@ -173,9 +177,9 @@ void setup() {
 }
 
 void loop() {
-  #if defined(ARDUINO_PORTENTA_H7_M7)
-    usbStorage.checkConnection();
-  #endif
+
+  usbStorage.checkConnection();
+  
   runPeriodically(logDataToRAM, 100, &lastLog);
   runPeriodically(moveDataToQSPI, 1000, &lastMove);
   runPeriodically(backupToUSB, 10000, &lastBackup);

@@ -105,16 +105,29 @@ String Folder::getPathString() {
 }
 
 Folder Folder::createSubfolder(const char* subfolderName) {
-    // Construct the full path of the subfolder
+    bool alreadyExists = false;
     std::string subfolderPath = this->path + "/" + subfolderName;
 
-    // Create the subfolder
-    int result = mkdir(subfolderPath.c_str(), 0777);
-    if (result == 0) {
-        return Folder(subfolderPath.c_str());
-    } else {
-        return Folder(); // Return an empty directory object on failure
+     for(Folder d: this->getFolders()){
+        if(d.getPath() == subfolderPath){
+            alreadyExists = true;
+
+        }
     }
+
+    // Construct the full path of the subfolder
+ 
+    if (!alreadyExists){
+    int result = mkdir(subfolderPath.c_str(), 0777);
+        if (result == 0) {
+           return Folder(subfolderPath.c_str());
+        } else {
+            return Folder();
+        }
+    } else {
+        return Folder(subfolderPath.c_str());
+    }
+ 
 }
 
 Folder Folder::createSubfolder(String subfolderName) {

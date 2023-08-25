@@ -5,7 +5,7 @@
 
 
 
-static bool available = false;
+static bool usb_available = false;
 
 class USBStorage : public Arduino_UnifiedStorage {
     public:
