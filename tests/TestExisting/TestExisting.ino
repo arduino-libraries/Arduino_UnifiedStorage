@@ -15,7 +15,7 @@ void setup() {
 
 
     internalStorage.formatLittleFS();
-        internalStorage.begin();
+    internalStorage.begin();
    
 
     Folder root = internalStorage.getRootFolder();

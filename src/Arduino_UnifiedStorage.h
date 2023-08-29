@@ -10,9 +10,7 @@
 #include "Types.h"
 #include "Arduino.h"
 #include "Arduino_POSIXStorage.h"
-
 #endif
-
 
 
 
@@ -49,7 +47,6 @@ class Arduino_UnifiedStorage {
     #include "USBStorage.h"
     #include "InternalStorage.h"
 #endif
-
 
 
 #endif
