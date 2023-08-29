@@ -42,6 +42,8 @@ jobs:
             type: arduino:mbed_portenta
           - fqbn: arduino:renesas_portenta:portenta_c33
             type: renesas_portenta
+          - fqbn: arduino:mbed:opta
+
 
     steps:
       - name: Checkout repository
