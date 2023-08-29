@@ -35,7 +35,9 @@ class Arduino_UnifiedStorage {
 
         virtual Folder getRootFolder() = 0;
 
-        virtual int format() = 0;
+        virtual int formatLittleFS() = 0;
+
+        virtual int formatFAT() = 0;
 };
 
 

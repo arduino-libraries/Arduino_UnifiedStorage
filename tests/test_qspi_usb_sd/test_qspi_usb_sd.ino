@@ -14,7 +14,7 @@ SDStorage sd = SDStorage();
 #endif
 
 #ifdef HAS_QSPI 
-InternalStorage internal = InternalStorage();
+InternalStorage internal = InternalStorage(2, "user", FS_LITTLEFS);
 #endif 
 
 void testMoveAndDelete(Arduino_UnifiedStorage* sourceStorage, Arduino_UnifiedStorage* destinationStorage, const char* storageTypeA, const char* storageTypeB) {
@@ -142,26 +142,20 @@ void setup() {
     while (!Serial); 
 
 
-/* UNCOMMENT THIS PART IF YOU WANT TO ENABLE FORMATTING
-    internal.begin();
-    internal.unmount();
 
-    usb.begin();
-    usb.unmount();
-
-    sd.begin();
-    sd.unmount();
 
     Serial.println("Formatting all attached drives...");
-    Serial.println("Formatting USB drive: " + String(usb.format()));
-    Serial.println("Formatting SD drive: " + String(sd.format()));
-    Serial.println("Formatting Internal drive: " + String(internal.format()));
+    Serial.println("Formatting USB drive: " + String(usb.formatLittleFS()));
+    Serial.println("Formatting SD drive: " + String(sd.formatFAT()));
+    Serial.println("Formatting Internal drive: " + String(internal.formatLittleFS()));
 
-    */
+ 
     
     runRepeatedMountTest(&usb, "USB");
     runRepeatedMountTest(&sd, "SD");
     runRepeatedMountTest(&internal, "QSPI");
+
+
 
     runTests(&usb, "USB Storage");
     runTests(&internal, "Internal Storage (QSPI)");
@@ -169,6 +163,8 @@ void setup() {
 
 
     delay(1000);
+
+
 
     usb.begin();
     sd.begin();
@@ -532,12 +528,16 @@ bool testFolderRenaming(Folder root) {
 bool testCopyingFolder(Folder root) {
   Folder sourceFolder = root.createSubfolder("folder1");
   Folder copyDestination = root.createSubfolder("copy_destination");
+  copyDestination.createSubfolder("folder1");
 
   if (sourceFolder.exists()) {
     Serial.println("\n--- Test copying a folder ---");
     Serial.println("Source folder name: " + String(sourceFolder.getPathString()));
     Serial.println("Destination folder name: " + String(copyDestination.getPathString()));
-    if (sourceFolder.copyTo(copyDestination)) {
+
+   
+
+    if (sourceFolder.copyTo(copyDestination, false)) {
       Serial.println("Folder copied successfully!");
       sourceFolder.remove();
       copyDestination.remove();

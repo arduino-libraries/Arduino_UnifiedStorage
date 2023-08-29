@@ -7,6 +7,7 @@
 Folder::Folder() {}
 
 Folder::Folder(const char* path) {
+
     DIR* dir = opendir(path);
     if (dir != nullptr) {
         this->path = std::string(path);
@@ -15,9 +16,7 @@ Folder::Folder(const char* path) {
         int result = mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO);
         if (result == 0) {
             this->path = std::string(path);
-        } else {
-            this->path = "";
-        }
+        } // else ...not sure about this one yet
     }
 }
 
@@ -104,34 +103,35 @@ String Folder::getPathString() {
     return String(this->getPath());
 }
 
-Folder Folder::createSubfolder(const char* subfolderName) {
-    bool alreadyExists = false;
+Folder Folder::createSubfolder(const char* subfolderName, bool overwrite) {
     std::string subfolderPath = this->path + "/" + subfolderName;
 
-     for(Folder d: this->getFolders()){
-        if(d.getPath() == subfolderPath){
-            alreadyExists = true;
+    DIR* dir = opendir(subfolderPath.c_str());
+    if (dir != nullptr) {
+        if(!overwrite){
+            errno = EEXIST;
+            closedir(dir);
+            return Folder(subfolderPath.c_str());
 
-        }
-    }
-
-    // Construct the full path of the subfolder
- 
-    if (!alreadyExists){
-    int result = mkdir(subfolderPath.c_str(), 0777);
-        if (result == 0) {
-           return Folder(subfolderPath.c_str());
         } else {
-            return Folder();
-        }
-    } else {
+            closedir(dir);
+            Folder(subfolderPath.c_str()).remove();
+        }   
+    } 
+
+
+    int result = mkdir(subfolderPath.c_str(), 0777);
+    if (result == 0) {
         return Folder(subfolderPath.c_str());
+    } else {
+        return Folder();
     }
+
  
 }
 
-Folder Folder::createSubfolder(String subfolderName) {
-    return this->createSubfolder(subfolderName.c_str());
+Folder Folder::createSubfolder(String subfolderName, bool overwrite)  {
+    return this->createSubfolder(subfolderName.c_str(), overwrite);
 }
 
 std::vector<UFile> Folder::getFiles() {
@@ -173,11 +173,13 @@ std::vector<Folder> Folder::getFolders() {
     }
 }
 
-bool Folder::copyTo(Folder destination) {
-    return this->copyTo(destination.getPath());
+bool Folder::copyTo(Folder destination, bool overwrite) {
+    return this->copyTo(destination.getPath(), overwrite);
 }
 
-bool Folder::copyTo(const char* destinationPath) {
+
+
+bool Folder::copyTo(const char* destinationPath, bool overwrite) {
     std::string source = this->path;
     std::string fileName = getLastPathComponent(this->path.c_str());
     std::string destination = std::string(destinationPath) + "/" + fileName;
@@ -187,11 +189,20 @@ bool Folder::copyTo(const char* destinationPath) {
         return false;
     }
 
-    // Create destination directory if it doesn't exist
-    if (mkdir(destination.c_str(), 0777) != 0 && errno != EEXIST) {
+
+    if(opendir(destination.c_str())){
+        if(overwrite){
+            Folder(destination.c_str()).remove();
+        } else {
+            return false;
+        }
+
+    } else  if (mkdir(destination.c_str(), 0777) != 0 && errno != EEXIST) {
         closedir(dir);
-        return false;
     }
+
+    // Create destination directory if it doesn't exist
+
 
     struct dirent* entry;
     while ((entry = readdir(dir)) != nullptr) {
@@ -240,29 +251,43 @@ bool Folder::copyTo(const char* destinationPath) {
     return true;
 }
 
-bool Folder::copyTo(String destination) {
-    return this->copyTo(destination.c_str());
+
+bool Folder::copyTo(String destination, bool overwrite) { 
+    return this->copyTo(destination.c_str(), overwrite);
 }
 
-bool Folder::moveTo(Folder destination) {
-    return this->moveTo(destination.getPath());
+bool Folder::moveTo(Folder destination, bool overwrite) {
+    return this->moveTo(destination.getPath(), overwrite);
 }
 
-bool Folder::moveTo(const char* destination) {
+bool Folder::moveTo(const char* destination, bool overwrite) {
     std::string newPath = replaceFirstPathComponent(this->path.c_str(), destination);
 
-    if (!this->copyTo(destination)) {
-        return false; // Return false if the copy operation fails
+/*
+    DIR* dir = opendir(newPath.c_str());
+    if (dir != nullptr) {
+        if(!overwrite){
+            errno = EEXIST;
+            return false;
+        } else {
+            closedir(dir);
+            Folder(newPath.c_str()).remove();
+        }
     }
+    */
 
-    if (::remove(this->path.c_str()) != 0) {
-        return false;
+    if (!this->copyTo(destination, overwrite)) {
+        return false; // Return false if the copy operation fails
+    } else {
+        if (::remove(this->path.c_str()) != 0) {
+            return false;
+        }
     }
 
     this->path = newPath;
     return true;
 }
 
-bool Folder::moveTo(String destination) {
-    return this->moveTo(destination.c_str());
+bool Folder::moveTo(String destination, bool overwrite) {
+    return this->moveTo(destination.c_str(), overwrite);
 }

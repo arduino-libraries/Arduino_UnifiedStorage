@@ -205,28 +205,47 @@ bool UFile::exists() {
     }
 }
 
-bool UFile::copyTo(String destinationPath) {
-    return copyTo(destinationPath.c_str());
+bool UFile::copyTo(String destinationPath, bool overwrite) {
+    return copyTo(destinationPath.c_str(), overwrite);
 }
 
-bool UFile::copyTo(Folder destinationFolder) {
+bool UFile::copyTo(Folder destinationFolder, bool overwrite) {
     const char* destinationPath = destinationFolder.getPath();
-    return copyTo(destinationPath);
+    return copyTo(destinationPath, overwrite);
 }
 
-bool UFile::copyTo(const char* destinationPath) {
+bool UFile::copyTo(const char* destinationPath, bool overwrite) {
     std::string newPath = replaceFirstPathComponent(path, destinationPath);
 
 
     // Open the source file for reading
     FILE* sourceFile = fopen(path.c_str(), "r");
 
+
+
     if (sourceFile == nullptr) {
         return false;
     }
 
+
+    FILE* destinationFile = fopen(newPath.c_str(), "r");
+
+    if(destinationFile != nullptr){
+        Serial.println("destination file already exits");
+        if(overwrite){
+            Serial.println("overwriting destination file");
+            fclose(destinationFile);
+            ::remove(newPath.c_str());
+        } else {
+            Serial.println("not overriding, returning false");
+            errno = EEXIST;
+            return false;
+        }
+    } 
+
     // Open the destination file for writing
-    FILE* destinationFile = fopen(newPath.c_str(), "w");
+    destinationFile = fopen(newPath.c_str(), "w");
+
     if (destinationFile == nullptr) {
         fclose(sourceFile);
         return false;
@@ -245,20 +264,22 @@ bool UFile::copyTo(const char* destinationPath) {
     return true;
 }
 
-bool UFile::moveTo(String destinationPath) {
+bool UFile::moveTo(String destinationPath, bool overwrite) {
     return moveTo(destinationPath.c_str());
 }
 
-bool UFile::moveTo(Folder destinationFolder) {
+bool UFile::moveTo(Folder destinationFolder, bool overwrite) {
     const char* destinationPath = destinationFolder.getPath();
     return moveTo(destinationPath);
 }
 
-bool UFile::moveTo(const char* destinationPath) {
+bool UFile::moveTo(const char* destinationPath, bool overwrite){
     std::string newPath = replaceFirstPathComponent(path, destinationPath);
 
+    FILE* destinationFile = fopen(newPath.c_str(), "r");
+
     fclose(fp);
-    if (!copyTo(destinationPath)) {
+    if (!copyTo(destinationPath, overwrite)) {
         return false; // Return false if the copy operation fails
     }
 
@@ -267,7 +288,7 @@ bool UFile::moveTo(const char* destinationPath) {
         return false;
     }
 
-    open(newPath.c_str(), fm);
+    open(newPath.c_str(), fm); // sure about that ?
     path = newPath;
 
     return true;

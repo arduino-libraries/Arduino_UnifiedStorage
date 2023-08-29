@@ -124,42 +124,42 @@ public:
   * @param const char * destinationPath - The destination path to copy the file to.
   * @return True upon success, false otherwise. 
   */
-  bool copyTo(const char* destinationPath);
+  bool copyTo(const char* destinationPath, bool overwrite = false);
 
   /**
   * @brief Copies the file to the specified destination path.
   * @param String destinationPath The destination path to copy the file to.
   * @return True upon success, false otherwise. 
   */
-  bool copyTo(String destinationPath);
+  bool copyTo(String destinationPath, bool overwrite = false);
 
   /**
   * @brief Copies the file to the specified destination path.
   * @param Folder destinationPath - The destination folder to copy the file to.
   * @return True upon success, false otherwise. 
   */
-  bool copyTo(Folder destinationFolder);
+  bool copyTo(Folder destinationFolder, bool overwrite = false);
 
   /**
   * @brief Moves the file to the specified destination path.
   * @param const char * destinationPath The destination path to move the file to.
   * @return True upon success, false otherwise. 
   */
-  bool moveTo(const char * destinationPath);
+  bool moveTo(const char * destinationPath, bool overwrite = false);
 
   /**
   * @brief Moves the file to the specified destination path.
   * @param String destinationPath The destination path to move the file to.
   * @return True upon success, false otherwise. 
   */
-  bool moveTo(String destinationPath);
+  bool moveTo(String destinationPath, bool overwrite = false);
 
   /**
   * @brief Copies the file to the specified destination folder.
   * @param Folder destinationFolder The destination directory to move the file to.
   * @return True upon success, false otherwise. 
   */
-  bool moveTo(Folder  destinationFolder);
+  bool moveTo(Folder  destinationFolder, bool overwrite = false);
 
   /*
      * @brief Returns a reference to the parent folder of the current folder. 

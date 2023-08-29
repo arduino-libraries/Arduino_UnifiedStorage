@@ -20,12 +20,11 @@ int USBStorage::begin(){
  
 
     int attempts = 0;
-    int err = mount(DEV_USB, FS_FAT, MNT_DEFAULT);
+    int err = mount(DEV_USB, (FileSystems)this->fs, MNT_DEFAULT);
 
     while (0 != err && attempts < MAX_TRIES) {
         attempts +=1;
-        err = mount(DEV_USB, FS_FAT, MNT_DEFAULT);
-        Serial.println(errno);
+        err = mount(DEV_USB, (FileSystems)this->fs, MNT_DEFAULT);
         delay(1000);
     }
 
@@ -118,6 +117,18 @@ void USBStorage::checkConnection(){
     #endif
 }
 
-int USBStorage::format(){
+
+
+int USBStorage::formatFAT(){
+    this -> begin();
+    this -> unmount();
+    this -> fs = FS_FAT;
     return mkfs(DEV_USB, FS_FAT);
+}
+
+int USBStorage::formatLittleFS(){
+    this -> begin();
+    this -> unmount();
+    this -> fs = FS_LITTLEFS;
+    return mkfs(DEV_USB, FS_LITTLEFS);
 }

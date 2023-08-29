@@ -17,7 +17,9 @@ class USBStorage : public Arduino_UnifiedStorage {
 
         Folder getRootFolder() override;
 
-        int format() override;
+        int formatLittleFS() override;
+
+        int formatFAT() override;
 
         bool isConnected();
         
@@ -28,10 +30,8 @@ class USBStorage : public Arduino_UnifiedStorage {
 
 
     private:
-
-
+        uint8_t fs = FS_FAT;
         bool connected = false;
-   
         unsigned long previousMillis; 
         int interval = 500;
 };

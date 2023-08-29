@@ -17,7 +17,13 @@ class SDStorage: public Arduino_UnifiedStorage  {
 
         Folder getRootFolder() override;
 
-        int format() override;
+        int formatFAT() override;
+
+        int formatLittleFS() override;
+    private:
+        uint8_t fs = FS_FAT;
+
+        
 };
 
 #endif

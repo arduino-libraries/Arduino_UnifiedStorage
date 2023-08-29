@@ -11,7 +11,7 @@ class InternalStorage : public Arduino_UnifiedStorage {
     public:
         InternalStorage();
         // Override begin() method for SD card initialization
-        InternalStorage(int partition, const char * name);
+        InternalStorage(int partition, const char * name, uint8_t fs);
 
         int begin() override;
 
@@ -23,7 +23,9 @@ class InternalStorage : public Arduino_UnifiedStorage {
 
         void setQSPIPartitionName(const char * name);
 
-        int format();
+        int formatFAT();
+
+        int formatLittleFS();
         
         #if defined(ARDUINO_PORTENTA_C33)
             BlockDevice * getBlockDevice();
@@ -36,15 +38,16 @@ class InternalStorage : public Arduino_UnifiedStorage {
         #if defined(ARDUINO_PORTENTA_C33)
         BlockDevice * blockDevice;
         MBRBlockDevice * userData;
-        FATFileSystem * userDataFileSystem;
+        FileSystem * userDataFileSystem;
         #elif defined(ARDUINO_PORTENTA_H7_M7)  ||  defined(ARDUINO_OPTA)
         mbed::BlockDevice * blockDevice;
         mbed::MBRBlockDevice * userData;
-        mbed::FATFileSystem * userDataFileSystem;
+        mbed::FileSystem * userDataFileSystem;
         #endif
 
         int partitionNumber = 2;
         char * partitionName = "user";
+        int fs = FS_FAT;
 };
 
 #endif

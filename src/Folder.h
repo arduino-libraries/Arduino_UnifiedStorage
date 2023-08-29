@@ -87,16 +87,18 @@ class Folder {
     /*
      * @brief Creates a subfolder in the directory.
      * @param const char * subfolderName - he name of the subfolder to create.
+     * @param overwrite - behaviour in case the folder already exists, default is false
      * @return The created subfolder.
     */
-    Folder createSubfolder(const char * subfolderName);
+    Folder createSubfolder(const char * subfolderName, bool overwrite = false);
 
     /*
      * @brief Creates a subfolder in the directory.
      * @param String subfolderName - he name of the subfolder to create.
+     * @param overwrite - behaviour in case the folder already exists, default is false
      * @return The created subfolder.
      */
-    Folder createSubfolder(String subfolderName);
+    Folder createSubfolder(String subfolderName, bool overwrite = false);
 
     /*
      * @brief Returns File objects for all files in the current dirctory.
@@ -115,42 +117,47 @@ class Folder {
      * @param Folder destination - a Folder object representing the destination
      * @return True upon success, false otherwise. 
      */
-    bool copyTo(Folder destination);
+    bool copyTo(Folder destination, bool overwrite = false);
 
     /*
      * @brief Copies the current directory
      * @param const char * destination - the path of the destination location
+     * @param overwrite - behaviour in case the folder already exists, default is false
      * @return True upon success, false otherwise. 
      */
-    bool copyTo(const char * destination);
+    bool copyTo(const char * destination, bool overwrite = false);
 
     /*
      * @brief Copies the current directory
      * @param String destination - the path of the destination location
+     * @param overwrite - behaviour in case the folder already exists, default is false
      * @return True upon success, false otherwise. 
      */
-    bool copyTo(String destination);
+    bool copyTo(String destination, bool overwrite = false);
 
     /*
      * @brief Moves the current directory
      * @param Folder destination - a Folder object representing the destination
+     * @param overwrite - behaviour in case the folder already exists, default is false
      * @return True upon success, false otherwise. 
      */
-    bool moveTo(Folder destination);
+    bool moveTo(Folder destination, bool overwrite = false);
 
     /*
      * @brief Moves the current directory
      * @param const char * destination - the path of the destination location
+     * @param overwrite - behaviour in case the folder already exists, default is false
      * @return True upon success, false otherwise. 
     */
-    bool moveTo(const char * destination);
+    bool moveTo(const char * destination, bool overwrite = false);
 
     /*
      * @brief Move the current directory
      * @param String destination - the path of the destination location
+     * @param overwrite - behaviour in case the folder already exists, default is false
      * @return True upon success, false otherwise. 
      */
-    bool moveTo(String destination);
+    bool moveTo(String destination, bool overwrite = false);
 
   private: 
   
