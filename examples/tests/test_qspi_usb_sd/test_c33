@@ -1,0 +1,7 @@
+#!/bin/bash
+<<<<<<< Updated upstream
+arduino-cli compile -b arduino:renesas_portenta:portenta_c33  --library "../../Arduino_POSIXStorage" --library  "/home/c.dragomir/ArduinoWorkspace/Arduino_UnifiedStorage"
+=======
+arduino-cli compile -b arduino:renesas_portenta:portenta_c33  --library "/home/c.dragomir/ArduinoWorkspace/Repos/POSIXStorage" --library  "/home/c.dragomir/ArduinoWorkspace/Repos/Arduino_UnifiedStorage"
+>>>>>>> Stashed changes
+arduino-cli upload -b arduino:renesas_portenta:portenta_c33 
