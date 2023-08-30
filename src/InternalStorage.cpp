@@ -28,8 +28,14 @@ int InternalStorage::begin(){
         this -> blockDevice = QSPIFBlockDevice::get_default_instance();
         this -> userData = new mbed::MBRBlockDevice(this->blockDevice, this->partitionNumber);
         if(this -> fs == FS_FAT){
+            if(this -> userDataFileSystem != nullptr){
+             delete(this -> userDataFileSystem);
+            } 
             this -> userDataFileSystem = new mbed::FATFileSystem(this->partitionName);
         } else {
+            if(this -> userDataFileSystem != nullptr){
+             delete(this -> userDataFileSystem);
+            } 
             this -> userDataFileSystem = new mbed::LittleFileSystem(this->partitionName);
         }
         int err = this -> userDataFileSystem -> mount(this -> userData);

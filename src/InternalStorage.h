@@ -5,6 +5,9 @@
 
 #include "Arduino_UnifiedStorage.h"
 
+
+
+
 class InternalStorage : public Arduino_UnifiedStorage {
 
 
@@ -26,6 +29,7 @@ class InternalStorage : public Arduino_UnifiedStorage {
         int formatFAT();
 
         int formatLittleFS();
+
         
         #if defined(ARDUINO_PORTENTA_C33)
             BlockDevice * getBlockDevice();

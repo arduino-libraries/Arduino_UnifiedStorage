@@ -54,9 +54,8 @@ bool UFile::open(String filename, FileMode mode) {
 void UFile::close() {
     // Close the file
     if (fp != nullptr) {
-        fflush(fp); // ?!?
         fclose(fp);
-        fp = nullptr;
+        //fp = nullptr;
     }
 }
 
