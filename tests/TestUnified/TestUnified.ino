@@ -1,7 +1,7 @@
 #include <Arduino_UnifiedStorage.h>
 
 #define HAS_USB 
-#define HAS_SD 
+//#define HAS_SD 
 #define HAS_QSPI 
 
 #if defined(HAS_USB)
@@ -63,7 +63,7 @@ void test(String opperation, Arduino_UnifiedStorage* sourceStorage, Arduino_Unif
 }
 
 
-
+#if defined(HAS_USB) && defined(HAS_SD)
 void sd_and_usb(){
     Serial.println("TESTING SD AND USB \n\n\n\n");
 
@@ -109,7 +109,10 @@ void sd_and_usb(){
     test("move", sd, usb, "SD LittleFS", "USB FAT");
     test("copy", sd, usb, "SD LittleFS", "USB FAT");
 }
+#endif
 
+
+#if defined(HAS_QSPI) && defined(HAS_SD)
 void qspi_and_sd() {
     Serial.println("TESTING QSPI AND SD \n\n\n\n");
     Serial.println("-----------------------------");
@@ -153,8 +156,9 @@ void qspi_and_sd() {
     test("move", qspi, sd, "QSPI FAT", "SD LittleFS");
     test("copy", qspi, sd, "QSPI FAT", "SD LittleFS");
 }
+#endif
 
-
+#if defined(HAS_QSPI) && defined(HAS_USB)
 void qspi_and_usb() {
 
     Serial.println("TESTING QSPI AND USB \n\n\n\n");
@@ -201,7 +205,7 @@ void qspi_and_usb() {
     test("copy", qspi, usb, "QSPI FAT", "USB LittleFS");
 
 }
-
+#endif
 
 void setup(){
     Serial.begin(115200);

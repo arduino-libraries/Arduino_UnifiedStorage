@@ -1,9 +1,9 @@
 #include "Arduino_UnifiedStorage.h"
 
 InternalStorage::InternalStorage(){
-    this -> fs = FS_FAT;
-    this -> setQSPIPartition(2);
-    this -> setQSPIPartitionName("user");
+   this -> fs = FS_FAT;
+   this -> setQSPIPartition(2);
+this -> setQSPIPartitionName("user");
 }
 
 InternalStorage::InternalStorage(int partition, const char * name, uint8_t fs){
@@ -28,17 +28,24 @@ int InternalStorage::begin(){
         this -> blockDevice = QSPIFBlockDevice::get_default_instance();
         this -> userData = new mbed::MBRBlockDevice(this->blockDevice, this->partitionNumber);
         if(this -> fs == FS_FAT){
+            
             if(this -> userDataFileSystem != nullptr){
-             delete(this -> userDataFileSystem);
+                delete(this -> userDataFileSystem);
+
             } 
             this -> userDataFileSystem = new mbed::FATFileSystem(this->partitionName);
         } else {
-            if(this -> userDataFileSystem != nullptr){
+
+                 if(this -> userDataFileSystem != nullptr){
              delete(this -> userDataFileSystem);
+
             } 
+
+
             this -> userDataFileSystem = new mbed::LittleFileSystem(this->partitionName);
         }
         int err = this -> userDataFileSystem -> mount(this -> userData);
+  
         if(err == 0) return 1;
     #endif
 }
@@ -49,7 +56,7 @@ int InternalStorage::unmount(){
 }
 
 Folder InternalStorage::getRootFolder(){
- return Folder("/user");
+    return Folder(String("/" + String(this->partitionName)).c_str());
 }
 
 

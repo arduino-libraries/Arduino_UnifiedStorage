@@ -1,7 +1,8 @@
 #include <Arduino_UnifiedStorage.h>
 
-#define HAS_USB 
+
 #define HAS_SD 
+#define HAS_USB 
 #define HAS_QSPI 
 
 #if defined(HAS_USB)
@@ -310,17 +311,22 @@ void setup(){
     Serial.begin(115200);
     while(!Serial);
     
+    #if defined(HAS_SD)
+        sd.formatFAT();
+        runTests(&sd, "SD");
+    #endif 
+
     #if defined(HAS_USB)
+        usb.formatFAT();
         runTests(&usb, "USB");
     #endif 
 
     #if defined(HAS_QSPI)
+        internal.formatFAT();
         runTests(&internal, "QSPI");
     #endif 
 
-    #if defined(HAS_SD)
-        runTests(&sd, "SD");
-    #endif 
+
 
 }
 

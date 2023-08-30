@@ -1,7 +1,7 @@
 #include <Arduino_UnifiedStorage.h>
 
-// #define HAS_USB 
-// #define HAS_SD 
+#define HAS_USB 
+#define HAS_SD 
 #define HAS_QSPI 
 
 #if defined(HAS_USB)
