@@ -1,7 +1,7 @@
 #include <Arduino_UnifiedStorage.h>
 
 #define HAS_USB 
-//#define HAS_SD 
+#define HAS_SD 
 #define HAS_QSPI 
 
 #if defined(HAS_USB)
@@ -13,7 +13,7 @@ SDStorage * sd = new SDStorage();
 #endif
 
 #if defined(HAS_QSPI)
-InternalStorage * qspi = new InternalStorage(2, "user", FS_FAT);
+InternalStorage * qspi = new InternalStorage();
 #endif
 
 
@@ -216,9 +216,9 @@ void setup(){
         sd_and_usb();
         qspi_and_sd();
         Serial.println("Tests finished, formatting all partitions back to FAT:");
-        Serial.println("\t * Formatting QSPI to FAT:" + String(qspi->formatFAT()));
-        Serial.println("\t * Formatting SD to FAT:" + String(sd->formatFAT()));
-        Serial.println("\t * Formatting USB to FAT:" + String(usb->formatFAT()));
+        Serial.println("\t * Formatting QSPI to FAT: " + String(qspi->formatFAT()));
+        Serial.println("\t * Formatting SD to FAT: " + String(sd->formatFAT()));
+        Serial.println("\t * Formatting USB to FAT: " + String(usb->formatFAT()));
     #elif defined(HAS_USB) && defined(HAS_SD)
         sd_and_usb();
         Serial.println("\t * Formatting SD to FAT:" + String(sd->formatFAT()));

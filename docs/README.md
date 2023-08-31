@@ -14,7 +14,22 @@ void setup(){
 	storageMedium.begin();
 }
 ```
-You can initialize a Arduino_UnifiedStorage object of each type (QSPI, SD, USB), and copy files and folders from one medium to another.
+
+There is also an overloaded version of the `begin()` method that takes in an argument of type `FileSystems` (can be `FS_FAT` or `FS_LITTLEFS`)
+```
+void setup(){
+	storageMedium.begin(FS_FAT);
+}
+```
+### Format QSPI Flash, SD cards, and USB mass storage devices
+This library also allows you to format any partition or drive to either FAT or LittleFS filesystems.
+
+```storageMedium.formatFAT()```
+or
+```storageMedium.formatLittleFS();```
+
+Please make sure you call format before calling `begin()` or after calling `unmount()`.
+
  
 ### Open, Write, and Read Files
  
@@ -103,6 +118,9 @@ In this example, the `available()` method is called to retrieve the number of av
 
 These methods are useful for scenarios where you need to navigate to a specific position in a file or check the availability of data before performing read operations.
 
+### Close files
+Closing files is extremely important as filesystems might fail to unmount if files are kept open. You can close files by calling `file.close()`
+
 ### File Manipulation
 The library provides various file manipulation operations such as renaming, deleting, moving, and copying files.
 
@@ -131,6 +149,13 @@ Folder destination = storageMedium.getRootFolder().createSubfolder("destination"
 bool success = document.moveTo(destination);
 ```
 
+This method also allows you to set the behaviour if there's an existing file with the same name at the location you want to move to. You can set the optional parameter `overwrite` to `true`.
+```cpp
+bool success = document.moveTo(destination, true);
+```
+
+
+Please note that the `File`` object will point now to the moved file, not the original one.
 #### Copying a File
 
 You can copy a file to a different directory using the `copyTo()` method.
@@ -139,6 +164,13 @@ You can copy a file to a different directory using the `copyTo()` method.
 Folder destination = storageMedium.getRootFolder().createSubfolder("destination");
 bool success = document.copyTo(destination);
 ```
+
+This method also allows you to set the behaviour if there's an existing file with the same name at the location you want to move to. You can set the optional parameter `overwrite` to `true`.
+```cpp
+bool success = document.copyTo(destination, true);
+```
+
+Please note that the `UFile` object will point now to the copy of the file, not the original one.
 
 ### Folder Manipulation
 The library provides methods to create, rename, delete, move, copy, and list directories.
@@ -176,6 +208,13 @@ You can move a directory to a different location using the `moveTo()` method.
 Folder destination = storageMedium.getRootFolder().createSubfolder("destination");
 bool success = newFolder.moveTo(destination);
 ```
+This method also allows you to set the behaviour if there's an existing Folder with the same name at the location you want to move to. You can set the optional parameter `overwrite` to `true`.
+```cpp
+bool success = newFolder.moveTo(destination, true);
+```
+
+Please note that the `Folder`` object will point now to the moved folder.
+
 
 #### Copying a Folder
 
@@ -185,6 +224,14 @@ You can copy a directory to a different location using the `copyTo()` method.
 Folder destination = storageMedium.getRootFolder().createSubfolder("destination");
 bool success = newFolder.copyTo(destination);
 ```
+
+This method also allows you to set the behaviour if there's an existing Folder with the same name at the location you want to move to. You can set the optional parameter `overwrite` to `true`.
+```cpp
+bool success = newFolder.copyTo(destination, true);
+```
+
+Please note that the `Folder`` object will point now to the copy of the folder, not the original one.
+
 
 #### Listing Files and Directories
 
