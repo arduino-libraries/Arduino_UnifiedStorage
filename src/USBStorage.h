@@ -3,40 +3,86 @@
 #ifndef USBStorage_H
 #define USBStorage_H
 
-
-
+/**
+ * Represents USB storage using the Arduino Unified Storage library.
+ */
 static bool usb_available = false;
 
 class USBStorage : public Arduino_UnifiedStorage {
-    public:
+public:
 
-        USBStorage();
-        // Override begin() method for SD card initialization
-        int begin() override;
+    /**
+     * Default constructor for the USBStorage class.
+     */
+    USBStorage();
 
-        int begin(FileSystems fs) override;
+    /**
+     * Initializes the USB storage.
+     * 
+     * @return 1 if successful, 0 if failed.
+     */
+    int begin() override;
 
-        int unmount() override;
+    /**
+     * Initializes the USB storage with the specified file system.
+     * 
+     * @param fs The desired file system (FS_FAT or FS_LITTLEFS).
+     * @return 1 if successful, 0 if failed.
+     */
+    int begin(FileSystems fs) override;
 
-        Folder getRootFolder() override;
+    /**
+     * Unmounts the USB storage.
+     * 
+     * @return 1 if successful, 0 if failed.
+     */
+    int unmount() override;
 
-        int formatLittleFS() override;
+    /**
+     * Retrieves the root folder of the USB storage.
+     * 
+     * @return The root folder as a Folder object.
+     */
+    Folder getRootFolder() override;
 
-        int formatFAT() override;
+    /**
+     * Formats the USB storage with the FAT file system.
+     * 
+     * @return 1 if successful, 0 if failed.
+     */
+    int formatFAT() override;
 
-        bool isConnected();
-        
-        bool isAvailable();
+    /**
+     * Formats the USB storage with the LittleFS file system.
+     * 
+     * @return 1 if successful, 0 if failed.
+     */
+    int formatLittleFS() override;
 
-        void checkConnection();
+    /**
+     * Checks if the USB storage is connected.
+     * 
+     * @return true if connected, false otherwise.
+     */
+    bool isConnected();
 
+    /**
+     * Checks if the USB storage is available.
+     * 
+     * @return true if available, false otherwise.
+     */
+    bool isAvailable();
 
+    /**
+     * Checks the USB storage connection status.
+     */
+    void checkConnection();
 
-    private:
-        FileSystems fs = FS_FAT;
-        bool connected = false;
-        unsigned long previousMillis; 
-        int interval = 500;
+private:
+    FileSystems fs = FS_FAT;
+    bool connected = false;
+    unsigned long previousMillis; 
+    int interval = 500;
 };
 
 #endif

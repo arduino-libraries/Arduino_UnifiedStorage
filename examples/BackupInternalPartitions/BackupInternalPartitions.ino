@@ -1,4 +1,25 @@
+   /*
+   BackupInternalPartitions
 
+   This code demonstrates how the "Arduino_UnifiedStorage" can be used to access multiple partitions on the internal storage,
+   and transfer information to a USB Mass storage device.
+
+   In the setup function, the code initializes serial communication, mounts both USB & internal storage.
+   It then creates a root directory in the internal storage and creates a subdirectory with files inside it.
+
+   The "addSomeFakeFiles" function generates random files in the specified folder, simulating real data.
+
+   Afterward, it copies files from internal storage to USB storage and moves folders from each partition internal storage to USB storage.
+
+   The "move" function is responsible for transferring folders and files between storage locations.
+
+   The "backupPartitionsC33" and "backupPartitionsH7" functions backup partitions based on the board type, as each have a different default scheme. 
+
+   Created: 31th August 2023
+   By: Cristian Dragomir
+
+   Source: https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/BackupInternalPartitions/BackupInternalPartitions.ino
+*/
 
 #include <Arduino_UnifiedStorage.h>
 

@@ -14,7 +14,6 @@ INSTRUCTIONS
     * You can do that by flashing the QSPIFormat example that can be found in the STM32H747_System folder
     * Open the serial monitor and select answer with "Y" when this appears "Do you want to use partition scheme 1? Y/[n]"
     * Reboot the board
-* Connect a RS485-enabled device to see the debugging output. 
 * This sketch will log data, and check if there is any USB MSD Device connected to the USB Port of the Opta. 
   The USB device is mounted and unmounted after every update operation. The first status LED is on when the USB drive is mounted. 
   So as long as the status LED is off you can safely remove the drive. 
@@ -24,13 +23,11 @@ INSTRUCTIONS
 #include "Arduino_UnifiedStorage.h"
 #include <vector>
 
-
 constexpr auto baudrate { 115200 };
 
 #if defined(ARDUINO_PORTENTA_H7_M7)
 #define USB_MOUNTED_LED LED_BLUE
 #elif defined(ARDUINO_PORTENTA_C33)
-#define USB_MOUNTED_LED LEDB
 #endif 
 
 
