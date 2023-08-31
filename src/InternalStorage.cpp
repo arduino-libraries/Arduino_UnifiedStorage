@@ -1,9 +1,15 @@
 #include "Arduino_UnifiedStorage.h"
 
 InternalStorage::InternalStorage(){
-   this -> fs = FS_FAT;
-   this -> setQSPIPartition(2);
-this -> setQSPIPartitionName("user");
+    this -> fs = FS_FAT;
+
+    #if defined(ARDUINO_PORTENTA_C33)
+        this -> setQSPIPartition(2);
+    #elif defined(ARDUINO_PORTENTA_H7_M7)
+        this -> setQSPIPartition(3);
+    #endif
+
+    this -> setQSPIPartitionName("user");
 }
 
 InternalStorage::InternalStorage(int partition, const char * name, FileSystems fs){

@@ -45,13 +45,15 @@ class InternalStorage : public Arduino_UnifiedStorage {
         BlockDevice * blockDevice;
         MBRBlockDevice * userData;
         FileSystem * userDataFileSystem;
+        int partitionNumber = 2;
         #elif defined(ARDUINO_PORTENTA_H7_M7)  ||  defined(ARDUINO_OPTA)
         mbed::BlockDevice * blockDevice;
         mbed::MBRBlockDevice * userData;
         mbed::FileSystem * userDataFileSystem;
+        int partitionNumber = 3;
         #endif
 
-        int partitionNumber = 2;
+
         char * partitionName = "user";
         FileSystems fs = FS_FAT;
 };
