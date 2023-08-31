@@ -13,6 +13,8 @@ class SDStorage: public Arduino_UnifiedStorage  {
         // Override begin() method for SD card initialization
         int begin() override ;
 
+        int begin(FileSystems fs) override;
+
         int unmount() override;
 
         Folder getRootFolder() override;
@@ -21,8 +23,7 @@ class SDStorage: public Arduino_UnifiedStorage  {
 
         int formatLittleFS() override;
     private:
-        uint8_t fs = FS_FAT;
-
+        FileSystems fs = FS_FAT;
         
 };
 

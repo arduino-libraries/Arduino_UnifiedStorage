@@ -14,9 +14,11 @@ class InternalStorage : public Arduino_UnifiedStorage {
     public:
         InternalStorage();
         // Override begin() method for SD card initialization
-        InternalStorage(int partition, const char * name, uint8_t fs);
+        InternalStorage(int partition, const char * name, FileSystems fs);
 
         int begin() override;
+
+        int begin(FileSystems fs) override;
 
         int unmount() override;
 
@@ -51,7 +53,7 @@ class InternalStorage : public Arduino_UnifiedStorage {
 
         int partitionNumber = 2;
         char * partitionName = "user";
-        int fs = FS_FAT;
+        FileSystems fs = FS_FAT;
 };
 
 #endif

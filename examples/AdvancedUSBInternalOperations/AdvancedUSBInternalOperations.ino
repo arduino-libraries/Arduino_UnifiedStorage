@@ -29,6 +29,7 @@
 USBStorage usbStorage = USBStorage();
 InternalStorage internalStorage = InternalStorage(2, "user", FS_FAT);
 
+
 // Helper function to prints the contents of a folder, including subdirectories (marked as "[D]") and files (marked as "[F]").
 void printFolderContents(Folder dir, int indentation = 0) {
   std::vector<Folder> directories = dir.getFolders();
@@ -61,16 +62,14 @@ void setup() {
   while (!Serial);
 
   // Mount the USB storage
-  if(usbStorage.begin()){
+  if(usbStorage.begin(FS_FAT)){
     Serial.println("USB storage mounted.");
   } else {
     Serial.println(errno);
   }
 
-  // Mount the internal storage
-  // Serial.println("Reformatting internal storage to make sure we have a clean FS");
-  // internalStorage.format();
-  if(internalStorage.begin()){
+
+  if(internalStorage.begin(FS_FAT)){
       Serial.println("Internal storage mounted.");
   } else {
      Serial.println(errno);
@@ -88,7 +87,7 @@ void setup() {
   file.close();
 
   // Copy the file from internal storage to USB storage
-  bool success = file.copyTo(usbStorage.getRootFolder());
+  bool success = file.copyTo(usbStorage.getRootFolder(), true);
   if (success) {
     Serial.println("File copied successfully from internal storage to USB storage.");
   } else {
@@ -97,7 +96,7 @@ void setup() {
   }
 
   // Move the subdirectory from internal storage to USB storage
-  success = subdir.moveTo(usbStorage.getRootFolder());
+  success = subdir.moveTo(usbStorage.getRootFolder(), true);
   if (success) {
     Serial.println("Subdirectory moved successfully from internal storage to USB storage.");
   } else {

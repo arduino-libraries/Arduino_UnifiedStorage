@@ -29,6 +29,8 @@ class Arduino_UnifiedStorage {
     public:
         virtual int begin() = 0;
 
+        virtual int begin(FileSystems fs) = 0;
+
         virtual int unmount() = 0;
 
         virtual Folder getRootFolder() = 0;

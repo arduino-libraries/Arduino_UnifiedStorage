@@ -57,7 +57,7 @@ void setup() {
   Serial.begin(115200);
   while (!Serial);
 
-  if(!internalStorage.begin()){
+  if(!internalStorage.begin(FS_FAT)){
     Serial.println("Error mounting storage device.");
   }
   

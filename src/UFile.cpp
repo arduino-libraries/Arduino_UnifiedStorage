@@ -230,13 +230,11 @@ bool UFile::copyTo(const char* destinationPath, bool overwrite) {
     FILE* destinationFile = fopen(newPath.c_str(), "r");
 
     if(destinationFile != nullptr){
-        Serial.println("destination file already exits");
+
         if(overwrite){
-            Serial.println("overwriting destination file");
             fclose(destinationFile);
             ::remove(newPath.c_str());
         } else {
-            Serial.println("not overriding, returning false");
             errno = EEXIST;
             return false;
         }

@@ -9,9 +9,12 @@ static bool usb_available = false;
 
 class USBStorage : public Arduino_UnifiedStorage {
     public:
+
         USBStorage();
         // Override begin() method for SD card initialization
         int begin() override;
+
+        int begin(FileSystems fs) override;
 
         int unmount() override;
 
@@ -30,7 +33,7 @@ class USBStorage : public Arduino_UnifiedStorage {
 
 
     private:
-        uint8_t fs = FS_FAT;
+        FileSystems fs = FS_FAT;
         bool connected = false;
         unsigned long previousMillis; 
         int interval = 500;

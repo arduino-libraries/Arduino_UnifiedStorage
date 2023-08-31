@@ -6,12 +6,16 @@ InternalStorage::InternalStorage(){
 this -> setQSPIPartitionName("user");
 }
 
-InternalStorage::InternalStorage(int partition, const char * name, uint8_t fs){
+InternalStorage::InternalStorage(int partition, const char * name, FileSystems fs){
     this -> setQSPIPartition(partition);
     this -> setQSPIPartitionName(name);
     this -> fs = fs;
 }
 
+int InternalStorage::begin(FileSystems fs){
+  this -> fs = fs;
+  this -> begin();
+}
 
 int InternalStorage::begin(){
     #if defined(ARDUINO_PORTENTA_C33)

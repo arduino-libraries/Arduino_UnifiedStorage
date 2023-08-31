@@ -15,16 +15,22 @@ USBStorage::USBStorage(){
 #endif
 }
 
+
+int USBStorage::begin(FileSystems fs){
+  this -> fs = fs;
+  this -> begin();
+}
+
 int USBStorage::begin(){
 
  
 
     int attempts = 0;
-    int err = mount(DEV_USB, (FileSystems)this->fs, MNT_DEFAULT);
+    int err = mount(DEV_USB, this->fs, MNT_DEFAULT);
 
     while (0 != err && attempts < MAX_TRIES) {
         attempts +=1;
-        err = mount(DEV_USB, (FileSystems)this->fs, MNT_DEFAULT);
+        err = mount(DEV_USB, this->fs, MNT_DEFAULT);
         delay(1000);
     }
 

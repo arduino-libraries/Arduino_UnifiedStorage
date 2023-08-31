@@ -9,7 +9,12 @@ SDStorage::SDStorage(){
 }
 
 int SDStorage::begin(){
-  return mount(DEV_SDCARD, (FileSystems)this->fs, MNT_DEFAULT) == 0;
+  return mount(DEV_SDCARD, this->fs, MNT_DEFAULT) == 0;
+}
+
+int SDStorage::begin(FileSystems fs){
+  this -> fs = fs;
+  this -> begin();
 }
 
 int SDStorage::unmount(){
