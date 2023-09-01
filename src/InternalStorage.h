@@ -10,7 +10,7 @@ class InternalStorage : public Arduino_UnifiedStorage {
 public:
     /**
      * Default constructor for the InternalStorage class.
-    */
+     */
     InternalStorage();
 
     /**
@@ -19,14 +19,14 @@ public:
      * @param partition The partition number.
      * @param name The name of the partition.
      * @param fs The desired file system (FS_FAT or FS_LITTLEFS).
-    */
+     */
     InternalStorage(int partition, const char *name, FileSystems fs);
 
     /**
      * Initializes the internal storage.
      * 
      * @return 1 if successful, 0 if failed.
-    */
+     */
     int begin() override;
 
     /**
@@ -34,56 +34,56 @@ public:
      * 
      * @param fs The desired file system (FS_FAT or FS_LITTLEFS).
      * @return 1 if successful, 0 if failed.
-    */
+     */
     int begin(FileSystems fs) override;
 
     /**
      * Unmounts the internal storage.
      * 
      * @return 1 if successful, 0 if failed.
-    */
+     */
     int unmount() override;
 
     /**
      * Retrieves the root folder of the internal storage.
      * 
      * @return The root folder as a Folder object.
-    */
+     */
     Folder getRootFolder() override;
 
     /**
      * Sets the QSPI partition number.
      * 
      * @param partition The partition number.
-    */
+     */
     void setQSPIPartition(int partition);
 
     /**
      * Sets the QSPI partition name.
      * 
      * @param name The name of the partition.
-    */
+     */
     void setQSPIPartitionName(const char *name);
 
     /**
      * Formats the internal storage with the FAT file system.
      * 
      * @return 1 if successful, 0 if failed.
-    */
+     */
     int formatFAT();
 
     /**
      * Formats the internal storage with the LittleFS file system.
      * 
      * @return 1 if successful, 0 if failed.
-    */
+     */
     int formatLittleFS();
 
     /**
      * Retrieves the block device associated with the internal storage.
      * 
      * @return The block device as a BlockDevice object.
-    */
+     */
     #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_OPTA)
         mbed::BlockDevice *getBlockDevice();
     #endif

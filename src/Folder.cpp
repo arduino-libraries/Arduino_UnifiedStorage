@@ -264,18 +264,7 @@ bool Folder::moveTo(Folder destination, bool overwrite) {
 bool Folder::moveTo(const char* destination, bool overwrite) {
     std::string newPath = replaceFirstPathComponent(this->path.c_str(), destination);
 
-/*
-    DIR* dir = opendir(newPath.c_str());
-    if (dir != nullptr) {
-        if(!overwrite){
-            errno = EEXIST;
-            return false;
-        } else {
-            closedir(dir);
-            Folder(newPath.c_str()).remove();
-        }
-    }
-    */
+
 
     if (!this->copyTo(destination, overwrite)) {
         return false; // Return false if the copy operation fails

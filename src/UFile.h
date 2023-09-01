@@ -16,19 +16,19 @@ class UFile{
 public:
 
   /**
-   * @brief Constructor.
-  */
+    * @brief Constructor.
+    */
   UFile();
 
   /**
    * @brief Constructor.
    * @param const char * path - path of the file
-  */
+   */
   UFile(const char* path);
 
   ~UFile();
 
-   /**
+  /**
    * @brief Closes the file, and opens it again with a new file mode
    * @param mode The file mode (READ, WRITE, or APPEND).
    * @return True if operation was successful, false otherwise.
@@ -40,7 +40,7 @@ public:
    * @param const char * filename - The name of the file to open.
    * @param mode The file mode (READ, WRITE, or APPEND).
    * @return True if the file was opened successfully, false otherwise.
-  */
+   */
   bool open(const char* filename, FileMode mode);
 
   /**
@@ -48,7 +48,7 @@ public:
    * @param String filename - The name of the file to open.
    * @param mode The file mode (READ, WRITE, or APPEND).
    * @return True if the file was opened successfully, false otherwise.
-  */
+   */
   bool open(String filename, FileMode mode);
 
 
@@ -120,68 +120,82 @@ public:
   bool exists();
 
   /**
-  * @brief Copies the file to the specified destination path.
-  * @param const char * destinationPath - The destination path to copy the file to.
-  * @return True upon success, false otherwise. 
-  */
+   * @brief Copies the file to the specified destination path.
+   * @param const char * destinationPath - The destination path to copy the file to.
+   * @return True upon success, false otherwise. 
+   */
   bool copyTo(const char* destinationPath, bool overwrite = false);
 
   /**
-  * @brief Copies the file to the specified destination path.
-  * @param String destinationPath The destination path to copy the file to.
-  * @return True upon success, false otherwise. 
-  */
+   * @brief Copies the file to the specified destination path.
+   * @param String destinationPath The destination path to copy the file to.
+   * @return True upon success, false otherwise. 
+   */
   bool copyTo(String destinationPath, bool overwrite = false);
 
   /**
-  * @brief Copies the file to the specified destination path.
-  * @param Folder destinationPath - The destination folder to copy the file to.
-  * @return True upon success, false otherwise. 
-  */
+   * @brief Copies the file to the specified destination path.
+   * @param Folder destinationPath - The destination folder to copy the file to.
+   * @return True upon success, false otherwise. 
+   */
   bool copyTo(Folder destinationFolder, bool overwrite = false);
 
   /**
-  * @brief Moves the file to the specified destination path.
-  * @param const char * destinationPath The destination path to move the file to.
-  * @return True upon success, false otherwise. 
-  */
+   * @brief Moves the file to the specified destination path.
+   * @param const char * destinationPath The destination path to move the file to.
+   * @return True upon success, false otherwise. 
+   */
   bool moveTo(const char * destinationPath, bool overwrite = false);
 
   /**
-  * @brief Moves the file to the specified destination path.
-  * @param String destinationPath The destination path to move the file to.
-  * @return True upon success, false otherwise. 
-  */
+   * @brief Moves the file to the specified destination path.
+   * @param String destinationPath The destination path to move the file to.
+   * @return True upon success, false otherwise. 
+   */
   bool moveTo(String destinationPath, bool overwrite = false);
 
   /**
-  * @brief Copies the file to the specified destination folder.
-  * @param Folder destinationFolder The destination directory to move the file to.
-  * @return True upon success, false otherwise. 
-  */
+   * @brief Copies the file to the specified destination folder.
+   * @param Folder destinationFolder The destination directory to move the file to.
+   * @return True upon success, false otherwise. 
+   */
   bool moveTo(Folder  destinationFolder, bool overwrite = false);
 
-  /*
-     * @brief Returns a reference to the parent folder of the current folder. 
-     * @return A directory object representing the current folder. 
-  */
+  /**
+   * @brief Returns a reference to the parent folder of the current folder. 
+   * @return A directory object representing the current folder. 
+   */
   Folder getParentFolder();
 
-  /*
-     * @brief Returns the path of the directory.
-     * @return The path of the file as a const char * 
-  */
+  /**
+   * @brief Returns the path of the directory.
+   * @return The path of the file as a const char * 
+   */
   const char * getPath();
 
-  /*
-     * @brief Returns the path of the directory.
-     * @return The path of the file as a String
-  */
+  /**
+   * @brief Returns the path of the directory.
+   * @return The path of the file as a String
+   */
   String getPathString();
 
-  // Inherited methods from Stream
-  int available() ;
-  int read() ;
+
+  /**
+   * @brief Returns the number of bytes available to read
+   * @return The number of bytes available to read as int
+   */
+  int available();
+
+  /**
+   * @brief Returns one byte from the file 
+   * @return An int representing one byte from the file
+   */
+  int read();
+
+  /**
+   * @brief Writes one byte to the file
+   * @param a uint8_t value representing the byte to write
+   */
   size_t write(uint8_t value);
 
 
