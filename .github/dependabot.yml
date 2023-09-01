@@ -6,5 +6,7 @@ updates:
   # See: https://docs.github.com/en/github/administering-a-repository/keeping-your-actions-up-to-date-with-dependabot
   - package-ecosystem: github-actions
     directory: / # Check the repository's workflows under /.github/workflows/
+    labels:
+      - "topic: infrastructure"
     schedule:
       interval: daily
