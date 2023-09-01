@@ -1,8 +1,0 @@
-#!/bin/bash
-<<<<<<< Updated upstream
-arduino-cli compile -b arduino:mbed_portenta:envie_m7 --library "../../Arduino_POSIXStorage" --library  "/home/c.dragomir/ArduinoWorkspace/Arduino_UnifiedStorage"
-arduino-cli upload -b arduino:mbed_portenta:envie_m7
-=======
-arduino-cli compile -b arduino:mbed_portenta:envie_m7  --library "../../../POSIXStorage"  --library "../../../Arduino_UnifiedStorage"
-
->>>>>>> Stashed changes

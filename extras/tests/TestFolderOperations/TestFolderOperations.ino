@@ -13,7 +13,7 @@ SDStorage sd = SDStorage();
 #endif
 
 #if defined(HAS_QSPI)
-InternalStorage internal = InternalStorage(2, "user", FS_FAT);
+InternalStorage internal = InternalStorage();
 #endif
 
 void printFolderContents(Folder dir, int indentation = 0) {

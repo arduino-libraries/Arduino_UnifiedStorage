@@ -14,7 +14,7 @@ SDStorage sd = SDStorage();
 #endif
 
 #if defined(HAS_QSPI)
-InternalStorage internal = InternalStorage(2, "user", FS_FAT);
+InternalStorage internal = InternalStorage();
 #endif
 
 
@@ -312,17 +312,15 @@ void setup(){
     while(!Serial);
     
     #if defined(HAS_SD)
-        sd.formatFAT();
         runTests(&sd, "SD");
     #endif 
 
     #if defined(HAS_USB)
-        usb.formatFAT();
+
         runTests(&usb, "USB");
     #endif 
 
     #if defined(HAS_QSPI)
-        internal.formatFAT();
         runTests(&internal, "QSPI");
     #endif 
 
