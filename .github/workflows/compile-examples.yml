@@ -39,10 +39,14 @@ jobs:
       matrix:
         board:
           - fqbn: arduino:mbed_portenta:envie_m7
-            type: arduino:mbed_portenta
+            platforms: |
+              - name: arduino:mbed_portenta
           - fqbn: arduino:renesas_portenta:portenta_c33
-            type: renesas_portenta
-          - fqbn: arduino:mbed:opta
+            platforms: |
+              - name: arduino:renesas_portenta
+          - fqbn: arduino:mbed_opta:opta
+            platforms: |
+              - name: arduino:mbed_opta
 
 
     steps:
