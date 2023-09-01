@@ -11,7 +11,9 @@ class Folder;
 
 
 
-
+/**
+ * Class representing a File
+ */
 class UFile{
 public:
 

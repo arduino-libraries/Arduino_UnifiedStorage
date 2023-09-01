@@ -3,11 +3,12 @@
 #ifndef USBStorage_H
 #define USBStorage_H
 
-/**
- * Represents USB storage using the Arduino Unified Storage library.
- */
+
 static bool usb_available = false;
 
+/**
+ * Represents a USB storage using the Arduino Unified Storage library.
+ */
 class USBStorage : public Arduino_UnifiedStorage {
 public:
 

@@ -25,18 +25,49 @@
         #include "FATFileSystem.h"
     #endif 
 
+
+/**
+ * Abstract class representing the common features of the supported storage methods 
+ */
 class Arduino_UnifiedStorage {
     public:
+        /**
+         * Initializes the storage.
+         * 
+         * @return 1 if successful, 0 if failed.
+         */
         virtual int begin() = 0;
 
+        /**
+          * Initializes the  storage with the specified file system.
+          * @param fs The desired file system (FS_FAT or FS_LITTLEFS).
+          * @return 1 if successful, 0 if failed.
+          */
         virtual int begin(FileSystems fs) = 0;
 
+        /**
+         * Unmounts the storage.
+         * @return 1 if successful, 0 if failed.
+         */
         virtual int unmount() = 0;
 
+        /**
+         * Retrieves the root folder of the storage.
+         * @return The root folder as a Folder object.
+         */
         virtual Folder getRootFolder() = 0;
 
+        /**
+         * Formats the storage with the FAT file system.
+         * @return 1 if successful, 0 if failed.
+         */
         virtual int formatLittleFS() = 0;
 
+        /**
+         * Formats the storage with the FAT file system.
+         * 
+         * @return 1 if successful, 0 if failed.
+         */
         virtual int formatFAT() = 0;
 };
 
