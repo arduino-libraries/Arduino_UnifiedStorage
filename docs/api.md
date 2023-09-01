@@ -88,8 +88,8 @@ Class representing a directory.
 `public String ` [`getPathString`](#class_folder_1a30dd952da8ae977dca4e3dfde8fbd5be)`()` | Returns the path of the file.
 `public ` [`Folder`](#class_folder)` ` [`createSubfolder`](#class_folder_1a78f2f9b297f62b67c2e0656b15a95868)`(const char * subfolderName, bool overwrite)` | Creates a subfolder in the directory.
 `public ` [`Folder`](#class_folder)` ` [`createSubfolder`](#class_folder_1ab50743664becb7b2a1fb564b5513d69c)`(String subfolderName, bool overwrite)` | Creates a subfolder in the directory.
-`public std::vector< ` [`UFile`](#class_u_file)` > ` [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78)`()` | Returns File objects for all files in the current dirctory.
-`public std::vector< ` [`Folder`](#class_folder)` > ` [`getFolders`](#class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb)`()` | Returns [Folder](#class_folder) objects for all files in the current dirctory.
+`public std::vector< ` [`UFile`](#class_u_file)` > ` [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78)`()` | Returns File objects for all files in the current directory.
+`public std::vector< ` [`Folder`](#class_folder)` > ` [`getFolders`](#class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb)`()` | Returns [Folder](#class_folder) objects for all files in the current directory.
 `public bool ` [`copyTo`](#class_folder_1aabf0818b7ee45b2d871e82e86edb4ebd)`(` [`Folder`](#class_folder)` destination, bool overwrite)` | Copies the current directory.
 `public bool ` [`copyTo`](#class_folder_1a058d193f53c559eefe343b30797500eb)`(const char * destination, bool overwrite)` | Copies the current directory.
 `public bool ` [`copyTo`](#class_folder_1a3162979e4c679c7f5503cc4584949714)`(String destination, bool overwrite)` | Copies the current directory.
@@ -128,7 +128,7 @@ Creates a file inside the directory.
 * `const` char * fileName - The name of the file to create. 
 
 #### Returns
-A File object if successfull, NULL if not.
+A File object if successful, NULL if not.
 
 ### `public ` [`UFile`](#class_u_file)` ` [`createFile`](#class_folder_1a44255e2c0c4ffa37d7637a601bc590f6)`(String fileName, FileMode fmode)` <a id="class_folder_1a44255e2c0c4ffa37d7637a601bc590f6" class="anchor"></a>
 
@@ -138,7 +138,7 @@ Creates a file inside the directory.
 * `String` fileName - The name of the file to create. 
 
 #### Returns
-A File object if successfull, NULL if not.
+A File object if successful, NULL if not.
 
 ### `public bool ` [`remove`](#class_folder_1aca893daac6c6747895d50987cf9cf34c)`()` <a id="class_folder_1aca893daac6c6747895d50987cf9cf34c" class="anchor"></a>
 
@@ -217,14 +217,14 @@ The created subfolder.
 
 ### `public std::vector< ` [`UFile`](#class_u_file)` > ` [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78)`()` <a id="class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78" class="anchor"></a>
 
-Returns File objects for all files in the current dirctory.
+Returns File objects for all files in the current directory.
 
 #### Returns
 A std::vector of File objects representing the files in the directory.
 
 ### `public std::vector< ` [`Folder`](#class_folder)` > ` [`getFolders`](#class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb)`()` <a id="class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb" class="anchor"></a>
 
-Returns [Folder](#class_folder) objects for all files in the current dirctory.
+Returns [Folder](#class_folder) objects for all files in the current directory.
 
 #### Returns
 A std::vector of [Folder](#class_folder) objects representing the files in the directory.

@@ -298,7 +298,7 @@ void runTests(Arduino_UnifiedStorage * storage, String storageType) {
         testMovingFile(root);
 
         Serial.println("\n========= FS Contents after File Tests =========");
-        Serial.println("Should be empty if deletion was succesful");
+        Serial.println("Should be empty if deletion was successful");
 
         printFolderContents(root);
         Serial.println("=============================\n");

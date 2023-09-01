@@ -42,7 +42,7 @@ void runRepeatedMountTest(Arduino_UnifiedStorage * storage, String storageType, 
       Serial.println(umountResult);
       Serial.println(getErrno());
     } else {
-      Serial.println("Succesfully unmounted");
+      Serial.println("Successfully unmounted");
     }
   }
 }

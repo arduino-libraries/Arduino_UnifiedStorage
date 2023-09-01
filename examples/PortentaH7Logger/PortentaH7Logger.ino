@@ -17,7 +17,7 @@ INSTRUCTIONS
 * This sketch will log data, and check if there is any USB MSD Device connected to the USB Port of the Opta. 
   The USB device is mounted and unmounted after every update operation. The first status LED is on when the USB drive is mounted. 
   So as long as the status LED is off you can safely remove the drive. 
-  The skecth will log to internal storage in the meantime, and wait for the USB drive to be inserted again. 
+  The sketch will log to internal storage in the meantime, and wait for the USB drive to be inserted again. 
 */
 
 #include "Arduino_UnifiedStorage.h"

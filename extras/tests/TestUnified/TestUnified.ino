@@ -17,9 +17,9 @@ InternalStorage * qspi = new InternalStorage();
 #endif
 
 
-void test(String opperation, Arduino_UnifiedStorage* sourceStorage, Arduino_UnifiedStorage* destinationStorage, const char* storageTypeA, const char* storageTypeB) {
+void test(String operation, Arduino_UnifiedStorage* sourceStorage, Arduino_UnifiedStorage* destinationStorage, const char* storageTypeA, const char* storageTypeB) {
     Serial.println("----------------------------------------------------------");
-    Serial.println("Running test for " + opperation + " from " + String(storageTypeA) + " to " + String(storageTypeB) + "\n");
+    Serial.println("Running test for " + operation + " from " + String(storageTypeA) + " to " + String(storageTypeB) + "\n");
 
     int mountSource = sourceStorage -> begin();
     int mountDest =  destinationStorage->begin();
@@ -36,18 +36,18 @@ void test(String opperation, Arduino_UnifiedStorage* sourceStorage, Arduino_Unif
         fileToMove.close();
 
         int opperationResult = -1;
-        if (opperation == "move") {
+        if (operation == "move") {
             opperationResult = fileToMove.moveTo(destinationStorage->getRootFolder(), true);
             fileToMove.close();
             fileToMove.remove();
-        } else if(opperation == "copy"){
+        } else if(operation == "copy"){
             opperationResult = fileToMove.copyTo(destinationStorage->getRootFolder(), true);
             fileToMove.close();
             fileToMove.remove();
         }
 
         if (opperationResult) {
-            Serial.println(opperation + " from " + String(storageTypeA) + " to " + String(storageTypeB) + " successful");
+            Serial.println(operation + " from " + String(storageTypeA) + " to " + String(storageTypeB) + " successful");
         }
 
 
