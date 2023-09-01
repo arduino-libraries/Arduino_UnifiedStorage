@@ -34,14 +34,14 @@ class Folder {
     /**
      * @brief Creates a file inside the directory.
      * @param const char * fileName - The name of the file to create.
-     * @return A File object if successfull, NULL if not. 
+     * @return A File object if successful, NULL if not. 
      */
     UFile createFile(const char * fileName, FileMode fmode);
 
     /**
      * @brief Creates a file inside the directory.
      * @param String fileName - The name of the file to create.
-     * @return A File object if successfull, NULL if not. 
+     * @return A File object if successful, NULL if not. 
      */
     UFile createFile(String fileName, FileMode fmode);
 
@@ -101,13 +101,13 @@ class Folder {
     Folder createSubfolder(String subfolderName, bool overwrite = false);
 
     /**
-     * @brief Returns File objects for all files in the current dirctory.
+     * @brief Returns File objects for all files in the current directory.
      * @return A std::vector of File objects representing the files in the directory.
      */
     std::vector<UFile> getFiles();
 
     /**
-     * @brief Returns Folder objects for all files in the current dirctory.
+     * @brief Returns Folder objects for all files in the current directory.
      * @return A std::vector of Folder objects representing the files in the directory.
      */
     std::vector<Folder>  getFolders();
