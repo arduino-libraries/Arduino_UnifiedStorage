@@ -160,7 +160,7 @@ void setup() {
   //configureRS485(baudrate);
   //Serial.println("RS485 goes brrr...");
 
-  if (!internalStorage.begin() == 0) {
+  if (!internalStorage.begin()) {
     Serial.println("Failed to initialize internal storage");
     return;
   } else {
