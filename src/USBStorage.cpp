@@ -9,14 +9,12 @@
 bool USBStorage::usb_available = false;
 
 USBStorage::USBStorage(){
- #if defined(ARDUINO_PORTENTA_C33)
-         register_hotplug_callback(DEV_USB,  [](){
-            usb_available = !usb_available;
-
-        });
+#if defined(ARDUINO_PORTENTA_C33)
+    register_hotplug_callback(DEV_USB,  [](){
+        usb_available = !usb_available;
+    });
 #endif
 }
-
 
 int USBStorage::begin(FileSystems fs){
   this -> fs = fs;
@@ -24,9 +22,6 @@ int USBStorage::begin(FileSystems fs){
 }
 
 int USBStorage::begin(){
-
- 
-
     int attempts = 0;
     int err = mount(DEV_USB, this->fs, MNT_DEFAULT);
 
@@ -45,14 +40,12 @@ int USBStorage::begin(){
     return err == 0;
 }
 
-
 int USBStorage::unmount(){
   auto unmountResult = umount(DEV_USB);
     
 
   if(unmountResult == 0){
       this -> connected = false;
-  } else {
   }
 
   return unmountResult == 0;
@@ -61,7 +54,6 @@ int USBStorage::unmount(){
 Folder USBStorage::getRootFolder(){
     return Folder("/usb");
 }
-
 
 bool USBStorage::isAvailable(){
     return usb_available;
@@ -72,33 +64,25 @@ bool USBStorage::isConnected(){
 }
 
 void USBStorage::checkConnection(){
-    #if defined(ARDUINO_PORTENTA_H7_M7)
     USBHost * host;
     USBDeviceConnected * dev;
+#if defined(ARDUINO_PORTENTA_H7_M7)
     unsigned long currentMillis = millis();
     boolean found = false;
 
     if (currentMillis - previousMillis >= interval) {
-        this -> previousMillis = currentMillis;
+      this->previousMillis = currentMillis;
+      host = USBHost::getHostInst();
 
-            host = USBHost::getHostInst();
-
-        
-                    if ((dev = host->getDevice(0)) != NULL) {
-                         usb_available = true;
-                           found = true;
-                        } else {
-                             usb_available = false;
-                        }
+      if ((dev = host->getDevice(0)) != NULL){
+          usb_available = true;
+          found = true;
+      } else{
+          usb_available = false;
+      }
     }
-        
-                
-         
-
-    #endif
+#endif
 }
-
-
 
 int USBStorage::formatFAT(){
     this -> begin();
