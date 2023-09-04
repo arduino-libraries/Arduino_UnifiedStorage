@@ -84,8 +84,6 @@ void USBStorage::checkConnection(){
         
                     if ((dev = host->getDevice(0)) != NULL) {
                          usb_available = true;
-
-                        uint8_t ceva =  dev->getNbIntf();
                            found = true;
                         } else {
                              usb_available = false;
