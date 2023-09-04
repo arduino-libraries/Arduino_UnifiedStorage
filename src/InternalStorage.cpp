@@ -57,6 +57,8 @@ int InternalStorage::begin(){
         int err = this -> userDataFileSystem -> mount(this -> userData);
   
         if(err == 0) return 1;
+    #else
+        return 0;
     #endif
 }
 
