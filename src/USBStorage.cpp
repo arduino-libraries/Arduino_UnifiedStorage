@@ -69,31 +69,6 @@ bool USBStorage::isConnected(){
     return this -> connected;
 }
 
-
-/*
-
-
-void USBStorage::checkConnection(){
-    #if defined(ARDUINO_PORTENTA_H7_M7)
-    USBHost * host;
-    USBDeviceConnected * dev;
-    unsigned long currentMillis = millis();
-    boolean found = false;
-
-    if (currentMillis - previousMillis >= interval) {
-        this -> previousMillis = currentMillis;
-            host = USBHost::getHostInst();
-            if(host->getDevice(0) != NULL){
-                this->available = true;
-            } else {
-                this->available = false;
-            }
-    }
-    #endif
-}
-*/
-
-
 void USBStorage::checkConnection(){
     #if defined(ARDUINO_PORTENTA_H7_M7)
     USBHost * host;
