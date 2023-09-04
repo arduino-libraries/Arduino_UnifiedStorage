@@ -18,7 +18,7 @@ USBStorage::USBStorage(){
 
 int USBStorage::begin(FileSystems fs){
   this -> fs = fs;
-  this -> begin();
+  return this -> begin();
 }
 
 int USBStorage::begin(){
