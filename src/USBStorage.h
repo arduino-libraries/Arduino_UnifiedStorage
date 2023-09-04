@@ -80,7 +80,7 @@ private:
     FileSystems fs = FS_FAT;
     bool connected = false;
     unsigned long previousMillis; 
-    int interval = 500;
+    unsigned int interval = 500;
     static bool usb_available;
 };
 
