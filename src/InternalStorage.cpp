@@ -62,7 +62,7 @@ int InternalStorage::begin(){
 
 int InternalStorage::unmount(){
      int err = this -> userDataFileSystem -> unmount();
-     if(err == 0) return 1;
+     return err == 0 ? 1 : 0;
 }
 
 Folder InternalStorage::getRootFolder(){
