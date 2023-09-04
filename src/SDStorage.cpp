@@ -14,7 +14,7 @@ int SDStorage::begin(){
 
 int SDStorage::begin(FileSystems fs){
   this -> fs = fs;
-  this -> begin();
+  return this -> begin();
 }
 
 int SDStorage::unmount(){
