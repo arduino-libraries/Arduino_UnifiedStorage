@@ -2,55 +2,12 @@
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`define ` [`PATH_MAX`](#_types_8h_1ae688d728e1acdfe5988c7db45d6f0166)            | 
-`enum ` [`FileMode`](#_types_8h_1a031770da453a180e21dcbef5cf5aeab6)            | 
-`public static bool ` [`copyFolder`](#_types_8h_1ae376909a80f5f275a87d98a4d04379b3)`(const char * source, const char * destination)`            | 
-`public static std::string ` [`replaceLastPathComponent`](#_types_8h_1a1231b36e02c6532fe382bd77c07ac933)`(const std::string & path, const std::string & newComponent)`            | 
-`public static std::string ` [`getLastPathComponent`](#_types_8h_1aef7f02955007c4af74bc4539be935ed9)`(const std::string & path)`            | 
-`public static std::string ` [`replaceFirstPathComponent`](#_types_8h_1ae04577d71725c561b6a741435bed465a)`(const std::string & path, const std::string & destinationPath)`            | 
-`public inline static String ` [`getErrno`](#_types_8h_1a6f2ca9f121d182e6715776886b08ace5)`()`            | 
 `class ` [`Arduino_UnifiedStorage`](#class_arduino___unified_storage) | Abstract class representing the common features of the supported storage methods
 `class ` [`Folder`](#class_folder) | Class representing a directory.
 `class ` [`InternalStorage`](#class_internal_storage) | Represents internal storage using the Arduino Unified Storage library.
 `class ` [`SDStorage`](#class_s_d_storage) | Represents an SD card storage using the Arduino Unified Storage library.
 `class ` [`UFile`](#class_u_file) | Class representing a File
 `class ` [`USBStorage`](#class_u_s_b_storage) | Represents a USB storage using the Arduino Unified Storage library.
-
-## Members
-
-#### `define ` [`PATH_MAX`](#_types_8h_1ae688d728e1acdfe5988c7db45d6f0166) <a id="_types_8h_1ae688d728e1acdfe5988c7db45d6f0166" class="anchor"></a>
-
-<hr />
-
-#### `enum ` [`FileMode`](#_types_8h_1a031770da453a180e21dcbef5cf5aeab6) <a id="_types_8h_1a031770da453a180e21dcbef5cf5aeab6" class="anchor"></a>
-
- Values                         | Descriptions                                
---------------------------------|---------------------------------------------
-READ            | 
-WRITE            | 
-APPEND            | 
-
-<hr />
-
-#### `public static bool ` [`copyFolder`](#_types_8h_1ae376909a80f5f275a87d98a4d04379b3)`(const char * source, const char * destination)` <a id="_types_8h_1ae376909a80f5f275a87d98a4d04379b3" class="anchor"></a>
-
-<hr />
-
-#### `public static std::string ` [`replaceLastPathComponent`](#_types_8h_1a1231b36e02c6532fe382bd77c07ac933)`(const std::string & path, const std::string & newComponent)` <a id="_types_8h_1a1231b36e02c6532fe382bd77c07ac933" class="anchor"></a>
-
-<hr />
-
-#### `public static std::string ` [`getLastPathComponent`](#_types_8h_1aef7f02955007c4af74bc4539be935ed9)`(const std::string & path)` <a id="_types_8h_1aef7f02955007c4af74bc4539be935ed9" class="anchor"></a>
-
-<hr />
-
-#### `public static std::string ` [`replaceFirstPathComponent`](#_types_8h_1ae04577d71725c561b6a741435bed465a)`(const std::string & path, const std::string & destinationPath)` <a id="_types_8h_1ae04577d71725c561b6a741435bed465a" class="anchor"></a>
-
-<hr />
-
-#### `public inline static String ` [`getErrno`](#_types_8h_1a6f2ca9f121d182e6715776886b08ace5)`()` <a id="_types_8h_1a6f2ca9f121d182e6715776886b08ace5" class="anchor"></a>
-
-<hr />
 
 # class `Arduino_UnifiedStorage` <a id="class_arduino___unified_storage" class="anchor"></a>
 
@@ -75,6 +32,7 @@ Initializes the storage.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public int ` [`begin`](#class_arduino___unified_storage_1a8875999ef2fdb12a98db1f0fcd0afc28)`(FileSystems fs)` <a id="class_arduino___unified_storage_1a8875999ef2fdb12a98db1f0fcd0afc28" class="anchor"></a>
 
@@ -84,24 +42,28 @@ Initializes the storage with the specified file system.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public int ` [`unmount`](#class_arduino___unified_storage_1ad6ec554809fdf4a168a38d50c6b0096c)`()` <a id="class_arduino___unified_storage_1ad6ec554809fdf4a168a38d50c6b0096c" class="anchor"></a>
 
 Unmounts the storage. 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_arduino___unified_storage_1a7166075ba695d54bf74c6c71b8c4c1bf)`()` <a id="class_arduino___unified_storage_1a7166075ba695d54bf74c6c71b8c4c1bf" class="anchor"></a>
 
 Retrieves the root folder of the storage. 
 #### Returns
 The root folder as a [Folder](#class_folder) object.
+<hr />
 
 ### `public int ` [`formatLittleFS`](#class_arduino___unified_storage_1ac24d1b858dd5323c9ec1a3838a119c97)`()` <a id="class_arduino___unified_storage_1ac24d1b858dd5323c9ec1a3838a119c97" class="anchor"></a>
 
 Formats the storage with the FAT file system. 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public int ` [`formatFAT`](#class_arduino___unified_storage_1a33683ec5084c1108dd735f71a20d27a0)`()` <a id="class_arduino___unified_storage_1a33683ec5084c1108dd735f71a20d27a0" class="anchor"></a>
 
@@ -109,6 +71,7 @@ Formats the storage with the FAT file system.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 # class `Folder` <a id="class_folder" class="anchor"></a>
 
@@ -131,8 +94,8 @@ Class representing a directory.
 `public String ` [`getPathString`](#class_folder_1a30dd952da8ae977dca4e3dfde8fbd5be)`()` | Returns the path of the file.
 `public ` [`Folder`](#class_folder)` ` [`createSubfolder`](#class_folder_1a78f2f9b297f62b67c2e0656b15a95868)`(const char * subfolderName, bool overwrite)` | Creates a subfolder in the directory.
 `public ` [`Folder`](#class_folder)` ` [`createSubfolder`](#class_folder_1ab50743664becb7b2a1fb564b5513d69c)`(String subfolderName, bool overwrite)` | Creates a subfolder in the directory.
-`public std::vector< ` [`UFile`](#class_u_file)` > ` [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78)`()` | Returns File objects for all files in the current dirctory.
-`public std::vector< ` [`Folder`](#class_folder)` > ` [`getFolders`](#class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb)`()` | Returns [Folder](#class_folder) objects for all files in the current dirctory.
+`public std::vector< ` [`UFile`](#class_u_file)` > ` [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78)`()` | Returns File objects for all files in the current directory.
+`public std::vector< ` [`Folder`](#class_folder)` > ` [`getFolders`](#class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb)`()` | Returns [Folder](#class_folder) objects for all files in the current directory.
 `public bool ` [`copyTo`](#class_folder_1aabf0818b7ee45b2d871e82e86edb4ebd)`(` [`Folder`](#class_folder)` destination, bool overwrite)` | Copies the current directory.
 `public bool ` [`copyTo`](#class_folder_1a058d193f53c559eefe343b30797500eb)`(const char * destination, bool overwrite)` | Copies the current directory.
 `public bool ` [`copyTo`](#class_folder_1a3162979e4c679c7f5503cc4584949714)`(String destination, bool overwrite)` | Copies the current directory.
@@ -149,12 +112,15 @@ Class representing a directory.
 
 Blank Constructor.
 
+<hr />
+
 ### `public  ` [`Folder`](#class_folder_1aa2a4dc98e8c383c7b4fa503b45813fe3)`(const char * dirname)` <a id="class_folder_1aa2a4dc98e8c383c7b4fa503b45813fe3" class="anchor"></a>
 
 Constructor.
 
 #### Parameters
 * `const` char * dirname - The name of the directory.
+<hr />
 
 ### `public  ` [`Folder`](#class_folder_1a6f445bfe0214a03ba00a1408e41726dd)`(String dirname)` <a id="class_folder_1a6f445bfe0214a03ba00a1408e41726dd" class="anchor"></a>
 
@@ -162,6 +128,7 @@ Constructor.
 
 #### Parameters
 * `String` dirname - The name of the directory.
+<hr />
 
 ### `public ` [`UFile`](#class_u_file)` ` [`createFile`](#class_folder_1a04eceb0406b02e2d8a628d3c359dba5d)`(const char * fileName, FileMode fmode)` <a id="class_folder_1a04eceb0406b02e2d8a628d3c359dba5d" class="anchor"></a>
 
@@ -171,7 +138,8 @@ Creates a file inside the directory.
 * `const` char * fileName - The name of the file to create. 
 
 #### Returns
-A File object if successfull, NULL if not.
+A File object if successful, NULL if not.
+<hr />
 
 ### `public ` [`UFile`](#class_u_file)` ` [`createFile`](#class_folder_1a44255e2c0c4ffa37d7637a601bc590f6)`(String fileName, FileMode fmode)` <a id="class_folder_1a44255e2c0c4ffa37d7637a601bc590f6" class="anchor"></a>
 
@@ -181,7 +149,8 @@ Creates a file inside the directory.
 * `String` fileName - The name of the file to create. 
 
 #### Returns
-A File object if successfull, NULL if not.
+A File object if successful, NULL if not.
+<hr />
 
 ### `public bool ` [`remove`](#class_folder_1aca893daac6c6747895d50987cf9cf34c)`()` <a id="class_folder_1aca893daac6c6747895d50987cf9cf34c" class="anchor"></a>
 
@@ -192,6 +161,7 @@ Removes a directory.
 
 #### Returns
 True if the directory was removed successfully, false otherwise.
+<hr />
 
 ### `public bool ` [`rename`](#class_folder_1adcbb7766d628810f716887d1e7e8d36f)`(const char * newDirname)` <a id="class_folder_1adcbb7766d628810f716887d1e7e8d36f" class="anchor"></a>
 
@@ -202,6 +172,7 @@ Renames a directory.
 
 #### Returns
 True if the directory was renamed successfully, false otherwise.
+<hr />
 
 ### `public bool ` [`rename`](#class_folder_1a14519c2a344ebfb8161c2bee2a2b5464)`(String newDirname)` <a id="class_folder_1a14519c2a344ebfb8161c2bee2a2b5464" class="anchor"></a>
 
@@ -212,6 +183,7 @@ Renames a directory.
 
 #### Returns
 True if the directory was renamed successfully, false otherwise.
+<hr />
 
 ### `public bool ` [`exists`](#class_folder_1aa548278d3ec09fd4abcaa827a79c40f4)`()` <a id="class_folder_1aa548278d3ec09fd4abcaa827a79c40f4" class="anchor"></a>
 
@@ -219,6 +191,7 @@ Checks if the directory exists.
 
 #### Returns
 True if the directory exists, false otherwise.
+<hr />
 
 ### `public const char * ` [`getPath`](#class_folder_1a731e8d84685eca8e273affba152468a6)`()` <a id="class_folder_1a731e8d84685eca8e273affba152468a6" class="anchor"></a>
 
@@ -226,6 +199,7 @@ Returns the path of the file.
 
 #### Returns
 The path of the file as a const char *
+<hr />
 
 ### `public String ` [`getPathString`](#class_folder_1a30dd952da8ae977dca4e3dfde8fbd5be)`()` <a id="class_folder_1a30dd952da8ae977dca4e3dfde8fbd5be" class="anchor"></a>
 
@@ -233,6 +207,7 @@ Returns the path of the file.
 
 #### Returns
 The path of the file as an Arduino String
+<hr />
 
 ### `public ` [`Folder`](#class_folder)` ` [`createSubfolder`](#class_folder_1a78f2f9b297f62b67c2e0656b15a95868)`(const char * subfolderName, bool overwrite)` <a id="class_folder_1a78f2f9b297f62b67c2e0656b15a95868" class="anchor"></a>
 
@@ -245,6 +220,7 @@ Creates a subfolder in the directory.
 
 #### Returns
 The created subfolder.
+<hr />
 
 ### `public ` [`Folder`](#class_folder)` ` [`createSubfolder`](#class_folder_1ab50743664becb7b2a1fb564b5513d69c)`(String subfolderName, bool overwrite)` <a id="class_folder_1ab50743664becb7b2a1fb564b5513d69c" class="anchor"></a>
 
@@ -257,20 +233,23 @@ Creates a subfolder in the directory.
 
 #### Returns
 The created subfolder.
+<hr />
 
 ### `public std::vector< ` [`UFile`](#class_u_file)` > ` [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78)`()` <a id="class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78" class="anchor"></a>
 
-Returns File objects for all files in the current dirctory.
+Returns File objects for all files in the current directory.
 
 #### Returns
 A std::vector of File objects representing the files in the directory.
+<hr />
 
 ### `public std::vector< ` [`Folder`](#class_folder)` > ` [`getFolders`](#class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb)`()` <a id="class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb" class="anchor"></a>
 
-Returns [Folder](#class_folder) objects for all files in the current dirctory.
+Returns [Folder](#class_folder) objects for all files in the current directory.
 
 #### Returns
 A std::vector of [Folder](#class_folder) objects representing the files in the directory.
+<hr />
 
 ### `public bool ` [`copyTo`](#class_folder_1aabf0818b7ee45b2d871e82e86edb4ebd)`(` [`Folder`](#class_folder)` destination, bool overwrite)` <a id="class_folder_1aabf0818b7ee45b2d871e82e86edb4ebd" class="anchor"></a>
 
@@ -281,6 +260,7 @@ Copies the current directory.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `public bool ` [`copyTo`](#class_folder_1a058d193f53c559eefe343b30797500eb)`(const char * destination, bool overwrite)` <a id="class_folder_1a058d193f53c559eefe343b30797500eb" class="anchor"></a>
 
@@ -293,6 +273,7 @@ Copies the current directory.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `public bool ` [`copyTo`](#class_folder_1a3162979e4c679c7f5503cc4584949714)`(String destination, bool overwrite)` <a id="class_folder_1a3162979e4c679c7f5503cc4584949714" class="anchor"></a>
 
@@ -305,6 +286,7 @@ Copies the current directory.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `public bool ` [`moveTo`](#class_folder_1a5002b388b7e503ba79a8623ca6c1cbbd)`(` [`Folder`](#class_folder)` destination, bool overwrite)` <a id="class_folder_1a5002b388b7e503ba79a8623ca6c1cbbd" class="anchor"></a>
 
@@ -317,6 +299,7 @@ Moves the current directory.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `public bool ` [`moveTo`](#class_folder_1a0ab690abfff790a2bd9fff3dd5976e82)`(const char * destination, bool overwrite)` <a id="class_folder_1a0ab690abfff790a2bd9fff3dd5976e82" class="anchor"></a>
 
@@ -329,6 +312,7 @@ Moves the current directory.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `public bool ` [`moveTo`](#class_folder_1a3125db272185165a03b891efe5985a32)`(String destination, bool overwrite)` <a id="class_folder_1a3125db272185165a03b891efe5985a32" class="anchor"></a>
 
@@ -341,12 +325,19 @@ Move the current directory.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `private std::string ` [`dirname`](#class_folder_1a9a8a698e1d21f5aa0e10dc139d6d7f32) <a id="class_folder_1a9a8a698e1d21f5aa0e10dc139d6d7f32" class="anchor"></a>
 
+<hr />
+
 ### `private std::string ` [`path`](#class_folder_1adbf6c881f9e745d724fc37ad4cea153f) <a id="class_folder_1adbf6c881f9e745d724fc37ad4cea153f" class="anchor"></a>
 
+<hr />
+
 ### `private DIR * ` [`dir`](#class_folder_1ada2c04b7bb18988637ef5d03af23c53a) <a id="class_folder_1ada2c04b7bb18988637ef5d03af23c53a" class="anchor"></a>
+
+<hr />
 
 # class `InternalStorage` <a id="class_internal_storage" class="anchor"></a>
 
@@ -379,6 +370,7 @@ Represents internal storage using the Arduino Unified Storage library.
 ### `public  ` [`InternalStorage`](#class_internal_storage_1ac45948ef554bc659efed81240140192e)`()` <a id="class_internal_storage_1ac45948ef554bc659efed81240140192e" class="anchor"></a>
 
 Default constructor for the [InternalStorage](#class_internal_storage) class.
+<hr />
 
 ### `public  ` [`InternalStorage`](#class_internal_storage_1ac13cad019a2ae66647d1c3604690eca7)`(int partition, const char * name, FileSystems fs)` <a id="class_internal_storage_1ac13cad019a2ae66647d1c3604690eca7" class="anchor"></a>
 
@@ -390,6 +382,7 @@ Constructs an [InternalStorage](#class_internal_storage) object with the specifi
 * `name` The name of the partition. 
 
 * `fs` The desired file system (FS_FAT or FS_LITTLEFS).
+<hr />
 
 ### `public virtual int ` [`begin`](#class_internal_storage_1a520a40d49b3be7cc4b4ade86a9a8845b)`()` <a id="class_internal_storage_1a520a40d49b3be7cc4b4ade86a9a8845b" class="anchor"></a>
 
@@ -397,6 +390,7 @@ Initializes the internal storage.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual int ` [`begin`](#class_internal_storage_1ace5153b8fbef34b9d0d6c8e3cf87007e)`(FileSystems fs)` <a id="class_internal_storage_1ace5153b8fbef34b9d0d6c8e3cf87007e" class="anchor"></a>
 
@@ -407,6 +401,7 @@ Initializes the internal storage with the specified file system.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual int ` [`unmount`](#class_internal_storage_1a3d139260d59add4222516aaf577a9399)`()` <a id="class_internal_storage_1a3d139260d59add4222516aaf577a9399" class="anchor"></a>
 
@@ -414,6 +409,7 @@ Unmounts the internal storage.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_internal_storage_1a87142ddbdad62217e33851b32572082d)`()` <a id="class_internal_storage_1a87142ddbdad62217e33851b32572082d" class="anchor"></a>
 
@@ -421,6 +417,7 @@ Retrieves the root folder of the internal storage.
 
 #### Returns
 The root folder as a [Folder](#class_folder) object.
+<hr />
 
 ### `public void ` [`setQSPIPartition`](#class_internal_storage_1a2ca8680537077ca3e189be2ca6dcc634)`(int partition)` <a id="class_internal_storage_1a2ca8680537077ca3e189be2ca6dcc634" class="anchor"></a>
 
@@ -428,6 +425,7 @@ Sets the QSPI partition number.
 
 #### Parameters
 * `partition` The partition number.
+<hr />
 
 ### `public void ` [`setQSPIPartitionName`](#class_internal_storage_1ae0fbe264a758a4026548df66ec05f8c8)`(const char * name)` <a id="class_internal_storage_1ae0fbe264a758a4026548df66ec05f8c8" class="anchor"></a>
 
@@ -435,6 +433,7 @@ Sets the QSPI partition name.
 
 #### Parameters
 * `name` The name of the partition.
+<hr />
 
 ### `public virtual int ` [`formatFAT`](#class_internal_storage_1a8a1bea9b07a7a507e4d4ac6aafb75e12)`()` <a id="class_internal_storage_1a8a1bea9b07a7a507e4d4ac6aafb75e12" class="anchor"></a>
 
@@ -442,6 +441,7 @@ Formats the internal storage with the FAT file system.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual int ` [`formatLittleFS`](#class_internal_storage_1a9e86d2bbc4cbafbaee58a4b2913e0830)`()` <a id="class_internal_storage_1a9e86d2bbc4cbafbaee58a4b2913e0830" class="anchor"></a>
 
@@ -449,6 +449,7 @@ Formats the internal storage with the LittleFS file system.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `private char * ` [`partitionName`](#class_internal_storage_1a831d504f992d398801924538b677b85c) <a id="class_internal_storage_1a831d504f992d398801924538b677b85c" class="anchor"></a>
 
@@ -456,8 +457,11 @@ Retrieves the block device associated with the internal storage.
 
 #### Returns
 The block device as a BlockDevice object.
+<hr />
 
 ### `private FileSystems ` [`fs`](#class_internal_storage_1a7bec9fbc7008259985da0460c501bca8) <a id="class_internal_storage_1a7bec9fbc7008259985da0460c501bca8" class="anchor"></a>
+
+<hr />
 
 # class `SDStorage` <a id="class_s_d_storage" class="anchor"></a>
 
@@ -486,6 +490,7 @@ Represents an SD card storage using the Arduino Unified Storage library.
 ### `public  ` [`SDStorage`](#class_s_d_storage_1a992cb710f41462a7a35c6dfdc838f01f)`()` <a id="class_s_d_storage_1a992cb710f41462a7a35c6dfdc838f01f" class="anchor"></a>
 
 Default constructor for the [SDStorage](#class_s_d_storage) class.
+<hr />
 
 ### `public virtual int ` [`begin`](#class_s_d_storage_1a2e46cdebf6b253b7a5d3efa41c019b84)`()` <a id="class_s_d_storage_1a2e46cdebf6b253b7a5d3efa41c019b84" class="anchor"></a>
 
@@ -493,6 +498,7 @@ Initializes the SD card storage.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual int ` [`begin`](#class_s_d_storage_1ab78cac5ad77a9b61cd586485755a6f8a)`(FileSystems fs)` <a id="class_s_d_storage_1ab78cac5ad77a9b61cd586485755a6f8a" class="anchor"></a>
 
@@ -503,6 +509,7 @@ Initializes the SD card storage with the specified file system.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual int ` [`unmount`](#class_s_d_storage_1a29ed4a057be24972953d9bb52b7bd593)`()` <a id="class_s_d_storage_1a29ed4a057be24972953d9bb52b7bd593" class="anchor"></a>
 
@@ -510,6 +517,7 @@ Unmounts the SD card storage.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_s_d_storage_1a2f7327c327985d88bd1305310ec0c5e8)`()` <a id="class_s_d_storage_1a2f7327c327985d88bd1305310ec0c5e8" class="anchor"></a>
 
@@ -517,6 +525,7 @@ Retrieves the root folder of the SD card storage.
 
 #### Returns
 The root folder as a [Folder](#class_folder) object.
+<hr />
 
 ### `public virtual int ` [`formatFAT`](#class_s_d_storage_1ab06c05a87f5e34036c2d69d187ea3775)`()` <a id="class_s_d_storage_1ab06c05a87f5e34036c2d69d187ea3775" class="anchor"></a>
 
@@ -524,6 +533,7 @@ Formats the SD card storage with the FAT file system.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual int ` [`formatLittleFS`](#class_s_d_storage_1a797b3226c20794fa140cea95e13d5cee)`()` <a id="class_s_d_storage_1a797b3226c20794fa140cea95e13d5cee" class="anchor"></a>
 
@@ -531,8 +541,11 @@ Formats the SD card storage with the LittleFS file system.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `private FileSystems ` [`fs`](#class_s_d_storage_1a711f6f2e8af27534e9cc4cb83146049b) <a id="class_s_d_storage_1a711f6f2e8af27534e9cc4cb83146049b" class="anchor"></a>
+
+<hr />
 
 # class `UFile` <a id="class_u_file" class="anchor"></a>
 
@@ -581,14 +594,19 @@ Class representing a File
 
 Constructor.
 
+<hr />
+
 ### `public  ` [`UFile`](#class_u_file_1acdd969b1c2f115fc105f6d08bd67b121)`(const char * path)` <a id="class_u_file_1acdd969b1c2f115fc105f6d08bd67b121" class="anchor"></a>
 
 Constructor.
 
 #### Parameters
 * `const` char * path - path of the file
+<hr />
 
 ### `public  ` [`~UFile`](#class_u_file_1a4f74e28f98898e3603140b6409fa52ba)`()` <a id="class_u_file_1a4f74e28f98898e3603140b6409fa52ba" class="anchor"></a>
+
+<hr />
 
 ### `public bool ` [`changeMode`](#class_u_file_1a744ad88f2037e87e3f5375c7aec28f6d)`(FileMode mode)` <a id="class_u_file_1a744ad88f2037e87e3f5375c7aec28f6d" class="anchor"></a>
 
@@ -599,6 +617,7 @@ Closes the file, and opens it again with a new file mode.
 
 #### Returns
 True if operation was successful, false otherwise.
+<hr />
 
 ### `public bool ` [`open`](#class_u_file_1aa52ff2913386374e6e83ba35f595d213)`(const char * filename, FileMode mode)` <a id="class_u_file_1aa52ff2913386374e6e83ba35f595d213" class="anchor"></a>
 
@@ -611,6 +630,7 @@ Opens a file with the specified mode.
 
 #### Returns
 True if the file was opened successfully, false otherwise.
+<hr />
 
 ### `public bool ` [`open`](#class_u_file_1a0247abf7053b47463f73ca8cb1c7c23c)`(String filename, FileMode mode)` <a id="class_u_file_1a0247abf7053b47463f73ca8cb1c7c23c" class="anchor"></a>
 
@@ -623,10 +643,13 @@ Opens a file with the specified mode.
 
 #### Returns
 True if the file was opened successfully, false otherwise.
+<hr />
 
 ### `public void ` [`close`](#class_u_file_1ab5731b8e40a87a44a7322bf151597c55)`()` <a id="class_u_file_1ab5731b8e40a87a44a7322bf151597c55" class="anchor"></a>
 
 Closes the file and releases any allocated resources.
+
+<hr />
 
 ### `public bool ` [`seek`](#class_u_file_1aa117a19e5efe6508e5e87ab65abbb560)`(size_t offset)` <a id="class_u_file_1aa117a19e5efe6508e5e87ab65abbb560" class="anchor"></a>
 
@@ -637,6 +660,7 @@ Seeks to a specific position in the file.
 
 #### Returns
 True if the seek operation was successful, false otherwise.
+<hr />
 
 ### `public size_t ` [`read`](#class_u_file_1a8192f041831d58ba8186798676c5ad3a)`(uint8_t * buffer, size_t size)` <a id="class_u_file_1a8192f041831d58ba8186798676c5ad3a" class="anchor"></a>
 
@@ -649,6 +673,7 @@ Reads data from the file into a buffer.
 
 #### Returns
 The number of bytes read from the file.
+<hr />
 
 ### `public String ` [`readAsString`](#class_u_file_1ad70a29b0e436906bdaa7b99e3fc9e1b3)`()` <a id="class_u_file_1ad70a29b0e436906bdaa7b99e3fc9e1b3" class="anchor"></a>
 
@@ -656,6 +681,7 @@ Reads the contents of the file as an Arduino String.
 
 #### Returns
 The file contents as a String.
+<hr />
 
 ### `public size_t ` [`write`](#class_u_file_1a16625e123db35bf19f9088828d9e1305)`(const uint8_t * buffer, size_t size)` <a id="class_u_file_1a16625e123db35bf19f9088828d9e1305" class="anchor"></a>
 
@@ -668,6 +694,7 @@ Writes data to the file from a buffer.
 
 #### Returns
 The number of bytes written to the file.
+<hr />
 
 ### `public size_t ` [`write`](#class_u_file_1a68ee9ecdb0a6efd9816f3382de67905e)`(String)` <a id="class_u_file_1a68ee9ecdb0a6efd9816f3382de67905e" class="anchor"></a>
 
@@ -678,6 +705,7 @@ Writes a string to the file.
 
 #### Returns
 The number of bytes written to the file.
+<hr />
 
 ### `public bool ` [`remove`](#class_u_file_1a0e9efb7c54053b6f507f6caa704fc101)`()` <a id="class_u_file_1a0e9efb7c54053b6f507f6caa704fc101" class="anchor"></a>
 
@@ -685,6 +713,7 @@ Removes the file.
 
 #### Returns
 True if the file was removed successfully, false otherwise.
+<hr />
 
 ### `public bool ` [`rename`](#class_u_file_1a0511c1a498bcbce549b49db9e188c2c0)`(const char * newFilename)` <a id="class_u_file_1a0511c1a498bcbce549b49db9e188c2c0" class="anchor"></a>
 
@@ -695,6 +724,7 @@ Renames the file.
 
 #### Returns
 True if the file was renamed successfully, false otherwise.
+<hr />
 
 ### `public bool ` [`rename`](#class_u_file_1a2122cd3e0e16481ecaff1af897790c03)`(String newFilename)` <a id="class_u_file_1a2122cd3e0e16481ecaff1af897790c03" class="anchor"></a>
 
@@ -705,6 +735,7 @@ Renames the file.
 
 #### Returns
 True if the file was renamed successfully, false otherwise.
+<hr />
 
 ### `public bool ` [`exists`](#class_u_file_1a4963afa70289718a3bd1ca50b6adb420)`()` <a id="class_u_file_1a4963afa70289718a3bd1ca50b6adb420" class="anchor"></a>
 
@@ -712,6 +743,7 @@ Checks if the file exists.
 
 #### Returns
 True if the file exists, false otherwise.
+<hr />
 
 ### `public bool ` [`copyTo`](#class_u_file_1a6178616dea1a897b0e4033dfdc7bc41d)`(const char * destinationPath, bool overwrite)` <a id="class_u_file_1a6178616dea1a897b0e4033dfdc7bc41d" class="anchor"></a>
 
@@ -722,6 +754,7 @@ Copies the file to the specified destination path.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `public bool ` [`copyTo`](#class_u_file_1a908edbee6d38619798d63f72f8f58dd1)`(String destinationPath, bool overwrite)` <a id="class_u_file_1a908edbee6d38619798d63f72f8f58dd1" class="anchor"></a>
 
@@ -732,6 +765,7 @@ Copies the file to the specified destination path.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `public bool ` [`copyTo`](#class_u_file_1a9e06719446533b73505a6f6a66091fa7)`(` [`Folder`](#class_folder)` destinationFolder, bool overwrite)` <a id="class_u_file_1a9e06719446533b73505a6f6a66091fa7" class="anchor"></a>
 
@@ -742,6 +776,7 @@ Copies the file to the specified destination path.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `public bool ` [`moveTo`](#class_u_file_1abadd4af5700d94b2c3d74dd4dce51bdc)`(const char * destinationPath, bool overwrite)` <a id="class_u_file_1abadd4af5700d94b2c3d74dd4dce51bdc" class="anchor"></a>
 
@@ -752,6 +787,7 @@ Moves the file to the specified destination path.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `public bool ` [`moveTo`](#class_u_file_1ae676e42f3e5ad423da3386985fc8261f)`(String destinationPath, bool overwrite)` <a id="class_u_file_1ae676e42f3e5ad423da3386985fc8261f" class="anchor"></a>
 
@@ -762,6 +798,7 @@ Moves the file to the specified destination path.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `public bool ` [`moveTo`](#class_u_file_1a69f6a7cccce8cc40eb6698df15f38635)`(` [`Folder`](#class_folder)` destinationFolder, bool overwrite)` <a id="class_u_file_1a69f6a7cccce8cc40eb6698df15f38635" class="anchor"></a>
 
@@ -772,6 +809,7 @@ Copies the file to the specified destination folder.
 
 #### Returns
 True upon success, false otherwise.
+<hr />
 
 ### `public ` [`Folder`](#class_folder)` ` [`getParentFolder`](#class_u_file_1a087b79b6d62a3ed122d1f8b0f25b0d24)`()` <a id="class_u_file_1a087b79b6d62a3ed122d1f8b0f25b0d24" class="anchor"></a>
 
@@ -779,6 +817,7 @@ Returns a reference to the parent folder of the current folder.
 
 #### Returns
 A directory object representing the current folder.
+<hr />
 
 ### `public const char * ` [`getPath`](#class_u_file_1a41592023ea53cd1b46f383097a3db1f8)`()` <a id="class_u_file_1a41592023ea53cd1b46f383097a3db1f8" class="anchor"></a>
 
@@ -786,6 +825,7 @@ Returns the path of the directory.
 
 #### Returns
 The path of the file as a const char *
+<hr />
 
 ### `public String ` [`getPathString`](#class_u_file_1a379d1f0076b414408bac26f317ffc204)`()` <a id="class_u_file_1a379d1f0076b414408bac26f317ffc204" class="anchor"></a>
 
@@ -793,6 +833,7 @@ Returns the path of the directory.
 
 #### Returns
 The path of the file as a String
+<hr />
 
 ### `public int ` [`available`](#class_u_file_1a37fbfdc0ad16ee06d4a66848b40912cd)`()` <a id="class_u_file_1a37fbfdc0ad16ee06d4a66848b40912cd" class="anchor"></a>
 
@@ -800,6 +841,7 @@ Returns the number of bytes available to read.
 
 #### Returns
 The number of bytes available to read as int
+<hr />
 
 ### `public int ` [`read`](#class_u_file_1a62b544ebe9c3b144268016e6427917b5)`()` <a id="class_u_file_1a62b544ebe9c3b144268016e6427917b5" class="anchor"></a>
 
@@ -807,6 +849,7 @@ Returns one byte from the file.
 
 #### Returns
 An int representing one byte from the file
+<hr />
 
 ### `public size_t ` [`write`](#class_u_file_1a4db87498c1a4205145816c14df704de7)`(uint8_t value)` <a id="class_u_file_1a4db87498c1a4205145816c14df704de7" class="anchor"></a>
 
@@ -814,14 +857,23 @@ Writes one byte to the file.
 
 #### Parameters
 * `a` uint8_t value representing the byte to write
+<hr />
 
 ### `private FILE * ` [`fp`](#class_u_file_1aeb2eaaab578ba6e4d25cd347ec8b8ba2) <a id="class_u_file_1aeb2eaaab578ba6e4d25cd347ec8b8ba2" class="anchor"></a>
 
+<hr />
+
 ### `private uint8_t * ` [`readBuffer`](#class_u_file_1abcfa16a7593cd3c993cd3ac944c60ddb) <a id="class_u_file_1abcfa16a7593cd3c993cd3ac944c60ddb" class="anchor"></a>
+
+<hr />
 
 ### `private std::string ` [`path`](#class_u_file_1a19c3bc34bb3756ee19145ab259520d1a) <a id="class_u_file_1a19c3bc34bb3756ee19145ab259520d1a" class="anchor"></a>
 
+<hr />
+
 ### `private FileMode ` [`fm`](#class_u_file_1a2cfecc27dc709b4dafc9b97245348f90) <a id="class_u_file_1a2cfecc27dc709b4dafc9b97245348f90" class="anchor"></a>
+
+<hr />
 
 # class `USBStorage` <a id="class_u_s_b_storage" class="anchor"></a>
 
@@ -856,6 +908,7 @@ Represents a USB storage using the Arduino Unified Storage library.
 ### `public  ` [`USBStorage`](#class_u_s_b_storage_1ad084f3bd2479b0a1daa88013f3cfe23a)`()` <a id="class_u_s_b_storage_1ad084f3bd2479b0a1daa88013f3cfe23a" class="anchor"></a>
 
 Default constructor for the [USBStorage](#class_u_s_b_storage) class.
+<hr />
 
 ### `public virtual int ` [`begin`](#class_u_s_b_storage_1a03f962b05deea5d39509af029d4898b9)`()` <a id="class_u_s_b_storage_1a03f962b05deea5d39509af029d4898b9" class="anchor"></a>
 
@@ -863,6 +916,7 @@ Initializes the USB storage.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual int ` [`begin`](#class_u_s_b_storage_1a4512f903c687b7430382555c78b6e052)`(FileSystems fs)` <a id="class_u_s_b_storage_1a4512f903c687b7430382555c78b6e052" class="anchor"></a>
 
@@ -873,6 +927,7 @@ Initializes the USB storage with the specified file system.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual int ` [`unmount`](#class_u_s_b_storage_1a84413a1327d2a6b4c889a71c721ef4f3)`()` <a id="class_u_s_b_storage_1a84413a1327d2a6b4c889a71c721ef4f3" class="anchor"></a>
 
@@ -880,6 +935,7 @@ Unmounts the USB storage.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_u_s_b_storage_1a1d39336ddd7ec401dc2ed99c3117af59)`()` <a id="class_u_s_b_storage_1a1d39336ddd7ec401dc2ed99c3117af59" class="anchor"></a>
 
@@ -887,6 +943,7 @@ Retrieves the root folder of the USB storage.
 
 #### Returns
 The root folder as a [Folder](#class_folder) object.
+<hr />
 
 ### `public virtual int ` [`formatFAT`](#class_u_s_b_storage_1a12c7124a493cf587e5651314a9331ad5)`()` <a id="class_u_s_b_storage_1a12c7124a493cf587e5651314a9331ad5" class="anchor"></a>
 
@@ -894,6 +951,7 @@ Formats the USB storage with the FAT file system.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public virtual int ` [`formatLittleFS`](#class_u_s_b_storage_1a1f5f3a6d258f4a327c2dd96331a66e30)`()` <a id="class_u_s_b_storage_1a1f5f3a6d258f4a327c2dd96331a66e30" class="anchor"></a>
 
@@ -901,6 +959,7 @@ Formats the USB storage with the LittleFS file system.
 
 #### Returns
 1 if successful, 0 if failed.
+<hr />
 
 ### `public bool ` [`isConnected`](#class_u_s_b_storage_1a228919e4b7f6fe0619fbcb33da9a9534)`()` <a id="class_u_s_b_storage_1a228919e4b7f6fe0619fbcb33da9a9534" class="anchor"></a>
 
@@ -908,6 +967,7 @@ Checks if the USB storage is connected.
 
 #### Returns
 true if connected, false otherwise.
+<hr />
 
 ### `public bool ` [`isAvailable`](#class_u_s_b_storage_1ad71d15f8c9bcd12aa14a2bd6be620184)`()` <a id="class_u_s_b_storage_1ad71d15f8c9bcd12aa14a2bd6be620184" class="anchor"></a>
 
@@ -915,15 +975,27 @@ Checks if the USB storage is available.
 
 #### Returns
 true if available, false otherwise.
+<hr />
 
 ### `public void ` [`checkConnection`](#class_u_s_b_storage_1adf1432619e4e970d34f14742d6932dfe)`()` <a id="class_u_s_b_storage_1adf1432619e4e970d34f14742d6932dfe" class="anchor"></a>
 
 Checks the USB storage connection status.
+<hr />
 
 ### `private FileSystems ` [`fs`](#class_u_s_b_storage_1a65c532755dae77664016c63e3a69a6d6) <a id="class_u_s_b_storage_1a65c532755dae77664016c63e3a69a6d6" class="anchor"></a>
 
+<hr />
+
 ### `private bool ` [`connected`](#class_u_s_b_storage_1abe6cfe6ed5e98e72c21150a6af17195c) <a id="class_u_s_b_storage_1abe6cfe6ed5e98e72c21150a6af17195c" class="anchor"></a>
+
+<hr />
 
 ### `private unsigned long ` [`previousMillis`](#class_u_s_b_storage_1a1421967255a94a2f4be67a5e37017307) <a id="class_u_s_b_storage_1a1421967255a94a2f4be67a5e37017307" class="anchor"></a>
 
+<hr />
+
 ### `private int ` [`interval`](#class_u_s_b_storage_1aecbd90e5183fd2dc86d98725d1577444) <a id="class_u_s_b_storage_1aecbd90e5183fd2dc86d98725d1577444" class="anchor"></a>
+
+<hr />
+
+Generated by [Moxygen](https://github.com/sourcey/moxygen)
