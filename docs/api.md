@@ -2,12 +2,55 @@
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
+`define ` [`PATH_MAX`](#_types_8h_1ae688d728e1acdfe5988c7db45d6f0166)            | 
+`enum ` [`FileMode`](#_types_8h_1a031770da453a180e21dcbef5cf5aeab6)            | 
+`public static bool ` [`copyFolder`](#_types_8h_1ae376909a80f5f275a87d98a4d04379b3)`(const char * source, const char * destination)`            | 
+`public static std::string ` [`replaceLastPathComponent`](#_types_8h_1a1231b36e02c6532fe382bd77c07ac933)`(const std::string & path, const std::string & newComponent)`            | 
+`public static std::string ` [`getLastPathComponent`](#_types_8h_1aef7f02955007c4af74bc4539be935ed9)`(const std::string & path)`            | 
+`public static std::string ` [`replaceFirstPathComponent`](#_types_8h_1ae04577d71725c561b6a741435bed465a)`(const std::string & path, const std::string & destinationPath)`            | 
+`public inline static String ` [`getErrno`](#_types_8h_1a6f2ca9f121d182e6715776886b08ace5)`()`            | 
 `class ` [`Arduino_UnifiedStorage`](#class_arduino___unified_storage) | Abstract class representing the common features of the supported storage methods
 `class ` [`Folder`](#class_folder) | Class representing a directory.
 `class ` [`InternalStorage`](#class_internal_storage) | Represents internal storage using the Arduino Unified Storage library.
 `class ` [`SDStorage`](#class_s_d_storage) | Represents an SD card storage using the Arduino Unified Storage library.
 `class ` [`UFile`](#class_u_file) | Class representing a File
 `class ` [`USBStorage`](#class_u_s_b_storage) | Represents a USB storage using the Arduino Unified Storage library.
+
+## Members
+
+#### `define ` [`PATH_MAX`](#_types_8h_1ae688d728e1acdfe5988c7db45d6f0166) <a id="_types_8h_1ae688d728e1acdfe5988c7db45d6f0166" class="anchor"></a>
+
+<hr />
+
+#### `enum ` [`FileMode`](#_types_8h_1a031770da453a180e21dcbef5cf5aeab6) <a id="_types_8h_1a031770da453a180e21dcbef5cf5aeab6" class="anchor"></a>
+
+ Values                         | Descriptions                                
+--------------------------------|---------------------------------------------
+READ            | 
+WRITE            | 
+APPEND            | 
+
+<hr />
+
+#### `public static bool ` [`copyFolder`](#_types_8h_1ae376909a80f5f275a87d98a4d04379b3)`(const char * source, const char * destination)` <a id="_types_8h_1ae376909a80f5f275a87d98a4d04379b3" class="anchor"></a>
+
+<hr />
+
+#### `public static std::string ` [`replaceLastPathComponent`](#_types_8h_1a1231b36e02c6532fe382bd77c07ac933)`(const std::string & path, const std::string & newComponent)` <a id="_types_8h_1a1231b36e02c6532fe382bd77c07ac933" class="anchor"></a>
+
+<hr />
+
+#### `public static std::string ` [`getLastPathComponent`](#_types_8h_1aef7f02955007c4af74bc4539be935ed9)`(const std::string & path)` <a id="_types_8h_1aef7f02955007c4af74bc4539be935ed9" class="anchor"></a>
+
+<hr />
+
+#### `public static std::string ` [`replaceFirstPathComponent`](#_types_8h_1ae04577d71725c561b6a741435bed465a)`(const std::string & path, const std::string & destinationPath)` <a id="_types_8h_1ae04577d71725c561b6a741435bed465a" class="anchor"></a>
+
+<hr />
+
+#### `public inline static String ` [`getErrno`](#_types_8h_1a6f2ca9f121d182e6715776886b08ace5)`()` <a id="_types_8h_1a6f2ca9f121d182e6715776886b08ace5" class="anchor"></a>
+
+<hr />
 
 # class `Arduino_UnifiedStorage` <a id="class_arduino___unified_storage" class="anchor"></a>
 
@@ -88,8 +131,8 @@ Class representing a directory.
 `public String ` [`getPathString`](#class_folder_1a30dd952da8ae977dca4e3dfde8fbd5be)`()` | Returns the path of the file.
 `public ` [`Folder`](#class_folder)` ` [`createSubfolder`](#class_folder_1a78f2f9b297f62b67c2e0656b15a95868)`(const char * subfolderName, bool overwrite)` | Creates a subfolder in the directory.
 `public ` [`Folder`](#class_folder)` ` [`createSubfolder`](#class_folder_1ab50743664becb7b2a1fb564b5513d69c)`(String subfolderName, bool overwrite)` | Creates a subfolder in the directory.
-`public std::vector< ` [`UFile`](#class_u_file)` > ` [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78)`()` | Returns File objects for all files in the current directory.
-`public std::vector< ` [`Folder`](#class_folder)` > ` [`getFolders`](#class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb)`()` | Returns [Folder](#class_folder) objects for all files in the current directory.
+`public std::vector< ` [`UFile`](#class_u_file)` > ` [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78)`()` | Returns File objects for all files in the current dirctory.
+`public std::vector< ` [`Folder`](#class_folder)` > ` [`getFolders`](#class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb)`()` | Returns [Folder](#class_folder) objects for all files in the current dirctory.
 `public bool ` [`copyTo`](#class_folder_1aabf0818b7ee45b2d871e82e86edb4ebd)`(` [`Folder`](#class_folder)` destination, bool overwrite)` | Copies the current directory.
 `public bool ` [`copyTo`](#class_folder_1a058d193f53c559eefe343b30797500eb)`(const char * destination, bool overwrite)` | Copies the current directory.
 `public bool ` [`copyTo`](#class_folder_1a3162979e4c679c7f5503cc4584949714)`(String destination, bool overwrite)` | Copies the current directory.
@@ -128,7 +171,7 @@ Creates a file inside the directory.
 * `const` char * fileName - The name of the file to create. 
 
 #### Returns
-A File object if successful, NULL if not.
+A File object if successfull, NULL if not.
 
 ### `public ` [`UFile`](#class_u_file)` ` [`createFile`](#class_folder_1a44255e2c0c4ffa37d7637a601bc590f6)`(String fileName, FileMode fmode)` <a id="class_folder_1a44255e2c0c4ffa37d7637a601bc590f6" class="anchor"></a>
 
@@ -138,7 +181,7 @@ Creates a file inside the directory.
 * `String` fileName - The name of the file to create. 
 
 #### Returns
-A File object if successful, NULL if not.
+A File object if successfull, NULL if not.
 
 ### `public bool ` [`remove`](#class_folder_1aca893daac6c6747895d50987cf9cf34c)`()` <a id="class_folder_1aca893daac6c6747895d50987cf9cf34c" class="anchor"></a>
 
@@ -217,14 +260,14 @@ The created subfolder.
 
 ### `public std::vector< ` [`UFile`](#class_u_file)` > ` [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78)`()` <a id="class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78" class="anchor"></a>
 
-Returns File objects for all files in the current directory.
+Returns File objects for all files in the current dirctory.
 
 #### Returns
 A std::vector of File objects representing the files in the directory.
 
 ### `public std::vector< ` [`Folder`](#class_folder)` > ` [`getFolders`](#class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb)`()` <a id="class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb" class="anchor"></a>
 
-Returns [Folder](#class_folder) objects for all files in the current directory.
+Returns [Folder](#class_folder) objects for all files in the current dirctory.
 
 #### Returns
 A std::vector of [Folder](#class_folder) objects representing the files in the directory.
@@ -884,5 +927,3 @@ Checks the USB storage connection status.
 ### `private unsigned long ` [`previousMillis`](#class_u_s_b_storage_1a1421967255a94a2f4be67a5e37017307) <a id="class_u_s_b_storage_1a1421967255a94a2f4be67a5e37017307" class="anchor"></a>
 
 ### `private int ` [`interval`](#class_u_s_b_storage_1aecbd90e5183fd2dc86d98725d1577444) <a id="class_u_s_b_storage_1aecbd90e5183fd2dc86d98725d1577444" class="anchor"></a>
-
-Generated by [Moxygen](https://github.com/sourcey/moxygen)
