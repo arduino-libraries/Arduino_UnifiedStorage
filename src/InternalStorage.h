@@ -107,7 +107,7 @@ public:
         #endif
 
 
-        char * partitionName = "user";
+        char * partitionName = (char *) "user";
         FileSystems fs = FS_FAT;
 };
 
