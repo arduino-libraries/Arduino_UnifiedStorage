@@ -102,9 +102,6 @@ Class representing a directory.
 `public bool ` [`moveTo`](#class_folder_1a5002b388b7e503ba79a8623ca6c1cbbd)`(` [`Folder`](#class_folder)` destination, bool overwrite)` | Moves the current directory.
 `public bool ` [`moveTo`](#class_folder_1a0ab690abfff790a2bd9fff3dd5976e82)`(const char * destination, bool overwrite)` | Moves the current directory.
 `public bool ` [`moveTo`](#class_folder_1a3125db272185165a03b891efe5985a32)`(String destination, bool overwrite)` | Move the current directory.
-`private std::string ` [`dirname`](#class_folder_1a9a8a698e1d21f5aa0e10dc139d6d7f32) | 
-`private std::string ` [`path`](#class_folder_1adbf6c881f9e745d724fc37ad4cea153f) | 
-`private DIR * ` [`dir`](#class_folder_1ada2c04b7bb18988637ef5d03af23c53a) | 
 
 ## Members
 
@@ -327,18 +324,6 @@ Move the current directory.
 True upon success, false otherwise.
 <hr />
 
-### `private std::string ` [`dirname`](#class_folder_1a9a8a698e1d21f5aa0e10dc139d6d7f32) <a id="class_folder_1a9a8a698e1d21f5aa0e10dc139d6d7f32" class="anchor"></a>
-
-<hr />
-
-### `private std::string ` [`path`](#class_folder_1adbf6c881f9e745d724fc37ad4cea153f) <a id="class_folder_1adbf6c881f9e745d724fc37ad4cea153f" class="anchor"></a>
-
-<hr />
-
-### `private DIR * ` [`dir`](#class_folder_1ada2c04b7bb18988637ef5d03af23c53a) <a id="class_folder_1ada2c04b7bb18988637ef5d03af23c53a" class="anchor"></a>
-
-<hr />
-
 # class `InternalStorage` <a id="class_internal_storage" class="anchor"></a>
 
 ```
@@ -362,8 +347,6 @@ Represents internal storage using the Arduino Unified Storage library.
 `public void ` [`setQSPIPartitionName`](#class_internal_storage_1ae0fbe264a758a4026548df66ec05f8c8)`(const char * name)` | Sets the QSPI partition name.
 `public virtual int ` [`formatFAT`](#class_internal_storage_1a8a1bea9b07a7a507e4d4ac6aafb75e12)`()` | Formats the internal storage with the FAT file system.
 `public virtual int ` [`formatLittleFS`](#class_internal_storage_1a9e86d2bbc4cbafbaee58a4b2913e0830)`()` | Formats the internal storage with the LittleFS file system.
-`private char * ` [`partitionName`](#class_internal_storage_1a831d504f992d398801924538b677b85c) | Retrieves the block device associated with the internal storage.
-`private FileSystems ` [`fs`](#class_internal_storage_1a7bec9fbc7008259985da0460c501bca8) | 
 
 ## Members
 
@@ -451,18 +434,6 @@ Formats the internal storage with the LittleFS file system.
 1 if successful, 0 if failed.
 <hr />
 
-### `private char * ` [`partitionName`](#class_internal_storage_1a831d504f992d398801924538b677b85c) <a id="class_internal_storage_1a831d504f992d398801924538b677b85c" class="anchor"></a>
-
-Retrieves the block device associated with the internal storage.
-
-#### Returns
-The block device as a BlockDevice object.
-<hr />
-
-### `private FileSystems ` [`fs`](#class_internal_storage_1a7bec9fbc7008259985da0460c501bca8) <a id="class_internal_storage_1a7bec9fbc7008259985da0460c501bca8" class="anchor"></a>
-
-<hr />
-
 # class `SDStorage` <a id="class_s_d_storage" class="anchor"></a>
 
 ```
@@ -483,7 +454,6 @@ Represents an SD card storage using the Arduino Unified Storage library.
 `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_s_d_storage_1a2f7327c327985d88bd1305310ec0c5e8)`()` | Retrieves the root folder of the SD card storage.
 `public virtual int ` [`formatFAT`](#class_s_d_storage_1ab06c05a87f5e34036c2d69d187ea3775)`()` | Formats the SD card storage with the FAT file system.
 `public virtual int ` [`formatLittleFS`](#class_s_d_storage_1a797b3226c20794fa140cea95e13d5cee)`()` | Formats the SD card storage with the LittleFS file system.
-`private FileSystems ` [`fs`](#class_s_d_storage_1a711f6f2e8af27534e9cc4cb83146049b) | 
 
 ## Members
 
@@ -543,10 +513,6 @@ Formats the SD card storage with the LittleFS file system.
 1 if successful, 0 if failed.
 <hr />
 
-### `private FileSystems ` [`fs`](#class_s_d_storage_1a711f6f2e8af27534e9cc4cb83146049b) <a id="class_s_d_storage_1a711f6f2e8af27534e9cc4cb83146049b" class="anchor"></a>
-
-<hr />
-
 # class `UFile` <a id="class_u_file" class="anchor"></a>
 
 Class representing a File
@@ -583,10 +549,6 @@ Class representing a File
 `public int ` [`available`](#class_u_file_1a37fbfdc0ad16ee06d4a66848b40912cd)`()` | Returns the number of bytes available to read.
 `public int ` [`read`](#class_u_file_1a62b544ebe9c3b144268016e6427917b5)`()` | Returns one byte from the file.
 `public size_t ` [`write`](#class_u_file_1a4db87498c1a4205145816c14df704de7)`(uint8_t value)` | Writes one byte to the file.
-`private FILE * ` [`fp`](#class_u_file_1aeb2eaaab578ba6e4d25cd347ec8b8ba2) | 
-`private uint8_t * ` [`readBuffer`](#class_u_file_1abcfa16a7593cd3c993cd3ac944c60ddb) | 
-`private std::string ` [`path`](#class_u_file_1a19c3bc34bb3756ee19145ab259520d1a) | 
-`private FileMode ` [`fm`](#class_u_file_1a2cfecc27dc709b4dafc9b97245348f90) | 
 
 ## Members
 
@@ -859,22 +821,6 @@ Writes one byte to the file.
 * `a` uint8_t value representing the byte to write
 <hr />
 
-### `private FILE * ` [`fp`](#class_u_file_1aeb2eaaab578ba6e4d25cd347ec8b8ba2) <a id="class_u_file_1aeb2eaaab578ba6e4d25cd347ec8b8ba2" class="anchor"></a>
-
-<hr />
-
-### `private uint8_t * ` [`readBuffer`](#class_u_file_1abcfa16a7593cd3c993cd3ac944c60ddb) <a id="class_u_file_1abcfa16a7593cd3c993cd3ac944c60ddb" class="anchor"></a>
-
-<hr />
-
-### `private std::string ` [`path`](#class_u_file_1a19c3bc34bb3756ee19145ab259520d1a) <a id="class_u_file_1a19c3bc34bb3756ee19145ab259520d1a" class="anchor"></a>
-
-<hr />
-
-### `private FileMode ` [`fm`](#class_u_file_1a2cfecc27dc709b4dafc9b97245348f90) <a id="class_u_file_1a2cfecc27dc709b4dafc9b97245348f90" class="anchor"></a>
-
-<hr />
-
 # class `USBStorage` <a id="class_u_s_b_storage" class="anchor"></a>
 
 ```
@@ -898,10 +844,6 @@ Represents a USB storage using the Arduino Unified Storage library.
 `public bool ` [`isConnected`](#class_u_s_b_storage_1a228919e4b7f6fe0619fbcb33da9a9534)`()` | Checks if the USB storage is connected.
 `public bool ` [`isAvailable`](#class_u_s_b_storage_1ad71d15f8c9bcd12aa14a2bd6be620184)`()` | Checks if the USB storage is available.
 `public void ` [`checkConnection`](#class_u_s_b_storage_1adf1432619e4e970d34f14742d6932dfe)`()` | Checks the USB storage connection status.
-`private FileSystems ` [`fs`](#class_u_s_b_storage_1a65c532755dae77664016c63e3a69a6d6) | 
-`private bool ` [`connected`](#class_u_s_b_storage_1abe6cfe6ed5e98e72c21150a6af17195c) | 
-`private unsigned long ` [`previousMillis`](#class_u_s_b_storage_1a1421967255a94a2f4be67a5e37017307) | 
-`private int ` [`interval`](#class_u_s_b_storage_1aecbd90e5183fd2dc86d98725d1577444) | 
 
 ## Members
 
@@ -981,21 +923,3 @@ true if available, false otherwise.
 
 Checks the USB storage connection status.
 <hr />
-
-### `private FileSystems ` [`fs`](#class_u_s_b_storage_1a65c532755dae77664016c63e3a69a6d6) <a id="class_u_s_b_storage_1a65c532755dae77664016c63e3a69a6d6" class="anchor"></a>
-
-<hr />
-
-### `private bool ` [`connected`](#class_u_s_b_storage_1abe6cfe6ed5e98e72c21150a6af17195c) <a id="class_u_s_b_storage_1abe6cfe6ed5e98e72c21150a6af17195c" class="anchor"></a>
-
-<hr />
-
-### `private unsigned long ` [`previousMillis`](#class_u_s_b_storage_1a1421967255a94a2f4be67a5e37017307) <a id="class_u_s_b_storage_1a1421967255a94a2f4be67a5e37017307" class="anchor"></a>
-
-<hr />
-
-### `private int ` [`interval`](#class_u_s_b_storage_1aecbd90e5183fd2dc86d98725d1577444) <a id="class_u_s_b_storage_1aecbd90e5183fd2dc86d98725d1577444" class="anchor"></a>
-
-<hr />
-
-Generated by [Moxygen](https://github.com/sourcey/moxygen)
