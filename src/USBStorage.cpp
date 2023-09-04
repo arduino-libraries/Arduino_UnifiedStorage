@@ -6,6 +6,8 @@
 
 #define MAX_TRIES 10
 
+bool USBStorage::usb_available = false;
+
 USBStorage::USBStorage(){
  #if defined(ARDUINO_PORTENTA_C33)
          register_hotplug_callback(DEV_USB,  [](){

@@ -3,9 +3,6 @@
 #ifndef USBStorage_H
 #define USBStorage_H
 
-
-static bool usb_available = false;
-
 /**
  * Represents a USB storage using the Arduino Unified Storage library.
  */
@@ -84,6 +81,7 @@ private:
     bool connected = false;
     unsigned long previousMillis; 
     int interval = 500;
+    static bool usb_available;
 };
 
 #endif
