@@ -81,7 +81,7 @@ void performUpdate() {
   UFile lastUpdateFile = usbRoot.createFile("diff.txt", FileMode::READ);  // Create or open the last update file
 
   backingUP = true;
-  int lastUpdateBytes = lastUpdateFile.readAsString().toInt();  // Read the last update size from the file
+  unsigned lastUpdateBytes = lastUpdateFile.readAsString().toInt();  // Read the last update size from the file
 
   Serial.print("Last update bytes: "); Serial.println(lastUpdateBytes);
 
