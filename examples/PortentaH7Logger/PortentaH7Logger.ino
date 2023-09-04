@@ -81,7 +81,7 @@ void performUpdate() {
   UFile lastUpdateFile = usbRoot.createFile("diff.txt", FileMode::READ);  // Create or open the last update file
 
   backingUP = true;
-  int lastUpdateBytes = lastUpdateFile.readAsString().toInt();  // Read the last update size from the file
+  unsigned lastUpdateBytes = lastUpdateFile.readAsString().toInt();  // Read the last update size from the file
 
   Serial.print("Last update bytes: "); Serial.println(lastUpdateBytes);
 
@@ -97,7 +97,8 @@ void performUpdate() {
   unsigned long totalBytesToMove = bytesWritten - lastUpdateBytes;
   Serial.print("New update bytes: "); Serial.println(totalBytesToMove);
 
-  uint8_t buffer[totalBytesToMove];
+  uint8_t* buffer = new uint8_t[totalBytesToMove];
+
   size_t bytesRead = logFile.read(buffer, totalBytesToMove);
   size_t bytesMoved = backupFile.write(buffer, bytesRead);  // Only write the bytes that haven't been backed up yet
 
@@ -115,6 +116,7 @@ void performUpdate() {
 
   digitalWrite(USB_MOUNTED_LED, HIGH);
   backingUP = false;
+  delete[] buffer;
 }
 
 
