@@ -100,7 +100,7 @@ const char* Folder::getPath() {
     return this->path.c_str();
 }
 
-String Folder::getPathString() {
+String Folder::getPathAsString() {
     return String(this->getPath());
 }
 

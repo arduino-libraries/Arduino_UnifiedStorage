@@ -306,6 +306,6 @@ const char* UFile::getPath() {
     return path.c_str();
 }
 
-String UFile::getPathString() {
+String UFile::getPathAsString() {
     return String(path.c_str());
 }

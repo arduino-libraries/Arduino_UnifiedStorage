@@ -19,7 +19,7 @@ void setup() {
    
 
     Folder root = internalStorage.getRootFolder();
-    Serial.println(root.getPathString());
+    Serial.println(root.getPathAsString());
 
     // Test copyTo
     Serial.println("Testing copyTo...");
@@ -35,8 +35,8 @@ void setup() {
     Folder destinationFolder2 = root.createSubfolder("destination_folder");
     Serial.println("Folder 2 created");
 
-    Serial.println(sourceFolder2.getPathString());
-    Serial.println(destinationFolder2.getPathString());
+    Serial.println(sourceFolder2.getPathAsString());
+    Serial.println(destinationFolder2.getPathAsString());
 
         Serial.println();
             Serial.println();

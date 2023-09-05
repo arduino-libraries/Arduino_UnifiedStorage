@@ -38,11 +38,11 @@ USBStorage thumbDrive = USBStorage();
 
 
 void addSomeFakeFiles(Folder * folder){
-    Serial.println("* adding some fake files to: " + String(folder -> getPathString()));
+    Serial.println("* adding some fake files to: " + String(folder -> getPathAsString()));
 
     for (int i = 0; i < random(0, 9); i++){
         UFile thisFile = folder -> createFile("File_"+ String(random(999)), FileMode::WRITE);
-        Serial.println("\t * " + thisFile.getPathString());
+        Serial.println("\t * " + thisFile.getPathAsString());
         thisFile.write("writing stuff to the file");
         thisFile.close();
     }
@@ -51,7 +51,7 @@ void addSomeFakeFiles(Folder * folder){
     Folder subfolder = folder -> createSubfolder("ChildFolder_"+ String(random(999)));
     for (int i = 0; i < random(0, 9); i++){
         UFile thisFile = subfolder.createFile("File_"+ String(random(999)), FileMode::WRITE);
-        Serial.println("\t * " + thisFile.getPathString());
+        Serial.println("\t * " + thisFile.getPathAsString());
         thisFile.write("writing stuff to the file");
         thisFile.close();
     }
@@ -59,12 +59,12 @@ void addSomeFakeFiles(Folder * folder){
 
 void move(Folder * source, Folder * dest){
     for(Folder f: source -> getFolders()){
-        Serial.println("* copying folder :" + String(f.getPathString()));
+        Serial.println("* copying folder :" + String(f.getPathAsString()));
         f.moveTo(*dest);
     }
 
     for(UFile f: source -> getFiles()){
-        Serial.println("* copying file :" + String(f.getPathString()));
+        Serial.println("* copying file :" + String(f.getPathAsString()));
         f.moveTo(*dest);
     }
 }
@@ -73,7 +73,7 @@ void move(Folder * source, Folder * dest){
 #if defined(ARDUINO_PORTENTA_C33)
 void backupPartitionsC33(Folder * backupFolder){
 
-    Serial.println("* backup location: " + String(backupFolder -> getPathString()));
+    Serial.println("* backup location: " + String(backupFolder -> getPathAsString()));
 
     int otaMounted = ota.begin(FS_FAT);
     Serial.println("* ota partition mount: " + String(otaMounted));
@@ -108,7 +108,7 @@ void backupPartitionsC33(Folder * backupFolder){
 
 #if defined(ARDUINO_PORTENTA_H7_M7)
 void backupPartitionsH7(Folder * backupFolder){
-    Serial.println("* backup location: " + String(backupFolder -> getPathString()));
+    Serial.println("* backup location: " + String(backupFolder -> getPathAsString()));
 
     int wifiMounted = wifi.begin(FS_FAT);
     Serial.println("* wifi partition mount: " + String(wifiMounted));

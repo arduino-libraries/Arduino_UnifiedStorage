@@ -82,7 +82,7 @@ class Folder {
      * @brief Returns the path of the file.
      * @return The path of the file as an Arduino String
     */
-    String getPathString();
+    String getPathAsString();
 
     /**
      * @brief Creates a subfolder in the directory.

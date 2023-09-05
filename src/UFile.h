@@ -179,7 +179,7 @@ public:
    * @brief Returns the path of the directory.
    * @return The path of the file as a String
    */
-  String getPathString();
+  String getPathAsString();
 
 
   /**
