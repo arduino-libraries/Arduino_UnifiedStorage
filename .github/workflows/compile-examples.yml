@@ -23,7 +23,7 @@ on:
 
 env:
   UNIVERSAL_SKETCH_PATHS: |
-        - extra/tests
+        - extras/tests
   SKETCHES_REPORTS_PATH: sketches-reports
   SKETCHES_REPORTS_ARTIFACT_NAME: sketches-reports
 
