@@ -61,14 +61,12 @@ jobs:
             - fqbn: arduino:renesas_portenta:portenta_c33
               additional-sketch-paths: |
                 - examples/SimpleStorageWriteRead
-                - examples/PortentaH7Logger
                 - examples/AdvancedUSBInternalOperations
                 - examples/BackupInternalPartitions
           - board:
             - fqbn: arduino:mbed_opta:opta
               additional-sketch-paths: |
                 - examples/SimpleStorageWriteRead
-                - examples/PortentaH7Logger
                 - examples/AdvancedUSBInternalOperations
                 - examples/BackupInternalPartitions
 
