@@ -41,21 +41,17 @@ int InternalStorage::begin(){
             
             if(this -> userDataFileSystem != nullptr){
                 delete(this -> userDataFileSystem);
-
             } 
             this -> userDataFileSystem = new mbed::FATFileSystem(this->partitionName);
         } else {
 
-                 if(this -> userDataFileSystem != nullptr){
-             delete(this -> userDataFileSystem);
-
+            if(this -> userDataFileSystem != nullptr){
+                delete(this -> userDataFileSystem);
             } 
-
 
             this -> userDataFileSystem = new mbed::LittleFileSystem(this->partitionName);
         }
         int err = this -> userDataFileSystem -> mount(this -> userData);
-  
         if(err == 0) return 1;
     #endif
 }
@@ -69,13 +65,11 @@ Folder InternalStorage::getRootFolder(){
     return Folder(String("/" + String(this->partitionName)).c_str());
 }
 
-
 void InternalStorage::setQSPIPartition(int partition){
     this -> partitionNumber = partition;
 }
 
 void InternalStorage::setQSPIPartitionName(const char * name){
-
     this -> partitionName = (char *)name;
 }
 
@@ -113,8 +107,8 @@ BlockDevice * InternalStorage::getBlockDevice(){
 
 
 #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_OPTA) 
-              mbed::BlockDevice *  InternalStorage::getBlockDevice(){
-                return this -> blockDevice;
-              }
+mbed::BlockDevice *  InternalStorage::getBlockDevice(){
+    return this -> blockDevice;
+}
  
 #endif

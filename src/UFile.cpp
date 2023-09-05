@@ -220,12 +220,9 @@ bool UFile::copyTo(const char* destinationPath, bool overwrite) {
     // Open the source file for reading
     FILE* sourceFile = fopen(path.c_str(), "r");
 
-
-
     if (sourceFile == nullptr) {
         return false;
     }
-
 
     FILE* destinationFile = fopen(newPath.c_str(), "r");
 

@@ -8,9 +8,6 @@
 class Folder;
 #include "Folder.h"
 
-
-
-
 /**
  * Class representing a File
  */
