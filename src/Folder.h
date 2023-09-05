@@ -160,10 +160,7 @@ class Folder {
     bool moveTo(String destination, bool overwrite = false);
 
   private: 
-  
-    std::string dirname;
     std::string path;
-    DIR * dir;
 };
 
 #endif
