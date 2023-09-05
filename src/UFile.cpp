@@ -55,7 +55,6 @@ void UFile::close() {
     // Close the file
     if (fp != nullptr) {
         fclose(fp);
-        //fp = nullptr;
     }
 }
 
