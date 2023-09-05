@@ -44,18 +44,11 @@ public:
     Folder getRootFolder() override;
 
     /**
-     * Formats the USB storage with the FAT file system.
+     * Formats the USB storage with the selected file system.
      * 
      * @return 1 if successful, 0 if failed.
      */
-    int formatFAT() override;
-
-    /**
-     * Formats the USB storage with the LittleFS file system.
-     * 
-     * @return 1 if successful, 0 if failed.
-     */
-    int formatLittleFS() override;
+    int format(FileSystems fs) override;
 
     /**
      * Checks if the USB storage is connected.
@@ -76,12 +69,14 @@ public:
      */
     void checkConnection();
 
+
+
 private:
     FileSystems fileSystem = FS_FAT;
     bool connected = false;
     unsigned long previousMillis; 
     unsigned int interval = 500;
-    static bool usbAvailable;
+    static volatile bool usbAvailable;
 };
 
 #endif

@@ -27,7 +27,7 @@
 
 // Two instances are made for the USB and internal storage respectively
 USBStorage usbStorage = USBStorage();
-InternalStorage internalStorage = InternalStorage(2, "user", FS_FAT);
+InternalStorage internalStorage = InternalStorage();
 
 
 // Helper function to prints the contents of a folder, including subdirectories (marked as "[D]") and files (marked as "[F]").

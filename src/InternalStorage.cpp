@@ -72,30 +72,29 @@ void InternalStorage::setQSPIPartitionName(const char * name){
     this -> partitionName = (char *)name;
 }
 
-int InternalStorage::formatFAT(){
+int InternalStorage::format(FileSystems fs){
     this -> begin();
     this -> unmount();
-    this -> fs = FS_FAT;
-    #if defined(ARDUINO_PORTENTA_C33)
-        this -> userDataFileSystem = new FATFileSystem(this->partitionName);
-        return this -> userDataFileSystem -> reformat(this-> userData);
-    #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
-        this -> userDataFileSystem =  new mbed::FATFileSystem(this->partitionName);
-        return this -> userDataFileSystem -> reformat(this-> userData);
-    #endif
-}
+    this -> fs = fs;
 
-int InternalStorage::formatLittleFS(){
-    this -> begin();
-    this -> unmount();
-    this -> fs = FS_LITTLEFS;
-    #if defined(ARDUINO_PORTENTA_C33)
-        this -> userDataFileSystem = new LittleFileSystem(this->partitionName);
-        return this -> userDataFileSystem -> reformat(this-> userData);
-    #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
-        this -> userDataFileSystem =  new mbed::LittleFileSystem(this->partitionName);
-        return this -> userDataFileSystem -> reformat(this-> userData);
-    #endif
+
+    if(fs == FS_FAT){
+        #if defined(ARDUINO_PORTENTA_C33)
+            this -> userDataFileSystem = new FATFileSystem(this->partitionName);
+            return this -> userDataFileSystem -> reformat(this-> userData);
+        #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
+            this -> userDataFileSystem =  new mbed::FATFileSystem(this->partitionName);
+            return this -> userDataFileSystem -> reformat(this-> userData);
+        #endif
+    } if (fs == FS_LITTLEFS) {
+        #if defined(ARDUINO_PORTENTA_C33)
+            this -> userDataFileSystem = new LittleFileSystem(this->partitionName);
+            return this -> userDataFileSystem -> reformat(this-> userData);
+        #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
+            this -> userDataFileSystem =  new mbed::LittleFileSystem(this->partitionName);
+            return this -> userDataFileSystem -> reformat(this-> userData);
+        #endif
+    }
 }
 
 #if defined(ARDUINO_PORTENTA_C33)

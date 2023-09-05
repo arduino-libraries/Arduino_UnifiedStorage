@@ -14,7 +14,7 @@ void setup() {
 
 
 
-    internalStorage.formatLittleFS();
+    internalStorage.format(FS_LITTLEFS);
     internalStorage.begin();
    
 

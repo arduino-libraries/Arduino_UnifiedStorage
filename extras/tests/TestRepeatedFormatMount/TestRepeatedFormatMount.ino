@@ -55,14 +55,14 @@ void setup(){
     // format storage as FAT32
     #if defined(HAS_USB)
     Serial.println("RUNNING FORMAT AND REPEATED MOUNT - USB \n");
-    Serial.println("Formatting USB drive as LittleFS: " + String(usb.formatLittleFS()));
+    Serial.println("Formatting USB drive as LittleFS: " + String(usb.format(FS_LITTLEFS)));
     runRepeatedMountTest(&usb, "USB");
-    Serial.println("Formatting USB drive as FAT32: " + String(usb.formatFAT()));
+    Serial.println("Formatting USB drive as FAT32: " + String(usb.format(FS_FAT)));
     runRepeatedMountTest(&usb, "USB");
         
-    Serial.println("Formatting USB drive as LittleFS again: " + String(usb.formatLittleFS()));
+    Serial.println("Formatting USB drive as LittleFS again: " + String(usb.format(FS_LITTLEFS)));
     runRepeatedMountTest(&usb, "USB");
-    Serial.println("Formatting USB drive as FAT32 again: " + String(usb.formatFAT()));
+    Serial.println("Formatting USB drive as FAT32 again: " + String(usb.format(FS_FAT)));
     runRepeatedMountTest(&usb, "USB");
     #endif 
 
@@ -70,26 +70,26 @@ void setup(){
 
     #if defined(HAS_SD)
     Serial.println("RUNNING FORMAT AND REPEATED MOUNT - SD Card \n");
-    Serial.println("Formatting SD drive as LittleFS: " + String(sd.formatLittleFS()));
+    Serial.println("Formatting SD drive as LittleFS: " + String(sd.format(FS_LITTLEFS)));
     runRepeatedMountTest(&sd, "SD");
-    Serial.println("Formatting SD drive as FAT32: " + String(sd.formatFAT()));
+    Serial.println("Formatting SD drive as FAT32: " + String(sd.format(FS_FAT)));
     runRepeatedMountTest(&sd, "SD");
-    Serial.println("Formatting SD drive as LittleFS again: " + String(sd.formatLittleFS()));
+    Serial.println("Formatting SD drive as LittleFS again: " + String(sd.format(FS_LITTLEFS)));
     runRepeatedMountTest(&sd, "SD");
-    Serial.println("Formatting SD drive as FAT32 again: " + String(sd.formatFAT()));
+    Serial.println("Formatting SD drive as FAT32 again: " + String(sd.format(FS_FAT)));
     runRepeatedMountTest(&sd, "SD");
     #endif 
 
 
     #if defined(HAS_QSPI)
     Serial.println("RUNNING FORMAT AND REPEATED MOUNT - QSPI Storage \n");
-    Serial.println("Formatting QSPI drive as LittleFS: " + String(internal.formatLittleFS()));
+    Serial.println("Formatting QSPI drive as LittleFS: " + String(internal.format(FS_LITTLEFS)));
     runRepeatedMountTest(&internal, "QSPI");
-    Serial.println("Formatting QSPI drive as FAT32: " + String(internal.formatFAT()));
+    Serial.println("Formatting QSPI drive as FAT32: " + String(internal.format(FS_FAT)));
     runRepeatedMountTest(&internal, "QSPI");
-    Serial.println("Formatting SD drive as LittleFS again: " + String(internal.formatLittleFS()));
+    Serial.println("Formatting SD drive as LittleFS again: " + String(internal.format(FS_LITTLEFS)));
     runRepeatedMountTest(&internal, "QSPI");
-    Serial.println("Formatting SD drive as FAT32 again: " + String(internal.formatFAT()));
+    Serial.println("Formatting SD drive as FAT32 again: " + String(internal.format(FS_FAT)));
     runRepeatedMountTest(&internal, "QSPI");
     #endif 
 

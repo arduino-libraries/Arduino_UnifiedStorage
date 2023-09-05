@@ -69,7 +69,7 @@ bool UFile::seek(size_t offset) {
     return (result == 0);
 }
 
-int UFile::available() {
+uint32_t UFile::available() {
     // Check the available data in the file
     if (filePointer == nullptr) {
         // File pointer is not valid

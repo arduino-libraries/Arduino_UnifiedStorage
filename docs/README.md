@@ -24,9 +24,9 @@ void setup(){
 ### Format QSPI Flash, SD cards, and USB mass storage devices
 This library also allows you to format any partition or drive to either FAT or LittleFS filesystems.
 
-```storageMedium.formatFAT()```
+```storageMedium.format(FS_FAT)```
 or
-```storageMedium.formatLittleFS();```
+```storageMedium.format(FS_LITTLEFS);```
 
 Please make sure you call format before calling `begin()` or after calling `unmount()`.
 

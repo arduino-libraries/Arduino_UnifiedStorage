@@ -183,7 +183,7 @@ public:
    * @brief Returns the number of bytes available to read
    * @return The number of bytes available to read as int
    */
-  int available();
+  uint32_t available();
 
   /**
    * @brief Returns one byte from the file 

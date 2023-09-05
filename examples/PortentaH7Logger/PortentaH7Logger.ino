@@ -156,7 +156,7 @@ void setup() {
   while (!Serial);
   pinMode(USB_MOUNTED_LED, OUTPUT);
   Serial.println("Formatting internal storage...");
-  int formatted = internalStorage.formatFAT();
+  int formatted = internalStorage.format(FS_FAT);
   Serial.print("QSPI Format status: "); Serial.println(formatted);
 
   //configureRS485(baudrate);

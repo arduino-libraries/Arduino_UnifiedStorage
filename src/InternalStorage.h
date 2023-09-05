@@ -66,18 +66,12 @@ public:
     void setQSPIPartitionName(const char *name);
 
     /**
-     * Formats the internal storage with the FAT file system.
+     * Formats the internal storage with the selceted file system.
      * 
      * @return 1 if successful, 0 if failed.
      */
-    int formatFAT();
+    int format(FileSystems fs) override;
 
-    /**
-     * Formats the internal storage with the LittleFS file system.
-     * 
-     * @return 1 if successful, 0 if failed.
-     */
-    int formatLittleFS();
 
     /**
      * Retrieves the block device associated with the internal storage.

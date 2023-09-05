@@ -47,20 +47,14 @@ class SDStorage: public Arduino_UnifiedStorage  {
         Folder getRootFolder() override;
 
         /**
-         * Formats the SD card storage with the FAT file system.
+         * Formats the SD card storage with the selected file system.
          * 
          * @return 1 if successful, 0 if failed.
          */
-        int formatFAT() override;
+        int format(FileSystems fs) override;
         
-        /**
-         * Formats the SD card storage with the LittleFS file system.
-         * 
-         * @return 1 if successful, 0 if failed.
-         */
-        int formatLittleFS() override;
     private:
-        FileSystems fs = FS_FAT;
+        FileSystems fileSystem = FS_FAT;
         
 };
 

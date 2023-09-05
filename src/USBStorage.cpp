@@ -7,12 +7,12 @@
 // The maximum number of attempts to mount the USB drive
 constexpr auto MAX_MOUNT_ATTEMPTS = 10;
 
-bool USBStorage::usbAvailable = false;
+volatile bool USBStorage::usbAvailable = false;
 
 USBStorage::USBStorage(){
 #if defined(ARDUINO_PORTENTA_C33)
     register_hotplug_callback(DEV_USB,  [](){
-        usbAvailable = !usbAvailable;
+        USBStorage::usbAvailable = !USBStorage::usbAvailable;
     });
 #endif
 }
@@ -65,36 +65,38 @@ bool USBStorage::isConnected(){
 }
 
 void USBStorage::checkConnection(){
-    USBHost * host;
-    USBDeviceConnected * dev;
-#if defined(ARDUINO_PORTENTA_H7_M7)
-    unsigned long currentMillis = millis();
-    boolean found = false;
+    #if defined(ARDUINO_PORTENTA_H7_M7)
+        USBHost * host;
+        USBDeviceConnected * dev;
+        unsigned long currentMillis = millis();
+        boolean found = false;
 
-    if (currentMillis - previousMillis >= interval) {
-      this->previousMillis = currentMillis;
-      host = USBHost::getHostInst();
+        if (currentMillis - previousMillis >= interval) {
+        this->previousMillis = currentMillis;
+        host = USBHost::getHostInst();
 
-      if ((dev = host->getDevice(0)) != NULL){
-          usbAvailable = true;
-          found = true;
-      } else{
-          usbAvailable = false;
-      }
+        if ((dev = host->getDevice(0)) != NULL){
+            usbAvailable = true;
+            found = true;
+        } else{
+            usbAvailable = false;
+        }
+        }
+    #endif
+}
+
+int USBStorage::format(FileSystems fs){
+    if(fs == FS_FAT){
+        this -> begin();
+        this -> unmount();
+        this -> fileSystem = FS_FAT;
+        return mkfs(DEV_USB, FS_FAT);
+    } else if(FS_LITTLEFS) {
+        this -> begin();
+        this -> unmount();
+        this -> fileSystem = FS_LITTLEFS;
+        return mkfs(DEV_USB, FS_LITTLEFS);
     }
-#endif
+
 }
 
-int USBStorage::formatFAT(){
-    this -> begin();
-    this -> unmount();
-    this -> fileSystem = FS_FAT;
-    return mkfs(DEV_USB, FS_FAT);
-}
-
-int USBStorage::formatLittleFS(){
-    this -> begin();
-    this -> unmount();
-    this -> fileSystem = FS_LITTLEFS;
-    return mkfs(DEV_USB, FS_LITTLEFS);
-}

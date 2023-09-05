@@ -58,17 +58,11 @@ class Arduino_UnifiedStorage {
         virtual Folder getRootFolder() = 0;
 
         /**
-         * Formats the storage with the FAT file system.
+         * Formats the storage with the selected file system.
          * @return 1 if successful, 0 if failed.
          */
-        virtual int formatLittleFS() = 0;
+        virtual int format(FileSystems fs) = 0;
 
-        /**
-         * Formats the storage with the FAT file system.
-         * 
-         * @return 1 if successful, 0 if failed.
-         */
-        virtual int formatFAT() = 0;
 };
 
 

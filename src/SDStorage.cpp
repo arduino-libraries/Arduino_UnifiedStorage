@@ -9,11 +9,11 @@ SDStorage::SDStorage(){
 }
 
 int SDStorage::begin(){
-  return mount(DEV_SDCARD, this->fs, MNT_DEFAULT) == 0;
+  return mount(DEV_SDCARD, this->fileSystem, MNT_DEFAULT) == 0;
 }
 
 int SDStorage::begin(FileSystems fs){
-  this -> fs = fs;
+  this -> fileSystem = fs;
   this -> begin();
 }
 
@@ -25,18 +25,19 @@ Folder SDStorage::getRootFolder(){
     return Folder("/sdcard");
 }
 
-int SDStorage::formatFAT(){
-    this -> begin();
-    this -> unmount();
-    this -> fs = FS_FAT;
-    return mkfs(DEV_SDCARD, FS_FAT);
-}
+int SDStorage::format(FileSystems fs){
+    if(fs == FS_FAT){
+        this -> begin();
+        this -> unmount();
+        this -> fileSystem = FS_FAT;
+        return mkfs(DEV_SDCARD, FS_FAT);
+    } else if (fs == FS_LITTLEFS) {
+        this -> begin();
+        this -> unmount();
+        this -> fileSystem = FS_LITTLEFS;
+        return mkfs(DEV_SDCARD, FS_LITTLEFS);
+    }
 
-int SDStorage::formatLittleFS(){
-    this -> begin();
-    this -> unmount();
-    this -> fs = FS_LITTLEFS;
-    return mkfs(DEV_SDCARD, FS_LITTLEFS);
 }
 
 
