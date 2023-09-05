@@ -20,7 +20,7 @@ InternalStorage internal = InternalStorage();
 
 bool testFileCreationWithOpen(Folder root) {
   UFile file = UFile();
-  String path = root.getPathString() + "/test_open.txt";
+  String path = root.getPathAsString() + "/test_open.txt";
   Serial.println(path);
   if (file.open(path, FileMode::WRITE)) {
     Serial.println("\n--- Test creating file using file.open ---");
@@ -104,7 +104,7 @@ bool testReadingAll(Folder root) {
     file.write(reinterpret_cast<const uint8_t*>("Hello, World!"), 13);
     file.close();
 
-    if (file.open(root.getPathString() + "/test_read.txt", FileMode::READ)) {
+    if (file.open(root.getPathAsString() + "/test_read.txt", FileMode::READ)) {
       char buffer[file.available()];
       size_t bytesRead = file.read(reinterpret_cast<uint8_t*>(buffer), sizeof(buffer));
       buffer[bytesRead] = '\0'; // Null-terminate the string
@@ -136,7 +136,7 @@ bool testSeeking(Folder root) {
     file.close();
  
 
-    if (file.open(root.getPathString() + "/test_seek.txt", FileMode::READ)) {
+    if (file.open(root.getPathAsString() + "/test_seek.txt", FileMode::READ)) {
       Serial.println("\n--- Test seeking file ---");
       file.seek(7);
       char buffer[20];
@@ -163,7 +163,7 @@ bool testAvailableData(Folder root) {
     file.write(reinterpret_cast<const uint8_t*>("Hello, World!"), 13);
     file.close();
 
-    if (file.open(root.getPathString() + "/test_available.txt", FileMode::READ)) {
+    if (file.open(root.getPathAsString() + "/test_available.txt", FileMode::READ)) {
       Serial.println("\n--- Test available data ---");
       int availableBytes = file.available();
       Serial.println("Available bytes in file (test_available.txt): " + String(availableBytes));
@@ -193,7 +193,7 @@ bool testCopyingFile(Folder root) {
 
     if (destinationFolder.exists()) {
         Serial.println("\n--- Test copying a file ---");
-        Serial.println("Source file name: " + String(sourceFile.getPathString()));
+        Serial.println("Source file name: " + String(sourceFile.getPathAsString()));
         
         if (sourceFile.copyTo(destinationFolder)) {
           Serial.println("File copied successfully!");
@@ -227,8 +227,8 @@ bool testMovingFile(Folder root) {
       UFile movedFile = sourceFileMove;
       if (movedFile.exists()) {
         Serial.println("\n--- Test moving a file ---");
-        Serial.println("Source file name: " + String(sourceFileMove.getPathString()));
-        Serial.println("Destination file name: " + String(destinationFolder.getPathString()) + "/test_source_move.txt");
+        Serial.println("Source file name: " + String(sourceFileMove.getPathAsString()));
+        Serial.println("Destination file name: " + String(destinationFolder.getPathAsString()) + "/test_source_move.txt");
         if (sourceFileMove.moveTo(destinationFolder)) {
           Serial.println("File moved successfully!");
           sourceFileMove.close();

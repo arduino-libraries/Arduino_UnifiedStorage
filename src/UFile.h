@@ -8,9 +8,6 @@
 class Folder;
 #include "Folder.h"
 
-
-
-
 /**
  * Class representing a File
  */
@@ -179,7 +176,7 @@ public:
    * @brief Returns the path of the directory.
    * @return The path of the file as a String
    */
-  String getPathString();
+  String getPathAsString();
 
 
   /**
@@ -202,9 +199,9 @@ public:
 
 
 private:
-  FILE* fp;
+  FILE* filePointer;
   uint8_t* readBuffer;
   std::string path;
-  FileMode fm;
+  FileMode fileMode;
 };
 #endif

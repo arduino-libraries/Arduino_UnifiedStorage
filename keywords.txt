@@ -45,7 +45,7 @@ copyTo                      KEYWORD2
 moveTo                      KEYWORD2
 getParentFolder             KEYWORD2
 getPath                     KEYWORD2
-getPathString               KEYWORD2
+getPathAsString             KEYWORD2
 
 isConnected                 KEYWORD2
 isAvailable                 KEYWORD2

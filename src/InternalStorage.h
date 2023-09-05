@@ -106,7 +106,6 @@ public:
         int partitionNumber = 3;
         #endif
 
-
         char * partitionName = "user";
         FileSystems fs = FS_FAT;
 };

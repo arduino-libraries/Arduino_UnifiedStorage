@@ -58,9 +58,9 @@ bool testFolderRenaming(Folder root) {
   Folder sourceFolder = root.createSubfolder("source_folder");
   if (sourceFolder.exists()) {
     Serial.println("\n--- Test renaming folder ---");
-    Serial.println("Source folder name: " + String(sourceFolder.getPathString()));
+    Serial.println("Source folder name: " + String(sourceFolder.getPathAsString()));
     if (sourceFolder.rename("renamed_folder")) {
-      Serial.println("Folder renamed to: " + String(sourceFolder.getPathString()));
+      Serial.println("Folder renamed to: " + String(sourceFolder.getPathAsString()));
       sourceFolder.remove();
       return true;
     } else {
@@ -79,8 +79,8 @@ bool testCopyingFolder(Folder root) {
 
   if (sourceFolder.exists()) {
     Serial.println("\n--- Test copying a folder ---");
-    Serial.println("Source folder name: " + String(sourceFolder.getPathString()));
-    Serial.println("Destination folder name: " + String(copyDestination.getPathString()));
+    Serial.println("Source folder name: " + String(sourceFolder.getPathAsString()));
+    Serial.println("Destination folder name: " + String(copyDestination.getPathAsString()));
 
    
 
@@ -108,8 +108,8 @@ bool testMovingFolder(Folder root) {
 
   if (sourceFolderMove.exists()) {
     Serial.println("\n--- Test moving a folder ---");
-    Serial.println("Source folder name: " + String(sourceFolderMove.getPathString()));
-    Serial.println("Destination folder name: " + String(moveDestination.getPathString()));
+    Serial.println("Source folder name: " + String(sourceFolderMove.getPathAsString()));
+    Serial.println("Destination folder name: " + String(moveDestination.getPathAsString()));
     if (sourceFolderMove.moveTo(moveDestination)) {
       Serial.println("Folder moved successfully!");
       sourceFolderMove.remove();

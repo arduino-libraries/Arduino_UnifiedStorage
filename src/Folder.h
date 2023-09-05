@@ -82,7 +82,7 @@ class Folder {
      * @brief Returns the path of the file.
      * @return The path of the file as an Arduino String
     */
-    String getPathString();
+    String getPathAsString();
 
     /**
      * @brief Creates a subfolder in the directory.
@@ -160,10 +160,7 @@ class Folder {
     bool moveTo(String destination, bool overwrite = false);
 
   private: 
-  
-    std::string dirname;
     std::string path;
-    DIR * dir;
 };
 
 #endif

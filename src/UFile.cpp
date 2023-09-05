@@ -2,9 +2,9 @@
 
 #include <cstdio>
 
-UFile::UFile() : fp(nullptr) {}
+UFile::UFile() : filePointer(nullptr) {}
 
-UFile::UFile(const char* path) : fp(nullptr), path(path) {}
+UFile::UFile(const char* path) : filePointer(nullptr), path(path) {}
 
 UFile::~UFile() {
     close();
@@ -36,10 +36,10 @@ bool UFile::open(const char* filename, FileMode fileMode) {
     }
 
     // Open the file
-    fp = fopen(filename, mode);
-    fm = fileMode;
+    filePointer = fopen(filename, mode);
+    this -> fileMode = fileMode;
 
-    if (fp == nullptr) {
+    if (filePointer == nullptr) {
         // Failed to open the file
         return false;
     }
@@ -53,62 +53,61 @@ bool UFile::open(String filename, FileMode mode) {
 
 void UFile::close() {
     // Close the file
-    if (fp != nullptr) {
-        fclose(fp);
-        //fp = nullptr;
+    if (filePointer != nullptr) {
+        fclose(filePointer);
     }
 }
 
 bool UFile::seek(size_t offset) {
     // Seek to a specific position in the file
-    if (fp == nullptr) {
+    if (filePointer == nullptr) {
         // File pointer is not valid
         return false;
     }
 
-    int result = fseek(fp, offset, SEEK_SET);
+    int result = fseek(filePointer, offset, SEEK_SET);
     return (result == 0);
 }
 
 int UFile::available() {
     // Check the available data in the file
-    if (fp == nullptr) {
+    if (filePointer == nullptr) {
         // File pointer is not valid
         return 0;
     }
 
-    int currentPosition = ftell(fp);
-    fseek(fp, 0, SEEK_END);
-    int fileSize = ftell(fp);
-    fseek(fp, currentPosition, SEEK_SET);
+    int currentPosition = ftell(filePointer);
+    fseek(filePointer, 0, SEEK_END);
+    int fileSize = ftell(filePointer);
+    fseek(filePointer, currentPosition, SEEK_SET);
 
     return (fileSize - currentPosition);
 }
 
 int UFile::read() {
     // Read a single byte from the file
-    if (fp == nullptr) {
+    if (filePointer == nullptr) {
         // File pointer is not valid
         return 0;
     }
 
-    int value = fgetc(fp);
+    int value = fgetc(filePointer);
     return value;
 }
 
 size_t UFile::read(uint8_t* buffer, size_t size) {
     // Read data from the file into the buffer
-    if (fp == nullptr) {
+    if (filePointer == nullptr) {
         // File pointer is not valid
         return 0;
     }
 
-    size_t bytesRead = fread(buffer, sizeof(uint8_t), size, fp);
+    size_t bytesRead = fread(buffer, sizeof(uint8_t), size, filePointer);
     return bytesRead;
 }
 
 String UFile::readAsString() {
-    if (fp == nullptr) {
+    if (filePointer == nullptr) {
         return String("");
     }
 
@@ -129,33 +128,33 @@ String UFile::readAsString() {
 
 size_t UFile::write(uint8_t value) {
     // Write a single byte to the file
-    if (fp == nullptr) {
+    if (filePointer == nullptr) {
         // File pointer is not valid
         return 0;
     }
 
-    int result = fputc(value, fp);
+    int result = fputc(value, filePointer);
     return (result != EOF) ? 1 : 0;
 }
 
 size_t UFile::write(String data) {
-    if (fp == nullptr) {
+    if (filePointer == nullptr) {
         // File pointer is not valid
         return 0;
     }
 
     // Write data to the file
-    size_t bytesWritten = fwrite(data.c_str(), sizeof(char), data.length(), fp);
+    size_t bytesWritten = fwrite(data.c_str(), sizeof(char), data.length(), filePointer);
     return bytesWritten;
 }
 
 size_t UFile::write(const uint8_t* buffer, size_t size) {
-    if (fp == nullptr) {
+    if (filePointer == nullptr) {
         // File pointer is not valid
         return 0;
     }
 
-    size_t bytesWritten = fwrite(buffer, sizeof(uint8_t), size, fp);
+    size_t bytesWritten = fwrite(buffer, sizeof(uint8_t), size, filePointer);
     return bytesWritten;
 }
 
@@ -220,12 +219,9 @@ bool UFile::copyTo(const char* destinationPath, bool overwrite) {
     // Open the source file for reading
     FILE* sourceFile = fopen(path.c_str(), "r");
 
-
-
     if (sourceFile == nullptr) {
         return false;
     }
-
 
     FILE* destinationFile = fopen(newPath.c_str(), "r");
 
@@ -275,7 +271,7 @@ bool UFile::moveTo(const char* destinationPath, bool overwrite){
 
     FILE* destinationFile = fopen(newPath.c_str(), "r");
 
-    fclose(fp);
+    fclose(filePointer);
     if (!copyTo(destinationPath, overwrite)) {
         return false; // Return false if the copy operation fails
     }
@@ -285,7 +281,7 @@ bool UFile::moveTo(const char* destinationPath, bool overwrite){
         return false;
     }
 
-    open(newPath.c_str(), fm); // sure about that ?
+    open(newPath.c_str(), fileMode); // sure about that ?
     path = newPath;
 
     return true;
@@ -306,6 +302,6 @@ const char* UFile::getPath() {
     return path.c_str();
 }
 
-String UFile::getPathString() {
+String UFile::getPathAsString() {
     return String(path.c_str());
 }

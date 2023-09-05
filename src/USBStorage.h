@@ -77,11 +77,11 @@ public:
     void checkConnection();
 
 private:
-    FileSystems fs = FS_FAT;
+    FileSystems fileSystem = FS_FAT;
     bool connected = false;
     unsigned long previousMillis; 
     unsigned int interval = 500;
-    static bool usb_available;
+    static bool usbAvailable;
 };
 
 #endif
