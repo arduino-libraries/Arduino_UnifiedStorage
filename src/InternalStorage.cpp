@@ -1,7 +1,6 @@
 #include "Arduino_UnifiedStorage.h"
 
 InternalStorage::InternalStorage(){
-    this -> fs = FS_FAT;
 
     #if defined(ARDUINO_PORTENTA_C33)
         this -> setQSPIPartition(2);
