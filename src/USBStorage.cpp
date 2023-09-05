@@ -17,12 +17,12 @@ USBStorage::USBStorage(){
 #endif
 }
 
-int USBStorage::begin(FileSystems fs){
+bool USBStorage::begin(FileSystems fs){
   this -> fileSystem = fs;
-  this -> begin();
+  return this -> begin();
 }
 
-int USBStorage::begin(){
+bool USBStorage::begin(){
     int attempts = 0;
     int err = mount(DEV_USB, this->fileSystem, MNT_DEFAULT);
 
@@ -38,10 +38,10 @@ int USBStorage::begin(){
         this -> connected = false;
     }
 
-    return err == 0;
+    return err == 0 ? true : false;
 }
 
-int USBStorage::unmount(){
+bool USBStorage::unmount(){
   auto unmountResult = umount(DEV_USB);
     
 
@@ -49,7 +49,7 @@ int USBStorage::unmount(){
       this -> connected = false;
   }
 
-  return unmountResult == 0;
+    return unmountResult == 0 ? true : false;
 }
 
 Folder USBStorage::getRootFolder(){
@@ -85,17 +85,17 @@ void USBStorage::checkConnection(){
     #endif
 }
 
-int USBStorage::format(FileSystems fs){
+bool  USBStorage::format(FileSystems fs){
     if(fs == FS_FAT){
         this -> begin();
         this -> unmount();
         this -> fileSystem = FS_FAT;
-        return mkfs(DEV_USB, FS_FAT);
+        return mkfs(DEV_USB, FS_FAT) == 0 ? true : false;
     } else if(FS_LITTLEFS) {
         this -> begin();
         this -> unmount();
         this -> fileSystem = FS_LITTLEFS;
-        return mkfs(DEV_USB, FS_LITTLEFS);
+        return mkfs(DEV_USB, FS_LITTLEFS) == 0 ? true : false;
     }
 
 }

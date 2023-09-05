@@ -19,7 +19,7 @@ public:
      * 
      * @return 1 if successful, 0 if failed.
      */
-    int begin() override;
+    bool begin() override;
 
     /**
      * Initializes the USB storage with the specified file system.
@@ -27,14 +27,14 @@ public:
      * @param fs The desired file system (FS_FAT or FS_LITTLEFS).
      * @return 1 if successful, 0 if failed.
      */
-    int begin(FileSystems fs) override;
+    bool begin(FileSystems fs) override;
 
     /**
      * Unmounts the USB storage.
      * 
      * @return 1 if successful, 0 if failed.
      */
-    int unmount() override;
+    bool unmount() override;
 
     /**
      * Retrieves the root folder of the USB storage.
@@ -48,7 +48,7 @@ public:
      * 
      * @return 1 if successful, 0 if failed.
      */
-    int format(FileSystems fs) override;
+    bool format(FileSystems fs) override;
 
     /**
      * Checks if the USB storage is connected.

@@ -17,12 +17,12 @@ InternalStorage::InternalStorage(int partition, const char * name, FileSystems f
     this -> fs = fs;
 }
 
-int InternalStorage::begin(FileSystems fs){
+bool InternalStorage::begin(FileSystems fs){
   this -> fs = fs;
-  this -> begin();
+  return this -> begin();
 }
 
-int InternalStorage::begin(){
+bool InternalStorage::begin(){
     #if defined(ARDUINO_PORTENTA_C33)
         this -> blockDevice = BlockDevice::get_default_instance();
         this -> userData = new MBRBlockDevice(this->blockDevice, this->partitionNumber);
@@ -51,13 +51,13 @@ int InternalStorage::begin(){
             this -> userDataFileSystem = new mbed::LittleFileSystem(this->partitionName);
         }
         int err = this -> userDataFileSystem -> mount(this -> userData);
-        if(err == 0) return 1;
+        return err == 0 ? true : false;
     #endif
 }
 
-int InternalStorage::unmount(){
-     int err = this -> userDataFileSystem -> unmount();
-     if(err == 0) return 1;
+bool InternalStorage::unmount(){
+    int err = this -> userDataFileSystem -> unmount();
+    return err == 0 ? true : false;
 }
 
 Folder InternalStorage::getRootFolder(){
@@ -72,7 +72,7 @@ void InternalStorage::setQSPIPartitionName(const char * name){
     this -> partitionName = (char *)name;
 }
 
-int InternalStorage::format(FileSystems fs){
+bool InternalStorage::format(FileSystems fs){
     this -> begin();
     this -> unmount();
     this -> fs = fs;
@@ -81,18 +81,18 @@ int InternalStorage::format(FileSystems fs){
     if(fs == FS_FAT){
         #if defined(ARDUINO_PORTENTA_C33)
             this -> userDataFileSystem = new FATFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData);
+            return this -> userDataFileSystem -> reformat(this-> userData)  == 0 ? true : false;
         #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
             this -> userDataFileSystem =  new mbed::FATFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData);
+            return this -> userDataFileSystem -> reformat(this-> userData)  == 0 ? true : false;
         #endif
     } if (fs == FS_LITTLEFS) {
         #if defined(ARDUINO_PORTENTA_C33)
             this -> userDataFileSystem = new LittleFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData);
+            return this -> userDataFileSystem -> reformat(this-> userData)  == 0 ? true : false;
         #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
             this -> userDataFileSystem =  new mbed::LittleFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData);
+            return this -> userDataFileSystem -> reformat(this-> userData)  == 0 ? true : false;
         #endif
     }
 }

@@ -269,8 +269,6 @@ bool UFile::moveTo(Folder destinationFolder, bool overwrite) {
 bool UFile::moveTo(const char* destinationPath, bool overwrite){
     std::string newPath = replaceFirstPathComponent(path, destinationPath);
 
-    FILE* destinationFile = fopen(newPath.c_str(), "r");
-
     fclose(filePointer);
     if (!copyTo(destinationPath, overwrite)) {
         return false; // Return false if the copy operation fails
@@ -281,7 +279,7 @@ bool UFile::moveTo(const char* destinationPath, bool overwrite){
         return false;
     }
 
-    open(newPath.c_str(), fileMode); // sure about that ?
+    //open(newPath.c_str(), fileMode); // sure about that ?
     path = newPath;
 
     return true;
