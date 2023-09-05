@@ -4,30 +4,31 @@
     #include <Arduino_USBHostMbed5.h>
 #endif
 
-#define MAX_TRIES 10
+// The maximum number of attempts to mount the USB drive
+constexpr auto MAX_MOUNT_ATTEMPTS = 10;
 
-bool USBStorage::usb_available = false;
+bool USBStorage::usbAvailable = false;
 
 USBStorage::USBStorage(){
 #if defined(ARDUINO_PORTENTA_C33)
     register_hotplug_callback(DEV_USB,  [](){
-        usb_available = !usb_available;
+        usbAvailable = !usbAvailable;
     });
 #endif
 }
 
 int USBStorage::begin(FileSystems fs){
-  this -> fs = fs;
+  this -> fileSystem = fs;
   this -> begin();
 }
 
 int USBStorage::begin(){
     int attempts = 0;
-    int err = mount(DEV_USB, this->fs, MNT_DEFAULT);
+    int err = mount(DEV_USB, this->fileSystem, MNT_DEFAULT);
 
-    while (0 != err && attempts < MAX_TRIES) {
+    while (0 != err && attempts < MAX_MOUNT_ATTEMPTS) {
         attempts +=1;
-        err = mount(DEV_USB, this->fs, MNT_DEFAULT);
+        err = mount(DEV_USB, this->fileSystem, MNT_DEFAULT);
         delay(1000);
     }
 
@@ -56,7 +57,7 @@ Folder USBStorage::getRootFolder(){
 }
 
 bool USBStorage::isAvailable(){
-    return usb_available;
+    return usbAvailable;
 }
 
 bool USBStorage::isConnected(){
@@ -75,10 +76,10 @@ void USBStorage::checkConnection(){
       host = USBHost::getHostInst();
 
       if ((dev = host->getDevice(0)) != NULL){
-          usb_available = true;
+          usbAvailable = true;
           found = true;
       } else{
-          usb_available = false;
+          usbAvailable = false;
       }
     }
 #endif
@@ -87,13 +88,13 @@ void USBStorage::checkConnection(){
 int USBStorage::formatFAT(){
     this -> begin();
     this -> unmount();
-    this -> fs = FS_FAT;
+    this -> fileSystem = FS_FAT;
     return mkfs(DEV_USB, FS_FAT);
 }
 
 int USBStorage::formatLittleFS(){
     this -> begin();
     this -> unmount();
-    this -> fs = FS_LITTLEFS;
+    this -> fileSystem = FS_LITTLEFS;
     return mkfs(DEV_USB, FS_LITTLEFS);
 }

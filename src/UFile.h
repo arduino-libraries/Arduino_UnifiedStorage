@@ -199,9 +199,9 @@ public:
 
 
 private:
-  FILE* fp;
+  FILE* filePointer;
   uint8_t* readBuffer;
   std::string path;
-  FileMode fm;
+  FileMode fileMode;
 };
 #endif
