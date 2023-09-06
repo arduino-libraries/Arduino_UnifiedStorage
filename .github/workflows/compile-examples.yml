@@ -5,13 +5,13 @@ name: Compile Examples
 on:
   push:
     paths:
-      - ".github/workflows/compile-examples-private.ya?ml"
+      - ".github/workflows/compile-examples.ya?ml"
       - "library.properties"
       - "examples/**"
       - "src/**"
   pull_request:
     paths:
-      - ".github/workflows/compile-examples-private.ya?ml"
+      - ".github/workflows/compile-examples.ya?ml"
       - "library.properties"
       - "examples/**"
       - "src/**"
@@ -24,6 +24,9 @@ on:
 env:
   UNIVERSAL_SKETCH_PATHS: |
         - extras/tests
+        - examples/SimpleStorageWriteRead
+        - examples/AdvancedUSBInternalOperations
+        - examples/BackupInternalPartitions
   SKETCHES_REPORTS_PATH: sketches-reports
   SKETCHES_REPORTS_ARTIFACT_NAME: sketches-reports
 
@@ -43,34 +46,14 @@ jobs:
           - fqbn: arduino:mbed_portenta:envie_m7
             platforms: |
               - name: arduino:mbed_portenta
+            additional-sketch-paths: |
+              - examples/PortentaH7Logger
           - fqbn: arduino:renesas_portenta:portenta_c33
             platforms: |
               - name: arduino:renesas_portenta
           - fqbn: arduino:mbed_opta:opta
             platforms: |
               - name: arduino:mbed_opta
-        include:
-          - board:
-            - fqbn: arduino:mbed_portenta:envie_m7
-              additional-sketch-paths: |
-                - examples/SimpleStorageWriteRead
-                - examples/PortentaH7Logger
-                - examples/AdvancedUSBInternalOperations
-                - examples/BackupInternalPartitions
-          - board:
-            - fqbn: arduino:renesas_portenta:portenta_c33
-              additional-sketch-paths: |
-                - examples/SimpleStorageWriteRead
-                - examples/AdvancedUSBInternalOperations
-                - examples/BackupInternalPartitions
-          - board:
-            - fqbn: arduino:mbed_opta:opta
-              additional-sketch-paths: |
-                - examples/SimpleStorageWriteRead
-                - examples/AdvancedUSBInternalOperations
-                - examples/BackupInternalPartitions
-
-
 
     steps:
       - name: Checkout repository
