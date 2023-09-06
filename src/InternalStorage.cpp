@@ -52,6 +52,8 @@ bool InternalStorage::begin(){
         }
         int err = this -> userDataFileSystem -> mount(this -> userData);
         return err == 0 ? true : false;
+    #else
+        return false; // Unsupported board
     #endif
 }
 
