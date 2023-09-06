@@ -1,7 +1,7 @@
 #include <Arduino_UnifiedStorage.h>
 
 
-if !defined(ARDUINO_OPTA)
+#if !defined(ARDUINO_OPTA)
 #define HAS_SD 
 #endif
 
