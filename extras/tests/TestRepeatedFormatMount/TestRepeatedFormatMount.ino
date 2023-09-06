@@ -1,7 +1,10 @@
 #include <Arduino_UnifiedStorage.h>
 
-#define HAS_USB 
+if !defined(ARDUINO_OPTA)
 #define HAS_SD 
+#endif
+
+#define HAS_USB 
 #define HAS_QSPI 
 
 #if defined(HAS_USB)
