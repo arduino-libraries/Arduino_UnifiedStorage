@@ -9,7 +9,7 @@
 #include <iostream>
 #include <vector>
 
-static bool copyFolder(const char* source, const char* destination) {
+[[gnu::unused]] static bool copyFolder(const char* source, const char* destination) {
     DIR* dir = opendir(source);
     if (dir == nullptr) {
         printf("Failed to open source directory\n");
@@ -75,7 +75,7 @@ static bool copyFolder(const char* source, const char* destination) {
     return true;
 }
 
-static std::string replaceLastPathComponent(const std::string& path, const std::string& newComponent) {
+[[gnu::unused]] static std::string replaceLastPathComponent(const std::string& path, const std::string& newComponent) {
     size_t lastSlashIndex = path.find_last_of('/');
     if (lastSlashIndex != std::string::npos) {
         std::string newPath = path.substr(0, lastSlashIndex + 1) + newComponent;
@@ -85,7 +85,7 @@ static std::string replaceLastPathComponent(const std::string& path, const std::
 }
 
 // Helper function to get the last path component
-static std::string getLastPathComponent(const std::string& path) {
+[[gnu::unused]] static std::string getLastPathComponent(const std::string& path) {
     size_t lastSlashIndex = path.find_last_of('/');
     if (lastSlashIndex != std::string::npos) {
         return path.substr(lastSlashIndex + 1);
@@ -94,7 +94,7 @@ static std::string getLastPathComponent(const std::string& path) {
 }
 
 // Helper function to replace the first path component with a new component
-static std::string replaceFirstPathComponent(const std::string& path, const std::string& destinationPath) {
+[[gnu::unused]] static std::string replaceFirstPathComponent(const std::string& path, const std::string& destinationPath) {
     std::string fileName = getLastPathComponent(path);
     std::string newPath = destinationPath + "/" + fileName;
     return newPath;

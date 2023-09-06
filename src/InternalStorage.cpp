@@ -32,7 +32,7 @@ bool InternalStorage::begin(){
             this -> userDataFileSystem = new LittleFileSystem(this->partitionName);
         }
         int err = this -> userDataFileSystem -> mount(userData);
-        if(err == 0) return 1;
+        return err == 0 ? true : false;
     #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
         this -> blockDevice = QSPIFBlockDevice::get_default_instance();
         this -> userData = new mbed::MBRBlockDevice(this->blockDevice, this->partitionNumber);
@@ -95,6 +95,8 @@ bool InternalStorage::format(FileSystems fs){
             return this -> userDataFileSystem -> reformat(this-> userData)  == 0 ? true : false;
         #endif
     }
+
+    return false;
 }
 
 #if defined(ARDUINO_PORTENTA_C33)

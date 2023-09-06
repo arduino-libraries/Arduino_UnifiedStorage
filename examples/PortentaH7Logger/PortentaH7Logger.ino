@@ -27,8 +27,7 @@ constexpr auto baudrate { 115200 };
 
 #if defined(ARDUINO_PORTENTA_H7_M7)
 #define USB_MOUNTED_LED LED_BLUE
-#elif defined(ARDUINO_PORTENTA_C33)
-#endif 
+
 
 
 InternalStorage internalStorage = InternalStorage();
@@ -179,3 +178,4 @@ void loop() {
   runPeriodically(moveDataToQSPI, 1000, &lastMove);
   runPeriodically(backupToUSB, 10000, &lastBackup);
 }
+#endif 
