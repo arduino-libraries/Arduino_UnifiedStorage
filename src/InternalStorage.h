@@ -101,7 +101,7 @@ public:
         #endif
 
         char * partitionName;
-        FileSystems fs;
+        FileSystems fileSystem;
 };
 
 #endif
