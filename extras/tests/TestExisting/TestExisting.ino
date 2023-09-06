@@ -1,6 +1,6 @@
 #include <Arduino_UnifiedStorage.h>
 
-InternalStorage internalStorage = InternalStorage(2, "user", FS_LITTLEFS);
+InternalStorage internalStorage = InternalStorage();
 
 
 void setup() {

@@ -9,7 +9,7 @@ SDStorage::SDStorage(){
 }
 
 bool SDStorage::begin(){
-  return mount(DEV_SDCARD, this->fileSystem, MNT_DEFAULT)== 0 ? true : false;
+  return mount(DEV_SDCARD, this->fileSystem, MNT_DEFAULT) == 0 ? true : false;
 }
 
 bool SDStorage::begin(FileSystems fs){
