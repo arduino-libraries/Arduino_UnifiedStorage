@@ -8,7 +8,6 @@ The Arduino_UnifiedStorage library provides a unified interface to access differ
 ## Examples
 * [**examples/SimpleStorageWriteRead**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/SimpleStorageWriteRead/SimpleStorageWriteRead.ino) - Write/read simple data from SD, USB and internal storage
 * [**examples/AdvancedUSBInternalOperations**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/AdvancedUSBInternalOperations/AdvancedUSBInternalOperations.ino) - Navigate file structure and demonstrate file operations between USB and internal storage
-* [**examples/PortentaH7Logger**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/PortentaH7Logger/PortentaH7Logger.ino) - Log analog input to the Portenta H7  with timestamp, then save to internal storage and backup to USB (if detected) 
 * [**examples/BackupInternalPartitions**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/BackupInternalPartitions/BackupInternalPartitions.ino) - Back up all partitions on the internal storage to a USB Mass Storage device.
 
 ## Instructions
@@ -48,4 +47,4 @@ This library has been tested with the following STM32 and Renesas based Arduino 
 * Opta: Internal QSPI Flash and USB
 
 
-Note: Due to an unforeseen compatibility issue on the Portenta Breakout Board, inserting a USB drive on the USB-A port of the breakout board may occasionally cause a reboot on Portenta C33 boards. You can work around this issue by connecting your USB Mass Storage device trough a USB hub. This limitation only affects Portenta C33 boards.
+Note: Due to an unforeseen compatibility issue on the Portenta Breakout Board, inserting a USB drive on the USB-A port of the breakout board may occasionally cause a reboot on Portenta C33 boards. You can work around this issue by connecting your USB Mass Storage device through a USB hub. This limitation only affects Portenta C33 boards.
