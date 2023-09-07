@@ -825,8 +825,6 @@ Represents a USB storage using the Arduino Unified Storage library.
 `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_u_s_b_storage_1a1d39336ddd7ec401dc2ed99c3117af59)`()` | Retrieves the root folder of the USB storage.
 `public virtual bool ` [`format`](#class_u_s_b_storage_1a8aec32e4e48d081183ad880a61836bc5)`(FileSystems fs)` | Formats the USB storage with the selected file system.
 `public bool ` [`isConnected`](#class_u_s_b_storage_1a228919e4b7f6fe0619fbcb33da9a9534)`()` | Checks if the USB storage is connected.
-`public bool ` [`isAvailable`](#class_u_s_b_storage_1ad71d15f8c9bcd12aa14a2bd6be620184)`()` | Checks if the USB storage is available.
-`public void ` [`checkConnection`](#class_u_s_b_storage_1adf1432619e4e970d34f14742d6932dfe)`()` | Checks the USB storage connection status.
 
 ## Members
 
@@ -886,15 +884,3 @@ Checks if the USB storage is connected.
 true if connected, false otherwise.
 <hr />
 
-### `public bool ` [`isAvailable`](#class_u_s_b_storage_1ad71d15f8c9bcd12aa14a2bd6be620184)`()` <a id="class_u_s_b_storage_1ad71d15f8c9bcd12aa14a2bd6be620184" class="anchor"></a>
-
-Checks if the USB storage is available.
-
-#### Returns
-true if available, false otherwise.
-<hr />
-
-### `public void ` [`checkConnection`](#class_u_s_b_storage_1adf1432619e4e970d34f14742d6932dfe)`()` <a id="class_u_s_b_storage_1adf1432619e4e970d34f14742d6932dfe" class="anchor"></a>
-
-Checks the USB storage connection status.
-<hr />
