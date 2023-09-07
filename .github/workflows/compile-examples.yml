@@ -74,7 +74,7 @@ jobs:
             # See: https://github.com/arduino/compile-sketches#libraries
           sketch-paths: |
             ${{ env.UNIVERSAL_SKETCH_PATHS }}
-            ${{ matrix.additional-sketch-paths }}
+            ${{ matrix.board.additional-sketch-paths }}
           enable-deltas-report: true
           sketches-report-path: ${{ env.SKETCHES_REPORTS_PATH }}
 
