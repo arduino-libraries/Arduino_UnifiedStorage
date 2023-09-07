@@ -17,38 +17,37 @@ Abstract class representing the common features of the supported storage methods
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public int ` [`begin`](#class_arduino___unified_storage_1a65139ad70db5bc94d9192a94614b6ddd)`()` | Initializes the storage.
-`public int ` [`begin`](#class_arduino___unified_storage_1a8875999ef2fdb12a98db1f0fcd0afc28)`(FileSystems fs)` | Initializes the storage with the specified file system. 
-`public int ` [`unmount`](#class_arduino___unified_storage_1ad6ec554809fdf4a168a38d50c6b0096c)`()` | Unmounts the storage. 
+`public bool ` [`begin`](#class_arduino___unified_storage_1a350443027c76ea18f2812a54aa8ab437)`()` | Initializes the storage.
+`public bool ` [`begin`](#class_arduino___unified_storage_1acb25f75f3dcdb89ebce3c7cd08970a99)`(FileSystems fs)` | Initializes the storage with the specified file system. 
+`public bool ` [`unmount`](#class_arduino___unified_storage_1a4281bc190ee4f2ad35265eab64ef6f7f)`()` | Unmounts the storage. 
 `public ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_arduino___unified_storage_1a7166075ba695d54bf74c6c71b8c4c1bf)`()` | Retrieves the root folder of the storage. 
-`public int ` [`formatLittleFS`](#class_arduino___unified_storage_1ac24d1b858dd5323c9ec1a3838a119c97)`()` | Formats the storage with the FAT file system. 
-`public int ` [`formatFAT`](#class_arduino___unified_storage_1a33683ec5084c1108dd735f71a20d27a0)`()` | Formats the storage with the FAT file system.
+`public bool ` [`format`](#class_arduino___unified_storage_1ad6d045b4bdafd4dcb75daed305888e25)`(FileSystems fs)` | Formats the storage with the selected file system. 
 
 ## Members
 
-### `public int ` [`begin`](#class_arduino___unified_storage_1a65139ad70db5bc94d9192a94614b6ddd)`()` <a id="class_arduino___unified_storage_1a65139ad70db5bc94d9192a94614b6ddd" class="anchor"></a>
+### `public bool ` [`begin`](#class_arduino___unified_storage_1a350443027c76ea18f2812a54aa8ab437)`()` <a id="class_arduino___unified_storage_1a350443027c76ea18f2812a54aa8ab437" class="anchor"></a>
 
 Initializes the storage.
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
-### `public int ` [`begin`](#class_arduino___unified_storage_1a8875999ef2fdb12a98db1f0fcd0afc28)`(FileSystems fs)` <a id="class_arduino___unified_storage_1a8875999ef2fdb12a98db1f0fcd0afc28" class="anchor"></a>
+### `public bool ` [`begin`](#class_arduino___unified_storage_1acb25f75f3dcdb89ebce3c7cd08970a99)`(FileSystems fs)` <a id="class_arduino___unified_storage_1acb25f75f3dcdb89ebce3c7cd08970a99" class="anchor"></a>
 
 Initializes the storage with the specified file system. 
 #### Parameters
 * `fs` The desired file system (FS_FAT or FS_LITTLEFS). 
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
-### `public int ` [`unmount`](#class_arduino___unified_storage_1ad6ec554809fdf4a168a38d50c6b0096c)`()` <a id="class_arduino___unified_storage_1ad6ec554809fdf4a168a38d50c6b0096c" class="anchor"></a>
+### `public bool ` [`unmount`](#class_arduino___unified_storage_1a4281bc190ee4f2ad35265eab64ef6f7f)`()` <a id="class_arduino___unified_storage_1a4281bc190ee4f2ad35265eab64ef6f7f" class="anchor"></a>
 
 Unmounts the storage. 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
 ### `public ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_arduino___unified_storage_1a7166075ba695d54bf74c6c71b8c4c1bf)`()` <a id="class_arduino___unified_storage_1a7166075ba695d54bf74c6c71b8c4c1bf" class="anchor"></a>
@@ -58,19 +57,11 @@ Retrieves the root folder of the storage.
 The root folder as a [Folder](#class_folder) object.
 <hr />
 
-### `public int ` [`formatLittleFS`](#class_arduino___unified_storage_1ac24d1b858dd5323c9ec1a3838a119c97)`()` <a id="class_arduino___unified_storage_1ac24d1b858dd5323c9ec1a3838a119c97" class="anchor"></a>
+### `public bool ` [`format`](#class_arduino___unified_storage_1ad6d045b4bdafd4dcb75daed305888e25)`(FileSystems fs)` <a id="class_arduino___unified_storage_1ad6d045b4bdafd4dcb75daed305888e25" class="anchor"></a>
 
-Formats the storage with the FAT file system. 
+Formats the storage with the selected file system. 
 #### Returns
-1 if successful, 0 if failed.
-<hr />
-
-### `public int ` [`formatFAT`](#class_arduino___unified_storage_1a33683ec5084c1108dd735f71a20d27a0)`()` <a id="class_arduino___unified_storage_1a33683ec5084c1108dd735f71a20d27a0" class="anchor"></a>
-
-Formats the storage with the FAT file system.
-
-#### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
 # class `Folder` <a id="class_folder" class="anchor"></a>
@@ -91,7 +82,7 @@ Class representing a directory.
 `public bool ` [`rename`](#class_folder_1a14519c2a344ebfb8161c2bee2a2b5464)`(String newDirname)` | Renames a directory.
 `public bool ` [`exists`](#class_folder_1aa548278d3ec09fd4abcaa827a79c40f4)`()` | Checks if the directory exists.
 `public const char * ` [`getPath`](#class_folder_1a731e8d84685eca8e273affba152468a6)`()` | Returns the path of the file.
-`public String ` [`getPathString`](#class_folder_1a30dd952da8ae977dca4e3dfde8fbd5be)`()` | Returns the path of the file.
+`public String ` [`getPathAsString`](#class_folder_1ac816d0fe5674c4648e97423b6f9c51f8)`()` | Returns the path of the file.
 `public ` [`Folder`](#class_folder)` ` [`createSubfolder`](#class_folder_1a78f2f9b297f62b67c2e0656b15a95868)`(const char * subfolderName, bool overwrite)` | Creates a subfolder in the directory.
 `public ` [`Folder`](#class_folder)` ` [`createSubfolder`](#class_folder_1ab50743664becb7b2a1fb564b5513d69c)`(String subfolderName, bool overwrite)` | Creates a subfolder in the directory.
 `public std::vector< ` [`UFile`](#class_u_file)` > ` [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78)`()` | Returns File objects for all files in the current directory.
@@ -198,7 +189,7 @@ Returns the path of the file.
 The path of the file as a const char *
 <hr />
 
-### `public String ` [`getPathString`](#class_folder_1a30dd952da8ae977dca4e3dfde8fbd5be)`()` <a id="class_folder_1a30dd952da8ae977dca4e3dfde8fbd5be" class="anchor"></a>
+### `public String ` [`getPathAsString`](#class_folder_1ac816d0fe5674c4648e97423b6f9c51f8)`()` <a id="class_folder_1ac816d0fe5674c4648e97423b6f9c51f8" class="anchor"></a>
 
 Returns the path of the file.
 
@@ -339,14 +330,13 @@ Represents internal storage using the Arduino Unified Storage library.
 --------------------------------|---------------------------------------------
 `public  ` [`InternalStorage`](#class_internal_storage_1ac45948ef554bc659efed81240140192e)`()` | Default constructor for the [InternalStorage](#class_internal_storage) class.
 `public  ` [`InternalStorage`](#class_internal_storage_1ac13cad019a2ae66647d1c3604690eca7)`(int partition, const char * name, FileSystems fs)` | Constructs an [InternalStorage](#class_internal_storage) object with the specified partition, name, and file system.
-`public virtual int ` [`begin`](#class_internal_storage_1a520a40d49b3be7cc4b4ade86a9a8845b)`()` | Initializes the internal storage.
-`public virtual int ` [`begin`](#class_internal_storage_1ace5153b8fbef34b9d0d6c8e3cf87007e)`(FileSystems fs)` | Initializes the internal storage with the specified file system.
-`public virtual int ` [`unmount`](#class_internal_storage_1a3d139260d59add4222516aaf577a9399)`()` | Unmounts the internal storage.
+`public virtual bool ` [`begin`](#class_internal_storage_1a984731348dfbdade84e24250133a033e)`()` | Initializes the internal storage.
+`public virtual bool ` [`begin`](#class_internal_storage_1a90cd409874d9c578ce3add4df88875e5)`(FileSystems fs)` | Initializes the internal storage with the specified file system.
+`public virtual bool ` [`unmount`](#class_internal_storage_1a663446e2135a4e91d7fdb8ca638cc027)`()` | Unmounts the internal storage.
 `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_internal_storage_1a87142ddbdad62217e33851b32572082d)`()` | Retrieves the root folder of the internal storage.
 `public void ` [`setQSPIPartition`](#class_internal_storage_1a2ca8680537077ca3e189be2ca6dcc634)`(int partition)` | Sets the QSPI partition number.
 `public void ` [`setQSPIPartitionName`](#class_internal_storage_1ae0fbe264a758a4026548df66ec05f8c8)`(const char * name)` | Sets the QSPI partition name.
-`public virtual int ` [`formatFAT`](#class_internal_storage_1a8a1bea9b07a7a507e4d4ac6aafb75e12)`()` | Formats the internal storage with the FAT file system.
-`public virtual int ` [`formatLittleFS`](#class_internal_storage_1a9e86d2bbc4cbafbaee58a4b2913e0830)`()` | Formats the internal storage with the LittleFS file system.
+`public virtual bool ` [`format`](#class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601)`(FileSystems fs)` | Formats the internal storage with the selceted file system.
 
 ## Members
 
@@ -367,15 +357,15 @@ Constructs an [InternalStorage](#class_internal_storage) object with the specifi
 * `fs` The desired file system (FS_FAT or FS_LITTLEFS).
 <hr />
 
-### `public virtual int ` [`begin`](#class_internal_storage_1a520a40d49b3be7cc4b4ade86a9a8845b)`()` <a id="class_internal_storage_1a520a40d49b3be7cc4b4ade86a9a8845b" class="anchor"></a>
+### `public virtual bool ` [`begin`](#class_internal_storage_1a984731348dfbdade84e24250133a033e)`()` <a id="class_internal_storage_1a984731348dfbdade84e24250133a033e" class="anchor"></a>
 
 Initializes the internal storage.
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
-### `public virtual int ` [`begin`](#class_internal_storage_1ace5153b8fbef34b9d0d6c8e3cf87007e)`(FileSystems fs)` <a id="class_internal_storage_1ace5153b8fbef34b9d0d6c8e3cf87007e" class="anchor"></a>
+### `public virtual bool ` [`begin`](#class_internal_storage_1a90cd409874d9c578ce3add4df88875e5)`(FileSystems fs)` <a id="class_internal_storage_1a90cd409874d9c578ce3add4df88875e5" class="anchor"></a>
 
 Initializes the internal storage with the specified file system.
 
@@ -383,15 +373,15 @@ Initializes the internal storage with the specified file system.
 * `fs` The desired file system (FS_FAT or FS_LITTLEFS). 
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
-### `public virtual int ` [`unmount`](#class_internal_storage_1a3d139260d59add4222516aaf577a9399)`()` <a id="class_internal_storage_1a3d139260d59add4222516aaf577a9399" class="anchor"></a>
+### `public virtual bool ` [`unmount`](#class_internal_storage_1a663446e2135a4e91d7fdb8ca638cc027)`()` <a id="class_internal_storage_1a663446e2135a4e91d7fdb8ca638cc027" class="anchor"></a>
 
 Unmounts the internal storage.
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
 ### `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_internal_storage_1a87142ddbdad62217e33851b32572082d)`()` <a id="class_internal_storage_1a87142ddbdad62217e33851b32572082d" class="anchor"></a>
@@ -418,21 +408,21 @@ Sets the QSPI partition name.
 * `name` The name of the partition.
 <hr />
 
-### `public virtual int ` [`formatFAT`](#class_internal_storage_1a8a1bea9b07a7a507e4d4ac6aafb75e12)`()` <a id="class_internal_storage_1a8a1bea9b07a7a507e4d4ac6aafb75e12" class="anchor"></a>
+### `public virtual bool ` [`format`](#class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601)`(FileSystems fs)` <a id="class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601" class="anchor"></a>
 
-Formats the internal storage with the FAT file system.
-
-#### Returns
-1 if successful, 0 if failed.
-<hr />
-
-### `public virtual int ` [`formatLittleFS`](#class_internal_storage_1a9e86d2bbc4cbafbaee58a4b2913e0830)`()` <a id="class_internal_storage_1a9e86d2bbc4cbafbaee58a4b2913e0830" class="anchor"></a>
-
-Formats the internal storage with the LittleFS file system.
+Formats the internal storage with the selceted file system.
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
+
+
+Retrieves the block device associated with the internal storage.
+
+#### Returns
+The block device as a BlockDevice object.
+<hr />
+
 
 # class `SDStorage` <a id="class_s_d_storage" class="anchor"></a>
 
@@ -448,12 +438,11 @@ Represents an SD card storage using the Arduino Unified Storage library.
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public  ` [`SDStorage`](#class_s_d_storage_1a992cb710f41462a7a35c6dfdc838f01f)`()` | Default constructor for the [SDStorage](#class_s_d_storage) class.
-`public virtual int ` [`begin`](#class_s_d_storage_1a2e46cdebf6b253b7a5d3efa41c019b84)`()` | Initializes the SD card storage.
-`public virtual int ` [`begin`](#class_s_d_storage_1ab78cac5ad77a9b61cd586485755a6f8a)`(FileSystems fs)` | Initializes the SD card storage with the specified file system.
-`public virtual int ` [`unmount`](#class_s_d_storage_1a29ed4a057be24972953d9bb52b7bd593)`()` | Unmounts the SD card storage.
+`public virtual bool ` [`begin`](#class_s_d_storage_1ab49c772b785b6c97940baca60ae386ec)`()` | Initializes the SD card storage.
+`public virtual bool ` [`begin`](#class_s_d_storage_1a19520df98c5a52d403ac26a873f65860)`(FileSystems fs)` | Initializes the SD card storage with the specified file system.
+`public virtual bool ` [`unmount`](#class_s_d_storage_1a6f4d671e685d660d0aff8648d8288b9c)`()` | Unmounts the SD card storage.
 `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_s_d_storage_1a2f7327c327985d88bd1305310ec0c5e8)`()` | Retrieves the root folder of the SD card storage.
-`public virtual int ` [`formatFAT`](#class_s_d_storage_1ab06c05a87f5e34036c2d69d187ea3775)`()` | Formats the SD card storage with the FAT file system.
-`public virtual int ` [`formatLittleFS`](#class_s_d_storage_1a797b3226c20794fa140cea95e13d5cee)`()` | Formats the SD card storage with the LittleFS file system.
+`public virtual bool ` [`format`](#class_s_d_storage_1a93cac8330a5950138985e3712db1dc07)`(FileSystems fs)` | Formats the SD card storage with the selected file system.
 
 ## Members
 
@@ -462,15 +451,15 @@ Represents an SD card storage using the Arduino Unified Storage library.
 Default constructor for the [SDStorage](#class_s_d_storage) class.
 <hr />
 
-### `public virtual int ` [`begin`](#class_s_d_storage_1a2e46cdebf6b253b7a5d3efa41c019b84)`()` <a id="class_s_d_storage_1a2e46cdebf6b253b7a5d3efa41c019b84" class="anchor"></a>
+### `public virtual bool ` [`begin`](#class_s_d_storage_1ab49c772b785b6c97940baca60ae386ec)`()` <a id="class_s_d_storage_1ab49c772b785b6c97940baca60ae386ec" class="anchor"></a>
 
 Initializes the SD card storage.
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
-### `public virtual int ` [`begin`](#class_s_d_storage_1ab78cac5ad77a9b61cd586485755a6f8a)`(FileSystems fs)` <a id="class_s_d_storage_1ab78cac5ad77a9b61cd586485755a6f8a" class="anchor"></a>
+### `public virtual bool ` [`begin`](#class_s_d_storage_1a19520df98c5a52d403ac26a873f65860)`(FileSystems fs)` <a id="class_s_d_storage_1a19520df98c5a52d403ac26a873f65860" class="anchor"></a>
 
 Initializes the SD card storage with the specified file system.
 
@@ -478,15 +467,15 @@ Initializes the SD card storage with the specified file system.
 * `fs` The desired file system (FS_FAT or FS_LITTLEFS). 
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
-### `public virtual int ` [`unmount`](#class_s_d_storage_1a29ed4a057be24972953d9bb52b7bd593)`()` <a id="class_s_d_storage_1a29ed4a057be24972953d9bb52b7bd593" class="anchor"></a>
+### `public virtual bool ` [`unmount`](#class_s_d_storage_1a6f4d671e685d660d0aff8648d8288b9c)`()` <a id="class_s_d_storage_1a6f4d671e685d660d0aff8648d8288b9c" class="anchor"></a>
 
 Unmounts the SD card storage.
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
 ### `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_s_d_storage_1a2f7327c327985d88bd1305310ec0c5e8)`()` <a id="class_s_d_storage_1a2f7327c327985d88bd1305310ec0c5e8" class="anchor"></a>
@@ -497,20 +486,15 @@ Retrieves the root folder of the SD card storage.
 The root folder as a [Folder](#class_folder) object.
 <hr />
 
-### `public virtual int ` [`formatFAT`](#class_s_d_storage_1ab06c05a87f5e34036c2d69d187ea3775)`()` <a id="class_s_d_storage_1ab06c05a87f5e34036c2d69d187ea3775" class="anchor"></a>
+### `public virtual bool ` [`format`](#class_s_d_storage_1a93cac8330a5950138985e3712db1dc07)`(FileSystems fs)` <a id="class_s_d_storage_1a93cac8330a5950138985e3712db1dc07" class="anchor"></a>
 
-Formats the SD card storage with the FAT file system.
+Formats the SD card storage with the selected file system.
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
-### `public virtual int ` [`formatLittleFS`](#class_s_d_storage_1a797b3226c20794fa140cea95e13d5cee)`()` <a id="class_s_d_storage_1a797b3226c20794fa140cea95e13d5cee" class="anchor"></a>
 
-Formats the SD card storage with the LittleFS file system.
-
-#### Returns
-1 if successful, 0 if failed.
 <hr />
 
 # class `UFile` <a id="class_u_file" class="anchor"></a>
@@ -545,8 +529,8 @@ Class representing a File
 `public bool ` [`moveTo`](#class_u_file_1a69f6a7cccce8cc40eb6698df15f38635)`(` [`Folder`](#class_folder)` destinationFolder, bool overwrite)` | Copies the file to the specified destination folder.
 `public ` [`Folder`](#class_folder)` ` [`getParentFolder`](#class_u_file_1a087b79b6d62a3ed122d1f8b0f25b0d24)`()` | Returns a reference to the parent folder of the current folder.
 `public const char * ` [`getPath`](#class_u_file_1a41592023ea53cd1b46f383097a3db1f8)`()` | Returns the path of the directory.
-`public String ` [`getPathString`](#class_u_file_1a379d1f0076b414408bac26f317ffc204)`()` | Returns the path of the directory.
-`public int ` [`available`](#class_u_file_1a37fbfdc0ad16ee06d4a66848b40912cd)`()` | Returns the number of bytes available to read.
+`public String ` [`getPathAsString`](#class_u_file_1a5adef9f3d538f92e51e52c4b1f3ada76)`()` | Returns the path of the directory.
+`public uint32_t ` [`available`](#class_u_file_1a82ad0fb6cffaf23aea794b508ec57bbb)`()` | Returns the number of bytes available to read.
 `public int ` [`read`](#class_u_file_1a62b544ebe9c3b144268016e6427917b5)`()` | Returns one byte from the file.
 `public size_t ` [`write`](#class_u_file_1a4db87498c1a4205145816c14df704de7)`(uint8_t value)` | Writes one byte to the file.
 
@@ -789,7 +773,7 @@ Returns the path of the directory.
 The path of the file as a const char *
 <hr />
 
-### `public String ` [`getPathString`](#class_u_file_1a379d1f0076b414408bac26f317ffc204)`()` <a id="class_u_file_1a379d1f0076b414408bac26f317ffc204" class="anchor"></a>
+### `public String ` [`getPathAsString`](#class_u_file_1a5adef9f3d538f92e51e52c4b1f3ada76)`()` <a id="class_u_file_1a5adef9f3d538f92e51e52c4b1f3ada76" class="anchor"></a>
 
 Returns the path of the directory.
 
@@ -797,7 +781,7 @@ Returns the path of the directory.
 The path of the file as a String
 <hr />
 
-### `public int ` [`available`](#class_u_file_1a37fbfdc0ad16ee06d4a66848b40912cd)`()` <a id="class_u_file_1a37fbfdc0ad16ee06d4a66848b40912cd" class="anchor"></a>
+### `public uint32_t ` [`available`](#class_u_file_1a82ad0fb6cffaf23aea794b508ec57bbb)`()` <a id="class_u_file_1a82ad0fb6cffaf23aea794b508ec57bbb" class="anchor"></a>
 
 Returns the number of bytes available to read.
 
@@ -835,12 +819,11 @@ Represents a USB storage using the Arduino Unified Storage library.
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public  ` [`USBStorage`](#class_u_s_b_storage_1ad084f3bd2479b0a1daa88013f3cfe23a)`()` | Default constructor for the [USBStorage](#class_u_s_b_storage) class.
-`public virtual int ` [`begin`](#class_u_s_b_storage_1a03f962b05deea5d39509af029d4898b9)`()` | Initializes the USB storage.
-`public virtual int ` [`begin`](#class_u_s_b_storage_1a4512f903c687b7430382555c78b6e052)`(FileSystems fs)` | Initializes the USB storage with the specified file system.
-`public virtual int ` [`unmount`](#class_u_s_b_storage_1a84413a1327d2a6b4c889a71c721ef4f3)`()` | Unmounts the USB storage.
+`public virtual bool ` [`begin`](#class_u_s_b_storage_1aabf0868054a1741ffe4018301d145cb1)`()` | Initializes the USB storage.
+`public virtual bool ` [`begin`](#class_u_s_b_storage_1a9fac27a863b6d73bb78f956be4517f67)`(FileSystems fs)` | Initializes the USB storage with the specified file system.
+`public virtual bool ` [`unmount`](#class_u_s_b_storage_1acb602dc07465880ebaec64dca1b36506)`()` | Unmounts the USB storage.
 `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_u_s_b_storage_1a1d39336ddd7ec401dc2ed99c3117af59)`()` | Retrieves the root folder of the USB storage.
-`public virtual int ` [`formatFAT`](#class_u_s_b_storage_1a12c7124a493cf587e5651314a9331ad5)`()` | Formats the USB storage with the FAT file system.
-`public virtual int ` [`formatLittleFS`](#class_u_s_b_storage_1a1f5f3a6d258f4a327c2dd96331a66e30)`()` | Formats the USB storage with the LittleFS file system.
+`public virtual bool ` [`format`](#class_u_s_b_storage_1a8aec32e4e48d081183ad880a61836bc5)`(FileSystems fs)` | Formats the USB storage with the selected file system.
 `public bool ` [`isConnected`](#class_u_s_b_storage_1a228919e4b7f6fe0619fbcb33da9a9534)`()` | Checks if the USB storage is connected.
 `public bool ` [`isAvailable`](#class_u_s_b_storage_1ad71d15f8c9bcd12aa14a2bd6be620184)`()` | Checks if the USB storage is available.
 `public void ` [`checkConnection`](#class_u_s_b_storage_1adf1432619e4e970d34f14742d6932dfe)`()` | Checks the USB storage connection status.
@@ -852,15 +835,15 @@ Represents a USB storage using the Arduino Unified Storage library.
 Default constructor for the [USBStorage](#class_u_s_b_storage) class.
 <hr />
 
-### `public virtual int ` [`begin`](#class_u_s_b_storage_1a03f962b05deea5d39509af029d4898b9)`()` <a id="class_u_s_b_storage_1a03f962b05deea5d39509af029d4898b9" class="anchor"></a>
+### `public virtual bool ` [`begin`](#class_u_s_b_storage_1aabf0868054a1741ffe4018301d145cb1)`()` <a id="class_u_s_b_storage_1aabf0868054a1741ffe4018301d145cb1" class="anchor"></a>
 
 Initializes the USB storage.
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
-### `public virtual int ` [`begin`](#class_u_s_b_storage_1a4512f903c687b7430382555c78b6e052)`(FileSystems fs)` <a id="class_u_s_b_storage_1a4512f903c687b7430382555c78b6e052" class="anchor"></a>
+### `public virtual bool ` [`begin`](#class_u_s_b_storage_1a9fac27a863b6d73bb78f956be4517f67)`(FileSystems fs)` <a id="class_u_s_b_storage_1a9fac27a863b6d73bb78f956be4517f67" class="anchor"></a>
 
 Initializes the USB storage with the specified file system.
 
@@ -868,15 +851,15 @@ Initializes the USB storage with the specified file system.
 * `fs` The desired file system (FS_FAT or FS_LITTLEFS). 
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
-### `public virtual int ` [`unmount`](#class_u_s_b_storage_1a84413a1327d2a6b4c889a71c721ef4f3)`()` <a id="class_u_s_b_storage_1a84413a1327d2a6b4c889a71c721ef4f3" class="anchor"></a>
+### `public virtual bool ` [`unmount`](#class_u_s_b_storage_1acb602dc07465880ebaec64dca1b36506)`()` <a id="class_u_s_b_storage_1acb602dc07465880ebaec64dca1b36506" class="anchor"></a>
 
 Unmounts the USB storage.
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
 ### `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_u_s_b_storage_1a1d39336ddd7ec401dc2ed99c3117af59)`()` <a id="class_u_s_b_storage_1a1d39336ddd7ec401dc2ed99c3117af59" class="anchor"></a>
@@ -887,20 +870,12 @@ Retrieves the root folder of the USB storage.
 The root folder as a [Folder](#class_folder) object.
 <hr />
 
-### `public virtual int ` [`formatFAT`](#class_u_s_b_storage_1a12c7124a493cf587e5651314a9331ad5)`()` <a id="class_u_s_b_storage_1a12c7124a493cf587e5651314a9331ad5" class="anchor"></a>
+### `public virtual bool ` [`format`](#class_u_s_b_storage_1a8aec32e4e48d081183ad880a61836bc5)`(FileSystems fs)` <a id="class_u_s_b_storage_1a8aec32e4e48d081183ad880a61836bc5" class="anchor"></a>
 
-Formats the USB storage with the FAT file system.
-
-#### Returns
-1 if successful, 0 if failed.
-<hr />
-
-### `public virtual int ` [`formatLittleFS`](#class_u_s_b_storage_1a1f5f3a6d258f4a327c2dd96331a66e30)`()` <a id="class_u_s_b_storage_1a1f5f3a6d258f4a327c2dd96331a66e30" class="anchor"></a>
-
-Formats the USB storage with the LittleFS file system.
+Formats the USB storage with the selected file system.
 
 #### Returns
-1 if successful, 0 if failed.
+true if successful, false if failed.
 <hr />
 
 ### `public bool ` [`isConnected`](#class_u_s_b_storage_1a228919e4b7f6fe0619fbcb33da9a9534)`()` <a id="class_u_s_b_storage_1a228919e4b7f6fe0619fbcb33da9a9534" class="anchor"></a>
