@@ -6,10 +6,10 @@ The Arduino_UnifiedStorage library provides a unified interface to access differ
 
 
 ## Examples
-* [**examples/SimpleStorageWriteRead**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/SimpleStorageWriteRead/SimpleStorageWriteRead.ino) - this example is concerned with reading/writing and seeking
-* [**examples/AdvancedUSBInternalOperations**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/AdvancedUSBInternalOperations/AdvancedUSBInternalOperations.ino) - this example is concerned with more advanced features like creating folders, traversing folder structures and moving/copying from one storage medium to another
-* [**examples/PortentaH7Logger**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/PortentaH7Logger/PortentaH7Logger.ino) - this is more of a real life usecase, where this library is used to log sensor data to a file on the internal storage and check if a USB Mass Storage device is inserted. If it is detected it will backup the information on the internal storage, only copying the bytes that are new since the last update.
-* [**examples/BackupInternalPartitions**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/BackupInternalPartitions/BackupInternalPartitions.ino) - Another real life usecase, where this library is used to back-up all partitions on the internal storage to a USB Mass Storage device.
+* [**examples/SimpleStorageWriteRead**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/SimpleStorageWriteRead/SimpleStorageWriteRead.ino) - Write/read simple data from SD, USB and internal storage
+* [**examples/AdvancedUSBInternalOperations**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/AdvancedUSBInternalOperations/AdvancedUSBInternalOperations.ino) - Navigate file structure and demonstrate file operations between USB and internal storage
+* [**examples/PortentaH7Logger**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/PortentaH7Logger/PortentaH7Logger.ino) - Log analog input to the Portenta H7  with timestamp, then save to internal storage and backup to USB (if detected) 
+* [**examples/BackupInternalPartitions**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/BackupInternalPartitions/BackupInternalPartitions.ino) - Back up all partitions on the internal storage to a USB Mass Storage device.
 
 ## Instructions
 1. Download and install this library 
