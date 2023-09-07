@@ -9,11 +9,6 @@ constexpr auto MAX_MOUNT_ATTEMPTS = 10;
 
 
 USBStorage::USBStorage(){
-#if defined(ARDUINO_PORTENTA_C33)
-    register_hotplug_callback(DEV_USB,  [](){
-        USBStorage::usbAvailable = !USBStorage::usbAvailable;
-    });
-#endif
 }
 
 bool USBStorage::begin(FileSystems fs){
