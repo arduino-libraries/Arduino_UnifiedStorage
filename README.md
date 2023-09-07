@@ -45,3 +45,5 @@ This library has been tested with the following STM32 and Renesas based Arduino 
 * Portenta H7 + Vision Shield: SD and QSPI
 * Portenta C33 + Portenta Breakout: USB, SD, and QSPI
 * Portenta C33 + Vision Shield: SD and QSPI
+* Opta: Internal QSPI Flash and USB
+
