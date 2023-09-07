@@ -46,8 +46,6 @@ jobs:
           - fqbn: arduino:mbed_portenta:envie_m7
             platforms: |
               - name: arduino:mbed_portenta
-            additional-sketch-paths: |
-              - examples/PortentaH7Logger
           - fqbn: arduino:renesas_portenta:portenta_c33
             platforms: |
               - name: arduino:renesas_portenta

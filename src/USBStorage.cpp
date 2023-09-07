@@ -7,14 +7,8 @@
 // The maximum number of attempts to mount the USB drive
 constexpr auto MAX_MOUNT_ATTEMPTS = 10;
 
-volatile bool USBStorage::usbAvailable = false;
 
 USBStorage::USBStorage(){
-#if defined(ARDUINO_PORTENTA_C33)
-    register_hotplug_callback(DEV_USB,  [](){
-        USBStorage::usbAvailable = !USBStorage::usbAvailable;
-    });
-#endif
 }
 
 bool USBStorage::begin(FileSystems fs){
@@ -56,34 +50,11 @@ Folder USBStorage::getRootFolder(){
     return Folder("/usb");
 }
 
-bool USBStorage::isAvailable(){
-    return usbAvailable;
-}
 
 bool USBStorage::isConnected(){
     return this -> connected;
 }
 
-void USBStorage::checkConnection(){
-    #if defined(ARDUINO_PORTENTA_H7_M7)
-        USBHost * host;
-        USBDeviceConnected * dev;
-        unsigned long currentMillis = millis();
-        boolean found = false;
-
-        if (currentMillis - previousMillis >= interval) {
-        this->previousMillis = currentMillis;
-        host = USBHost::getHostInst();
-
-        if ((dev = host->getDevice(0)) != NULL){
-            usbAvailable = true;
-            found = true;
-        } else{
-            usbAvailable = false;
-        }
-        }
-    #endif
-}
 
 bool  USBStorage::format(FileSystems fs){
     if(fs == FS_FAT){
