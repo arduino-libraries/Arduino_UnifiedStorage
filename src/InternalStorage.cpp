@@ -14,11 +14,11 @@ InternalStorage::InternalStorage(){
 InternalStorage::InternalStorage(int partition, const char * name, FileSystems fs){
     this -> setQSPIPartition(partition);
     this -> setQSPIPartitionName(name);
-    this -> fs = fs;
+    this -> fileSystem = fs;
 }
 
 bool InternalStorage::begin(FileSystems fs){
-  this -> fs = fs;
+  this -> fileSystem = fs;
   return this -> begin();
 }
 
@@ -26,17 +26,17 @@ bool InternalStorage::begin(){
     #if defined(ARDUINO_PORTENTA_C33)
         this -> blockDevice = BlockDevice::get_default_instance();
         this -> userData = new MBRBlockDevice(this->blockDevice, this->partitionNumber);
-        if(this -> fs == FS_FAT){
+        if(this -> fileSystem == FS_FAT){
             this -> userDataFileSystem = new FATFileSystem(this->partitionName);
         } else {
             this -> userDataFileSystem = new LittleFileSystem(this->partitionName);
         }
         int err = this -> userDataFileSystem -> mount(userData);
-        return err == 0 ? true : false;
+        return err == 0;
     #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
         this -> blockDevice = QSPIFBlockDevice::get_default_instance();
         this -> userData = new mbed::MBRBlockDevice(this->blockDevice, this->partitionNumber);
-        if(this -> fs == FS_FAT){
+        if(this -> fileSystem == FS_FAT){
             
             if(this -> userDataFileSystem != nullptr){
                 delete(this -> userDataFileSystem);
@@ -51,13 +51,15 @@ bool InternalStorage::begin(){
             this -> userDataFileSystem = new mbed::LittleFileSystem(this->partitionName);
         }
         int err = this -> userDataFileSystem -> mount(this -> userData);
-        return err == 0 ? true : false;
+        return err == 0;
+    #else
+        return false; // Unsupported board
     #endif
 }
 
 bool InternalStorage::unmount(){
     int err = this -> userDataFileSystem -> unmount();
-    return err == 0 ? true : false;
+    return err == 0;
 }
 
 Folder InternalStorage::getRootFolder(){
@@ -75,24 +77,24 @@ void InternalStorage::setQSPIPartitionName(const char * name){
 bool InternalStorage::format(FileSystems fs){
     this -> begin();
     this -> unmount();
-    this -> fs = fs;
+    this -> fileSystem = fs;
 
 
     if(fs == FS_FAT){
         #if defined(ARDUINO_PORTENTA_C33)
             this -> userDataFileSystem = new FATFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData)  == 0 ? true : false;
+            return this -> userDataFileSystem -> reformat(this-> userData)  == 0;
         #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
             this -> userDataFileSystem =  new mbed::FATFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData)  == 0 ? true : false;
+            return this -> userDataFileSystem -> reformat(this-> userData)  == 0;
         #endif
     } if (fs == FS_LITTLEFS) {
         #if defined(ARDUINO_PORTENTA_C33)
             this -> userDataFileSystem = new LittleFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData)  == 0 ? true : false;
+            return this -> userDataFileSystem -> reformat(this-> userData)  == 0;
         #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
             this -> userDataFileSystem =  new mbed::LittleFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData)  == 0 ? true : false;
+            return this -> userDataFileSystem -> reformat(this-> userData)  == 0;
         #endif
     }
 

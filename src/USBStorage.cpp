@@ -37,7 +37,7 @@ bool USBStorage::begin(){
         this -> connected = false;
     }
 
-    return err == 0 ? true : false;
+    return err == 0;
 }
 
 bool USBStorage::unmount(){
@@ -48,7 +48,7 @@ bool USBStorage::unmount(){
       this -> connected = false;
   }
 
-    return unmountResult == 0 ? true : false;
+    return unmountResult == 0;
 }
 
 Folder USBStorage::getRootFolder(){
@@ -66,12 +66,12 @@ bool  USBStorage::format(FileSystems fs){
         this -> begin();
         this -> unmount();
         this -> fileSystem = FS_FAT;
-        return mkfs(DEV_USB, FS_FAT) == 0 ? true : false;
+        return mkfs(DEV_USB, FS_FAT) == 0;
     } else if(FS_LITTLEFS) {
         this -> begin();
         this -> unmount();
         this -> fileSystem = FS_LITTLEFS;
-        return mkfs(DEV_USB, FS_LITTLEFS) == 0 ? true : false;
+        return mkfs(DEV_USB, FS_LITTLEFS) == 0;
     }
 
 }

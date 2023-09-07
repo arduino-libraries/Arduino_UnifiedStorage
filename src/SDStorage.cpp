@@ -9,7 +9,7 @@ SDStorage::SDStorage(){
 }
 
 bool SDStorage::begin(){
-  return mount(DEV_SDCARD, this->fileSystem, MNT_DEFAULT) == 0 ? true : false;
+  return mount(DEV_SDCARD, this->fileSystem, MNT_DEFAULT) == 0;
 }
 
 bool SDStorage::begin(FileSystems fs){
@@ -18,7 +18,7 @@ bool SDStorage::begin(FileSystems fs){
 }
 
 bool SDStorage::unmount(){
-    return umount(DEV_SDCARD) == 0 ? true : false;
+    return umount(DEV_SDCARD) == 0;
 }
 
 Folder SDStorage::getRootFolder(){
@@ -39,7 +39,7 @@ bool SDStorage::format(FileSystems fs){
         err =  mkfs(DEV_SDCARD, FS_LITTLEFS);
     }
 
-    return err == 0 ? true : false;
+    return err == 0;
 }
 
 

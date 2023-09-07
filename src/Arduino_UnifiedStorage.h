@@ -34,20 +34,20 @@ class Arduino_UnifiedStorage {
         /**
          * Initializes the storage.
          * 
-         * @return 1 if successful, 0 if failed.
+         * @return true if successful, false if failed.
          */
         virtual bool begin() = 0;
 
         /**
           * Initializes the  storage with the specified file system.
           * @param fs The desired file system (FS_FAT or FS_LITTLEFS).
-          * @return 1 if successful, 0 if failed.
+          * @return true if successful, false if failed.
           */
         virtual bool begin(FileSystems fs) = 0;
 
         /**
          * Unmounts the storage.
-         * @return 1 if successful, 0 if failed.
+         * @return true if successful, false if failed.
          */
         virtual bool unmount() = 0;
 
@@ -59,7 +59,7 @@ class Arduino_UnifiedStorage {
 
         /**
          * Formats the storage with the selected file system.
-         * @return 1 if successful, 0 if failed.
+         * @return true if successful, false if failed.
          */
         virtual bool format(FileSystems fs) = 0;
 

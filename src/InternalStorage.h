@@ -25,7 +25,7 @@ public:
     /**
      * Initializes the internal storage.
      * 
-     * @return 1 if successful, 0 if failed.
+     * @return true if successful, false if failed.
      */
     bool begin() override;
 
@@ -33,14 +33,14 @@ public:
      * Initializes the internal storage with the specified file system.
      * 
      * @param fs The desired file system (FS_FAT or FS_LITTLEFS).
-     * @return 1 if successful, 0 if failed.
+     * @return true if successful, false if failed.
      */
     bool begin(FileSystems fs) override;
 
     /**
      * Unmounts the internal storage.
      * 
-     * @return 1 if successful, 0 if failed.
+     * @return true if successful, false if failed.
      */
     bool unmount() override;
 
@@ -68,7 +68,7 @@ public:
     /**
      * Formats the internal storage with the selceted file system.
      * 
-     * @return 1 if successful, 0 if failed.
+     * @return true if successful, false if failed.
      */
     bool format(FileSystems fs) override;
 
@@ -101,7 +101,7 @@ public:
         #endif
 
         char * partitionName;
-        FileSystems fs;
+        FileSystems fileSystem;
 };
 
 #endif
