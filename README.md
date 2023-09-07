@@ -45,3 +45,5 @@ This library is compatible with STM32 and Renesas based Arduino boards. The avai
 * Portenta H7 + Vision Shield: SD and QSPI
 * Portenta C33 + Portenta Breakout: USB, SD, and QSPI
 * Portenta C33 + Vision Shield: SD and QSPI
+
+Note: Due to a known hardware issue on the Portenta Breakout Board, inserting a USB drive on the USB-A port of the breakout board will cause a reboot on Portenta C33 boards. You can work around this issue by connecting your USB Mass Storage device trough a USB hub. This issue only affects Portenta C33 boards, not Portenta H7 or Portenta Machine Control.

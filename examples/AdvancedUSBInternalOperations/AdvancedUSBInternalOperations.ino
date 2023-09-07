@@ -68,7 +68,6 @@ void setup() {
     Serial.println(errno);
   }
 
-
   if(internalStorage.begin(FS_FAT)){
       Serial.println("Internal storage mounted.");
   } else {

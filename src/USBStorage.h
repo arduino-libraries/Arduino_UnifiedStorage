@@ -57,17 +57,7 @@ public:
      */
     bool isConnected();
 
-    /**
-     * Checks if the USB storage is available.
-     * 
-     * @return true if available, false otherwise.
-     */
-    bool isAvailable();
 
-    /**
-     * Checks the USB storage connection status.
-     */
-    void checkConnection();
 
 
 
@@ -76,7 +66,6 @@ private:
     bool connected = false;
     unsigned long previousMillis; 
     unsigned int interval = 500;
-    static volatile bool usbAvailable;
 };
 
 #endif
