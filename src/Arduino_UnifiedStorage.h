@@ -1,10 +1,11 @@
+
 #ifndef UnifiedStorage_H
 #define UnifiedStorage_H
 
 
 #include "Folder.h"
 #include "UFile.h"
-
+#include "Output.h"
 
 #if defined(ARDUINO_PORTENTA_C33)
 #include "Types.h"

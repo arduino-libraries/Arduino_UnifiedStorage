@@ -1,16 +1,19 @@
 #include <Arduino_UnifiedStorage.h>
 
-InternalStorage internalStorage = InternalStorage();
 
+InternalStorage internalStorage = InternalStorage();
 
 void setup() {
     /* UNCOMMENT THIS PART IF YOU WANT TO ENABLE FORMATTING*/
 
 
+    #if defined(ARDUINO_PORTENTA_C33) || defined(ARDUINO_PORTENTA_H7_M7)
+        Serial.begin(115200);
+        while(!Serial);
+    #elif defined(ARDUINO_OPTA)
+        beginRS485(115200);
+    #endif 
 
-    Serial.begin(9600);
-    delay(1000); // Give time to open the Serial Monitor
-    while(!Serial);
 
 
 
@@ -19,36 +22,30 @@ void setup() {
    
 
     Folder root = internalStorage.getRootFolder();
-    Serial.println(root.getPathAsString());
+
 
     // Test copyTo
-    Serial.println("Testing copyTo...");
+    printFormatted("Testing copyTo... \n");
     Folder sourceFolder2 =  root.createSubfolder("source_folder");
-    Serial.println("Folder 1 created");
+    printFormatted("Folder 1 created \n");
 
-    Serial.println("Trying to create a folder on top of an existing one... without overwrite");
+    printFormatted("Trying to create a folder on top of an existing one... without overwrite \n");
     Folder sourceFolder3 =  root.createSubfolder("source_folder");
     
-    Serial.println("Trying to create a folder on top of an existing one... with overwrite");
+    printFormatted("Trying to create a folder on top of an existing one... with overwrite \n");
     Folder sourceFolder4 =  root.createSubfolder("source_folder", true);
 
     Folder destinationFolder2 = root.createSubfolder("destination_folder");
-    Serial.println("Folder 2 created");
+    printFormatted("Folder 2 created \n");
 
-    Serial.println(sourceFolder2.getPathAsString());
-    Serial.println(destinationFolder2.getPathAsString());
-
-        Serial.println();
-            Serial.println();
 
 
     bool copyResult = sourceFolder2.copyTo(destinationFolder2, true); // Overwrite if exists
     if (copyResult) {
-        Serial.println("Copy successful");
+        printFormatted("Copy successful \n");
     } else {
-        Serial.println("Copy failed");
+        printFormatted("Copy failed \n");
     }
-    Serial.println();
 
 
 
@@ -57,15 +54,12 @@ void setup() {
     Folder sourceFolder =  root.createSubfolder("source");
     Folder destinationFolder = root.createSubfolder("destination");
 
-
-    Serial.println();
-        Serial.println();
-    Serial.println("Testing moveTo...");
+    printFormatted("Testing moveTo...  \n");
     bool moveResult = sourceFolder.moveTo(destinationFolder, true); // Overwrite if exists
     if (moveResult) {
-        Serial.println("Move successful");
+        printFormatted("Move successful \n");
     } else {
-        Serial.println("Move failed");
+        printFormatted("Move failed \n");
     }
 
 
@@ -79,14 +73,10 @@ void setup() {
 
 
     bool success = someFile.copyTo(someOtherFolder);
-    Serial.println("trying to copy file without overwrite");
-    Serial.println(success);
+    printFormatted("trying to copy file without overwrite: %d\n", success);
 
     success = someFile.copyTo(someOtherFolder,true);
-    Serial.println("trying to copy file with overwrite");
-    Serial.println(success);
-
-
+    printFormatted("trying to copy file with overwrite: %d \n", success);
 
 }
 

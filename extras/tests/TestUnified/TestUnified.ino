@@ -21,14 +21,14 @@ InternalStorage * qspi = new InternalStorage();
 
 
 void test(String operation, Arduino_UnifiedStorage* sourceStorage, Arduino_UnifiedStorage* destinationStorage, const char* storageTypeA, const char* storageTypeB) {
-    Serial.println("----------------------------------------------------------");
-    Serial.println("Running test for " + operation + " from " + String(storageTypeA) + " to " + String(storageTypeB) + "\n");
+    printFormatted("----------------------------------------------------------");
+    printFormatted("Running test for " + operation + " from " + String(storageTypeA) + " to " + String(storageTypeB) + "\n");
 
     int mountSource = sourceStorage -> begin();
     int mountDest =  destinationStorage->begin();
 
-    Serial.println("Mount " + String(storageTypeA) + ": " + mountSource);
-    Serial.println("Mount " + String(storageTypeB) + ": " + mountDest);
+    printFormatted("Mount " + String(storageTypeA) + ": " + mountSource);
+    printFormatted("Mount " + String(storageTypeB) + ": " + mountDest);
 
     if(mountSource && mountDest){
    
@@ -50,30 +50,28 @@ void test(String operation, Arduino_UnifiedStorage* sourceStorage, Arduino_Unifi
         }
 
         if (opperationResult) {
-            Serial.println(operation + " from " + String(storageTypeA) + " to " + String(storageTypeB) + " successful");
+            printFormatted(operation + " from " + String(storageTypeA) + " to " + String(storageTypeB) + " successful");
         }
 
-
-        Serial.println();
         int unmountSource = sourceStorage->unmount();
         int unmountDest = destinationStorage->unmount();
 
         delay(1000);
         
     }  else {
-        Serial.println("cannot execute test, fs not mounted");
+        printFormatted("cannot execute test, fs not mounted");
     }
 }
 
 
 #if defined(HAS_USB) && defined(HAS_SD)
 void sd_and_usb(){
-    Serial.println("TESTING SD AND USB \n\n\n\n");
+    printFormatted("TESTING SD AND USB \n\n\n\n");
 
-    Serial.println("-----------------------------");
-    Serial.println("Formatting USB to FAT: " +  String(usb->format(FS_FAT)));
-    Serial.println("Formatting SD to FAT: "  + String(sd->format(FS_FAT)));
-    Serial.println("-----------------------------");
+    printFormatted("-----------------------------");
+    printFormatted("Formatting USB to FAT: " +  String(usb->format(FS_FAT)));
+    printFormatted("Formatting SD to FAT: "  + String(sd->format(FS_FAT)));
+    printFormatted("-----------------------------");
 
 
     test("move", usb, sd, "USB FAT", "SD FAT");
@@ -82,9 +80,9 @@ void sd_and_usb(){
     test("move", sd, usb, "SD FAT", "USB FAT");
     test("copy", sd, usb, "SD FAT", "USB FAT");
 
-    Serial.println("-----------------------------");
-    Serial.println("Formatting USB to LittleFS:" + String(usb->format(FS_LITTLEFS)));
-    Serial.println("-----------------------------");
+    printFormatted("-----------------------------");
+    printFormatted("Formatting USB to LittleFS:" + String(usb->format(FS_LITTLEFS)));
+    printFormatted("-----------------------------");
 
     test("move", usb, sd, "USB LittleFS", "SD FAT ");
     test("copy", usb, sd, "USB LittleFS", "SD FAT ");
@@ -92,9 +90,9 @@ void sd_and_usb(){
     test("move", sd, usb, "SD FAT", "USB LittleFS");
     test("copy", sd, usb, "SD FAT", "USB LittleFS");
 
-    Serial.println("-----------------------------");
-    Serial.println("Formatting SD to LittleFS: "+ String(sd->format(FS_LITTLEFS)));
-    Serial.println("-----------------------------");
+    printFormatted("-----------------------------");
+    printFormatted("Formatting SD to LittleFS: "+ String(sd->format(FS_LITTLEFS)));
+    printFormatted("-----------------------------");
 
     test("move", sd, usb, "SD LittleFS", "USB LittleFS");
     test("copy", sd, usb, "SD LittleFS", "USB LittleFS");
@@ -102,9 +100,9 @@ void sd_and_usb(){
     test("move", usb, sd, "USB LittleFS", "SD LittleFS");
     test("copy", usb, sd, "USB LittleFS", "SD LittleFS");
 
-    Serial.println("-----------------------------");
-    Serial.println("Formatting USB to FAT: " + String(usb->format(FS_FAT)));
-    Serial.println("-----------------------------");
+    printFormatted("-----------------------------");
+    printFormatted("Formatting USB to FAT: " + String(usb->format(FS_FAT)));
+    printFormatted("-----------------------------");
 
     test("move", usb, sd, "USB FAT", "SD LittleFS");
     test("copy", usb, sd, "USB FAT", "SD LittleFS");
@@ -117,11 +115,11 @@ void sd_and_usb(){
 
 #if defined(HAS_QSPI) && defined(HAS_SD)
 void qspi_and_sd() {
-    Serial.println("TESTING QSPI AND SD \n\n\n\n");
-    Serial.println("-----------------------------");
-    Serial.println("Formatting QSPI to FAT: " + String(qspi->format(FS_FAT)));
-    Serial.println("Formatting SD to FAT: " +  String(sd->format(FS_FAT)));
-    Serial.println("-----------------------------");
+    printFormatted("TESTING QSPI AND SD \n\n\n\n");
+    printFormatted("-----------------------------");
+    printFormatted("Formatting QSPI to FAT: " + String(qspi->format(FS_FAT)));
+    printFormatted("Formatting SD to FAT: " +  String(sd->format(FS_FAT)));
+    printFormatted("-----------------------------");
 
     test("move", qspi, sd, "QSPI FAT", "SD FAT");
     test("copy", qspi, sd, "QSPI FAT", "SD FAT");
@@ -129,9 +127,9 @@ void qspi_and_sd() {
     test("move", sd, qspi, "SD FAT", "QSPI FAT");
     test("copy", sd, qspi, "SD FAT", "QSPI FAT");
 
-    Serial.println("-----------------------------");
-    Serial.println("Formatting QSPI to LittleFS:" + String(qspi->format(FS_LITTLEFS)));
-    Serial.println("-----------------------------");
+    printFormatted("-----------------------------");
+    printFormatted("Formatting QSPI to LittleFS:" + String(qspi->format(FS_LITTLEFS)));
+    printFormatted("-----------------------------");
 
     test("move", qspi, sd, "QSPI LittleFS", "SD FAT");
     test("copy", qspi, sd, "QSPI LittleFS", "SD FAT");
@@ -139,9 +137,9 @@ void qspi_and_sd() {
     test("move", sd, qspi, "SD FAT", "QSPI LittleFS");
     test("copy", sd, qspi, "SD FAT", "QSPI LittleFS");
 
-    Serial.println("-----------------------------");
-    Serial.println("Formatting SD to LittleFS: "+ String(sd->format(FS_LITTLEFS)));
-    Serial.println("-----------------------------");
+    printFormatted("-----------------------------");
+    printFormatted("Formatting SD to LittleFS: "+ String(sd->format(FS_LITTLEFS)));
+    printFormatted("-----------------------------");
 
     test("move", qspi, sd, "QSPI LittleFS", "SD LittleFS");
     test("copy", qspi, sd, "QSPI LittleFS", "SD LittleFS");
@@ -149,9 +147,9 @@ void qspi_and_sd() {
     test("move", sd, qspi, "SD LittleFS", "QSPI LittleFS");
     test("copy", sd, qspi, "SD LittleFS", "QSPI LittleFS");
 
-    Serial.println("-----------------------------");
-    Serial.println("Formatting QSPI to FAT: " + String(qspi->format(FS_FAT)));
-    Serial.println("-----------------------------");
+    printFormatted("-----------------------------");
+    printFormatted("Formatting QSPI to FAT: " + String(qspi->format(FS_FAT)));
+    printFormatted("-----------------------------");
     
     test("move", sd, qspi, "SD LittleFS", "QSPI FAT");
     test("copy", sd, qspi, "SD LittleFS", "QSPI FAT");
@@ -164,11 +162,13 @@ void qspi_and_sd() {
 #if defined(HAS_QSPI) && defined(HAS_USB)
 void qspi_and_usb() {
 
-    Serial.println("TESTING QSPI AND USB \n\n\n\n");
-    Serial.println("-----------------------------");
-    Serial.println("Formatting QSPI to FAT: " + String(qspi->format(FS_FAT)));
-    Serial.println("Formatting USB to FAT: " +  String(usb->format(FS_FAT)));
-    Serial.println("-----------------------------");
+    printFormatted("TESTING QSPI AND USB \n\n\n\n");
+    printFormatted("-----------------------------");
+  
+    printFormatted("Formatting USB to FAT: " +  String(usb->format(FS_FAT)));
+    printFormatted(getErrno);
+      printFormatted("Formatting QSPI to FAT: " + String(qspi->format(FS_FAT)));
+    printFormatted("-----------------------------");
 
     test("move", qspi, usb, "QSPI FAT", "USB FAT");
     test("copy", qspi, usb, "QSPI FAT", "USB FAT");
@@ -176,9 +176,9 @@ void qspi_and_usb() {
     test("move", usb, qspi, "USB FAT", "QSPI FAT");
     test("copy", usb, qspi, "USB FAT", "QSPI FAT");
 
-    Serial.println("-----------------------------");
-    Serial.println("Formatting QSPI to LittleFS:" + String(qspi->format(FS_LITTLEFS)));
-    Serial.println("-----------------------------");
+    printFormatted("-----------------------------");
+    printFormatted("Formatting QSPI to LittleFS:" + String(qspi->format(FS_LITTLEFS)));
+    printFormatted("-----------------------------");
 
     test("move", qspi, usb, "QSPI LittleFS", "USB FAT");
     test("copy", qspi, usb, "QSPI LittleFS", "USB FAT");
@@ -186,9 +186,9 @@ void qspi_and_usb() {
     test("move", usb, qspi, "USB FAT", "QSPI LittleFS");
     test("copy", usb, qspi, "USB FAT", "QSPI LittleFS");
 
-    Serial.println("-----------------------------");
-    Serial.println("Formatting USB to LittleFS: "+ String(usb->format(FS_LITTLEFS)));
-    Serial.println("-----------------------------");
+    printFormatted("-----------------------------");
+    printFormatted("Formatting USB to LittleFS: "+ String(usb->format(FS_LITTLEFS)));
+    printFormatted("-----------------------------");
 
     test("move", qspi, usb, "QSPI LittleFS", "USB LittleFS");
     test("copy", qspi, usb, "QSPI LittleFS", "USB LittleFS");
@@ -197,9 +197,9 @@ void qspi_and_usb() {
     test("move", usb, qspi, "USB LittleFS", "QSPI LittleFS");
     test("copy", usb, qspi, "USB LittleFS", "QSPI LittleFS");
 
-    Serial.println("-----------------------------");
-    Serial.println("Formatting QSPI to FAT:" + String(qspi->format(FS_FAT)));
-    Serial.println("-----------------------------");
+    printFormatted("-----------------------------");
+    printFormatted("Formatting QSPI to FAT:" + String(qspi->format(FS_FAT)));
+    printFormatted("-----------------------------");
 
     test("move", usb, qspi, "USB LittleFS", "QSPI FAT");
     test("copy", usb, qspi, "USB LittleFS", "QSPI FAT");
@@ -211,39 +211,43 @@ void qspi_and_usb() {
 #endif
 
 void setup(){
-    Serial.begin(115200);
-    while(!Serial);
+    #if defined(ARDUINO_PORTENTA_C33) || defined(ARDUINO_PORTENTA_H7_M7)
+        Serial.begin(115200);
+        while(!Serial);
+    #elif defined(ARDUINO_OPTA)
+        beginRS485(115200);
+    #endif 
 
     #if defined(HAS_USB) && defined(HAS_SD) && defined(HAS_QSPI)
         qspi_and_usb();
         sd_and_usb();
         qspi_and_sd();
-        Serial.println("Tests finished, formatting all partitions back to FAT:");
-        Serial.println("\t * Formatting QSPI to FAT: " + String(qspi->format(FS_FAT)));
-        Serial.println("\t * Formatting SD to FAT: " + String(sd->format(FS_FAT)));
-        Serial.println("\t * Formatting USB to FAT: " + String(usb->format(FS_FAT)));
+        printFormatted("Tests finished, formatting all partitions back to FAT:");
+        printFormatted("\t * Formatting QSPI to FAT: " + String(qspi->format(FS_FAT)));
+        printFormatted("\t * Formatting SD to FAT: " + String(sd->format(FS_FAT)));
+        printFormatted("\t * Formatting USB to FAT: " + String(usb->format(FS_FAT)));
     #elif defined(HAS_USB) && defined(HAS_SD)
         sd_and_usb();
-        Serial.println("\t * Formatting SD to FAT:" + String(sd->format(FS_FAT)));
-        Serial.println("\t * Formatting USB to FAT:" + String(usb->format(FS_FAT)));
+        printFormatted("\t * Formatting SD to FAT:" + String(sd->format(FS_FAT)));
+        printFormatted("\t * Formatting USB to FAT:" + String(usb->format(FS_FAT)));
     #elif defined(HAS_USB) && defined(HAS_QSPI)
         qspi_and_usb();
-        Serial.println("Tests finished, formatting all partitions back to FAT:");
-        Serial.println("\t * Formatting QSPI to FAT:" + String(qspi->format(FS_FAT)));
-        Serial.println("\t * Formatting USB to FAT:" + String(usb->format(FS_FAT)));
+        printFormatted("Tests finished, formatting all partitions back to FAT:");
+        printFormatted("\t * Formatting QSPI to FAT:" + String(qspi->format(FS_FAT)));
+        printFormatted("\t * Formatting USB to FAT:" + String(usb->format(FS_FAT)));
     #elif defined(HAS_SD) && defined(HAS_QSPI)
         qspi_and_sd();
-        Serial.println("Tests finished, formatting all partitions back to FAT:");
-        Serial.println("\t * Formatting QSPI to FAT:" + String(qspi->format(FS_FAT)));
-        Serial.println("\t * Formatting SD to FAT:" + String(sd->format(FS_FAT)));
+        printFormatted("Tests finished, formatting all partitions back to FAT:");
+        printFormatted("\t * Formatting QSPI to FAT:" + String(qspi->format(FS_FAT)));
+        printFormatted("\t * Formatting SD to FAT:" + String(sd->format(FS_FAT)));
     #elif defined(HAS_USB)
-        Serial.println("Cannot perform tests if only one storage type is selected");
+        printFormatted("Cannot perform tests if only one storage type is selected");
     #elif defined(HAS_SD)
-        Serial.println("Cannot perform tests if only one storage type is selected");
+        printFormatted("Cannot perform tests if only one storage type is selected");
     #elif defined(HAS_QSPI)
-        Serial.println("Cannot perform tests if only one storage type is selected");
+        printFormatted("Cannot perform tests if only one storage type is selected");
     #else
-        Serial.println("Cannot perform tests if no storage type is selected");
+        printFormatted("Cannot perform tests if no storage type is selected");
     #endif
 
 }

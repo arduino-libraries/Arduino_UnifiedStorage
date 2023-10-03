@@ -1,6 +1,6 @@
 #include "USBStorage.h"
 
-#if defined(ARDUINO_PORTENTA_H7_M7)
+#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_OPTA)
     #include <Arduino_USBHostMbed5.h>
 #endif
 
@@ -57,6 +57,7 @@ bool USBStorage::isConnected(){
 
 
 bool  USBStorage::format(FileSystems fs){
+    
     if(fs == FS_FAT){
         this -> begin();
         this -> unmount();

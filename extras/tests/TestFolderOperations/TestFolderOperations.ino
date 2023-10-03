@@ -28,20 +28,20 @@ void printFolderContents(Folder dir, int indentation = 0) {
   // Print directories
   for (Folder subdir : directories) {
     for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
+      printFormatted("  ");
     }
-    Serial.print("[D] ");
-    Serial.println(subdir.getPath());
+    printFormatted("[D] ");
+    printFormatted(subdir.getPath());
     printFolderContents(subdir, indentation + 1);
   }
 
   // Print files
   for (UFile file : files) {
     for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
+      printFormatted("  ");
     }
-    Serial.print("[F] ");
-    Serial.println(file.getPath());
+    printFormatted("[F] ");
+    printFormatted(file.getPath());
   }
 }
 
@@ -49,12 +49,12 @@ void printFolderContents(Folder dir, int indentation = 0) {
 bool testFolderCreation(Folder root) {
   Folder subfolder = root.createSubfolder("test_folder");
   if (subfolder.exists()) {
-    Serial.println("\n--- Test creating folder using root.createSubfolder ---");
-    Serial.println("Test creating folder using root.createSubfolder - Success");
+    printFormatted("\n--- Test creating folder using root.createSubfolder ---");
+    printFormatted("Test creating folder using root.createSubfolder - Success");
     subfolder.remove();
     return true;
   } else {
-    Serial.println("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
+    printFormatted("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -62,18 +62,18 @@ bool testFolderCreation(Folder root) {
 bool testFolderRenaming(Folder root) {
   Folder sourceFolder = root.createSubfolder("source_folder");
   if (sourceFolder.exists()) {
-    Serial.println("\n--- Test renaming folder ---");
-    Serial.println("Source folder name: " + String(sourceFolder.getPathAsString()));
+    printFormatted("\n--- Test renaming folder ---");
+    printFormatted("Source folder name: " + String(sourceFolder.getPathAsString()));
     if (sourceFolder.rename("renamed_folder")) {
-      Serial.println("Folder renamed to: " + String(sourceFolder.getPathAsString()));
+      printFormatted("Folder renamed to: " + String(sourceFolder.getPathAsString()));
       sourceFolder.remove();
       return true;
     } else {
-      Serial.println("Folder renaming failed. Error: " + String(getErrno()));
+      printFormatted("Folder renaming failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    Serial.println("Test folder renaming - Failed. Error: " + String(getErrno()));
+    printFormatted("Test folder renaming - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -83,24 +83,24 @@ bool testCopyingFolder(Folder root) {
   Folder copyDestination = root.createSubfolder("copy_destination");
 
   if (sourceFolder.exists()) {
-    Serial.println("\n--- Test copying a folder ---");
-    Serial.println("Source folder name: " + String(sourceFolder.getPathAsString()));
-    Serial.println("Destination folder name: " + String(copyDestination.getPathAsString()));
+    printFormatted("\n--- Test copying a folder ---");
+    printFormatted("Source folder name: " + String(sourceFolder.getPathAsString()));
+    printFormatted("Destination folder name: " + String(copyDestination.getPathAsString()));
 
    
 
     if (sourceFolder.copyTo(copyDestination, true)) {
-      Serial.println("Folder copied successfully!");
+      printFormatted("Folder copied successfully!");
       sourceFolder.remove();
       copyDestination.remove();
       return true;
     } else {
-      Serial.println("Folder copying failed. Error: " + String(getErrno()));
+      printFormatted("Folder copying failed. Error: " + String(getErrno()));
       sourceFolder.remove();
       return false;
     }
   } else {
-    Serial.println("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
+    printFormatted("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -112,20 +112,20 @@ bool testMovingFolder(Folder root) {
   Folder moveDestination = root.createSubfolder("move_destination");
 
   if (sourceFolderMove.exists()) {
-    Serial.println("\n--- Test moving a folder ---");
-    Serial.println("Source folder name: " + String(sourceFolderMove.getPathAsString()));
-    Serial.println("Destination folder name: " + String(moveDestination.getPathAsString()));
+    printFormatted("\n--- Test moving a folder ---");
+    printFormatted("Source folder name: " + String(sourceFolderMove.getPathAsString()));
+    printFormatted("Destination folder name: " + String(moveDestination.getPathAsString()));
     if (sourceFolderMove.moveTo(moveDestination)) {
-      Serial.println("Folder moved successfully!");
+      printFormatted("Folder moved successfully!");
       sourceFolderMove.remove();
       moveDestination.remove();
       return true;
     } else {
-      Serial.println("Folder moving failed. Error: " + String(getErrno()));
+      printFormatted("Folder moving failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    Serial.println("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
+    printFormatted("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 
@@ -139,23 +139,28 @@ void runTests(Arduino_UnifiedStorage * storage, String storageType) {
         Folder root = storage->getRootFolder();
 
 
-        Serial.println("========= Folder Tests =========");
+        printFormatted("========= Folder Tests =========");
 
         testFolderCreation(root);
         testFolderRenaming(root);
         testCopyingFolder(root);
         testMovingFolder(root);
 
-        Serial.println("========= FS Contents after Folder Tests =========");
+        printFormatted("========= FS Contents after Folder Tests =========");
         printFolderContents(root);
         storage->unmount();
-        Serial.println();
+        printFormatted("");
     }
 }
 
 void setup(){
-    Serial.begin(115200);
-    while(!Serial);
+    #if defined(ARDUINO_PORTENTA_C33) || defined(ARDUINO_PORTENTA_H7_M7)
+        Serial.begin(115200);
+        while(!Serial);
+    #elif defined(ARDUINO_OPTA)
+        beginRS485(115200);
+    #endif 
+
     
     #if defined(HAS_USB)
         runTests(&usb, "USB");
