@@ -97,10 +97,10 @@ public:
         mbed::BlockDevice * blockDevice;
         mbed::MBRBlockDevice * userData;
         mbed::FileSystem * userDataFileSystem;
-        int partitionNumber = 3;
+        int partitionNumber = 2;
         #endif
 
-        char * partitionName;
+        char * partitionName ;        
         FileSystems fileSystem;
 };
 

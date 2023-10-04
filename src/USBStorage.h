@@ -55,17 +55,23 @@ public:
      * 
      * @return true if connected, false otherwise.
      */
-    bool isConnected();
+    bool isMounted();
 
+    void registerHotplugCallback(void (* const callbackFunction)());
 
+    void deregisterHotplugCallback();
 
+    void registerUnplugCallback(void (* const callbackFunction)());
+
+    void deregisterUnplugCallback();
 
 
 private:
     FileSystems fileSystem = FS_FAT;
-    bool connected = false;
+    bool mounted = false;
     unsigned long previousMillis; 
     unsigned int interval = 500;
+
 };
 
 #endif

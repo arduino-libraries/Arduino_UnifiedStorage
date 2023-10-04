@@ -171,7 +171,7 @@ void setup(){
     #endif 
 
     #if defined(HAS_SD)
-        runTests(&sd, "SD");
+        runTests(&&sd, "SD");
     #endif 
 
 }

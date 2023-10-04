@@ -16,6 +16,23 @@ bool USBStorage::begin(FileSystems fs){
   return this -> begin();
 }
 
+void USBStorage::registerHotplugCallback(void (* const callbackFunction)()){
+    register_hotplug_callback(DEV_USB, callbackFunction);
+}
+
+void USBStorage::deregisterHotplugCallback(){
+    deregister_hotplug_callback(DEV_USB);
+}
+
+void USBStorage::registerUnplugCallback(void (* const callbackFunction)()){
+    register_unplug_callback(DEV_USB, callbackFunction);
+}
+
+void USBStorage::deregisterUnplugCallback(){
+    deregister_unplug_callback(DEV_USB);
+}
+
+
 bool USBStorage::begin(){
     int attempts = 0;
     int err = mount(DEV_USB, this->fileSystem, MNT_DEFAULT);
@@ -27,12 +44,14 @@ bool USBStorage::begin(){
     }
 
     if(err == 0){
-        this -> connected = true;
+        this -> mounted = true;
     } else {
-        this -> connected = false;
+        this -> mounted = false;
     }
 
     return err == 0;
+
+
 }
 
 bool USBStorage::unmount(){
@@ -40,7 +59,7 @@ bool USBStorage::unmount(){
     
 
   if(unmountResult == 0){
-      this -> connected = false;
+      this -> mounted = false;
   }
 
     return unmountResult == 0;
@@ -51,10 +70,9 @@ Folder USBStorage::getRootFolder(){
 }
 
 
-bool USBStorage::isConnected(){
-    return this -> connected;
+bool USBStorage::isMounted(){
+    return this -> mounted;
 }
-
 
 bool  USBStorage::format(FileSystems fs){
     

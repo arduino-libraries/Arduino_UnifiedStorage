@@ -6,7 +6,7 @@ The Arduino_UnifiedStorage library provides a unified interface to access differ
 
 
 ## Examples
-* [**examples/SimpleStorageWriteRead**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/SimpleStorageWriteRead/SimpleStorageWriteRead.ino) - Write/read simple data from SD, USB and internal storage
+* [**examples/SimpleStorageWriteRead**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/SimpleStorageWriteRead/SimpleStorageWriteRead.ino) - Write/read simple data from &sd, USB and internal storage
 * [**examples/AdvancedUSBInternalOperations**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/AdvancedUSBInternalOperations/AdvancedUSBInternalOperations.ino) - Navigate file structure and demonstrate file operations between USB and internal storage
 * [**examples/BackupInternalPartitions**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/BackupInternalPartitions/BackupInternalPartitions.ino) - Back up all partitions on the internal storage to a USB Mass Storage device.
 
@@ -40,9 +40,9 @@ The Arduino_UnifiedStorage library provides a unified interface to access differ
 ## Compatibility
 This library has been tested with the following STM32 and Renesas based Arduino boards. The availability of storage mediums depends on the hardware interfaces:
 * Portenta Machine Control: USB and Internal QSPI Flash
-* Portenta H7 + Portenta Breakout: USB, SD, and QSPI
+* Portenta H7 + Portenta Breakout: USB, &sd, and QSPI
 * Portenta H7 + Vision Shield: SD and QSPI
-* Portenta C33 + Portenta Breakout: USB, SD, and QSPI
+* Portenta C33 + Portenta Breakout: USB, &sd, and QSPI
 * Portenta C33 + Vision Shield: SD and QSPI
 * Opta: Internal QSPI Flash and USB
 
