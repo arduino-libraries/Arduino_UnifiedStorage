@@ -16,19 +16,19 @@ bool USBStorage::begin(FileSystems fs){
   return this -> begin();
 }
 
-void USBStorage::registerHotplugCallback(void (* const callbackFunction)()){
+void USBStorage::onConnect(void (* const callbackFunction)()){
     register_hotplug_callback(DEV_USB, callbackFunction);
 }
 
-void USBStorage::deregisterHotplugCallback(){
+void USBStorage::removeConnectCallback(){
     deregister_hotplug_callback(DEV_USB);
 }
 
-void USBStorage::registerUnplugCallback(void (* const callbackFunction)()){
+void USBStorage::onDisconnect(void (* const callbackFunction)()){
     register_unplug_callback(DEV_USB, callbackFunction);
 }
 
-void USBStorage::deregisterUnplugCallback(){
+void USBStorage::removeDisconnectCallback(){
     deregister_unplug_callback(DEV_USB);
 }
 

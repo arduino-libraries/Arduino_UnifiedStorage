@@ -22,30 +22,30 @@ InternalStorage internal = InternalStorage();
 bool testFileCreationWithOpen(Folder root) {
   UFile file = UFile();
   String path = root.getPathAsString() + "/test_open.txt";
-  printFormatted(path);
+  printToSerialOrRS485(path);
   if (file.open(path, FileMode::WRITE)) {
-    printFormatted("\n--- Test creating file using file.open ---");
-    printFormatted("Test creating file using file.open - Success");
+    printToSerialOrRS485("\n--- Test creating file using file.open ---");
+    printToSerialOrRS485("Test creating file using file.open - Success");
     file.close();
     file.remove();
     return true;
   } else {
-    printFormatted("Test creating file using file.open - Failed. Error: " + String(getErrno()));
+    printToSerialOrRS485("Test creating file using file.open - Failed. Error: " + String(getErrno()));
     return false;
   }
 
 }
 
 bool testFileCreationWithCreate(Folder root) {
-  printFormatted("\n--- Test creating file using root.createFile ---");
+  printToSerialOrRS485("\n--- Test creating file using root.createFile ---");
   UFile file = root.createFile("test_create.txt", FileMode::WRITE);
   if (file.exists()) {
-    printFormatted("Test creating file using root.createFile - Success");
+    printToSerialOrRS485("Test creating file using root.createFile - Success");
     file.close();
     file.remove();
     return true;
   } else {
-    printFormatted("Test creating file using root.createFile - Failed. Error: " + String(getErrno()));
+    printToSerialOrRS485("Test creating file using root.createFile - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -53,14 +53,14 @@ bool testFileCreationWithCreate(Folder root) {
 bool testWritingCharBuffer(Folder root) {
   UFile file = root.createFile("test_write.txt", FileMode::WRITE);
   if (file.exists()) {
-    printFormatted("\n--- Test writing char * buffer ---");
+    printToSerialOrRS485("\n--- Test writing char * buffer ---");
     size_t bytesWritten = file.write(reinterpret_cast<const uint8_t*>("Hello, World!"), 13);
-    printFormatted("Bytes written to file: " + String(bytesWritten));
+    printToSerialOrRS485("Bytes written to file: " + String(bytesWritten));
     file.close();
     file.remove();
     return bytesWritten == 13;
   } else {
-    printFormatted("Test writing char * buffer - Failed. Error: " + String(getErrno()));
+    printToSerialOrRS485("Test writing char * buffer - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -68,16 +68,16 @@ bool testWritingCharBuffer(Folder root) {
 bool testWritingWithString(Folder root) {
   UFile file = root.createFile("test_write_string.txt", FileMode::WRITE);
   if (file.exists()) {
-    printFormatted("\n--- Test writing String ---");
+    printToSerialOrRS485("\n--- Test writing String ---");
     String data = " This is a test with String data.";
     size_t bytesWritten = file.write(data);
-    printFormatted("Bytes written to file (with String): " + String(bytesWritten));
+    printToSerialOrRS485("Bytes written to file (with String): " + String(bytesWritten));
     file.close();
     file.remove();
     return true;
 
   } else {
-    printFormatted("Test writing with String data type - Failed. Error: " + String(getErrno()));
+    printToSerialOrRS485("Test writing with String data type - Failed. Error: " + String(getErrno()));
     return false;
   }
   
@@ -86,15 +86,15 @@ bool testWritingWithString(Folder root) {
 bool testAppending(Folder root) {
   UFile file = root.createFile("test_append.txt", FileMode::WRITE);
   if (file.exists()) {
-    printFormatted("\n--- Test appending ---");
+    printToSerialOrRS485("\n--- Test appending ---");
     String data = " Appending some more data.";
     size_t bytesWritten = file.write(reinterpret_cast<const uint8_t*>(data.c_str()), data.length());
-    printFormatted("Bytes written to file (appending): " + String(bytesWritten));
+    printToSerialOrRS485("Bytes written to file (appending): " + String(bytesWritten));
     file.close();
     file.remove();
     return true;
   } else {
-    printFormatted("Test appending to the file - Failed. Error: " + String(getErrno()));
+    printToSerialOrRS485("Test appending to the file - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -109,19 +109,19 @@ bool testReadingAll(Folder root) {
       char buffer[file.available()];
       size_t bytesRead = file.read(reinterpret_cast<uint8_t*>(buffer), sizeof(buffer));
       buffer[bytesRead] = '\0'; // Null-terminate the string
-      printFormatted("\n--- Test reading everything from the file ---");
-      printFormatted("Read from file (test_read.txt): " + String(buffer));
+      printToSerialOrRS485("\n--- Test reading everything from the file ---");
+      printToSerialOrRS485("Read from file (test_read.txt): " + String(buffer));
       file.close();
 
       file.remove();
 
       return true;
     } else {
-      printFormatted("Test reading everything from the file - Failed. Error: " + String(getErrno()));
+      printToSerialOrRS485("Test reading everything from the file - Failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    printFormatted("Test reading everything from the file - Failed to create file. Error: " + String(getErrno()));
+    printToSerialOrRS485("Test reading everything from the file - Failed to create file. Error: " + String(getErrno()));
     return false;
   
   }
@@ -138,21 +138,21 @@ bool testSeeking(Folder root) {
  
 
     if (file.open(root.getPathAsString() + "/test_seek.txt", FileMode::READ)) {
-      printFormatted("\n--- Test seeking file ---");
+      printToSerialOrRS485("\n--- Test seeking file ---");
       file.seek(7);
       char buffer[20];
       size_t bytesRead = file.read(reinterpret_cast<uint8_t*>(buffer), sizeof(buffer));
       buffer[bytesRead] = '\0'; // Null-terminate the string
-      printFormatted("Read after seeking: " + String(buffer));
+      printToSerialOrRS485("Read after seeking: " + String(buffer));
       file.close();
       file.remove();
       return true;
     } else {
-      printFormatted("Test seeking in the file - Failed. Error: " + String(getErrno()));
+      printToSerialOrRS485("Test seeking in the file - Failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    printFormatted("Test seeking in the file - Failed to create file. Error: " + String(getErrno()));
+    printToSerialOrRS485("Test seeking in the file - Failed to create file. Error: " + String(getErrno()));
     return false;
   }
   
@@ -165,18 +165,18 @@ bool testAvailableData(Folder root) {
     file.close();
 
     if (file.open(root.getPathAsString() + "/test_available.txt", FileMode::READ)) {
-      printFormatted("\n--- Test available data ---");
+      printToSerialOrRS485("\n--- Test available data ---");
       int availableBytes = file.available();
-      printFormatted("Available bytes in file (test_available.txt): " + String(availableBytes));
+      printToSerialOrRS485("Available bytes in file (test_available.txt): " + String(availableBytes));
       file.close();
       file.remove();
       return true;
     } else {
-      printFormatted("Test checking available data in the file - Failed. Error: " + String(getErrno()));
+      printToSerialOrRS485("Test checking available data in the file - Failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    printFormatted("Test checking available data in the file - Failed to create file. Error: " + String(getErrno()));
+    printToSerialOrRS485("Test checking available data in the file - Failed to create file. Error: " + String(getErrno()));
     return false;
   }
 
@@ -193,26 +193,26 @@ bool testCopyingFile(Folder root) {
     Folder destinationFolder = root.createSubfolder("test_folder_copy");
 
     if (destinationFolder.exists()) {
-        printFormatted("\n--- Test copying a file ---");
-        printFormatted("Source file name: " + String(sourceFile.getPathAsString()));
+        printToSerialOrRS485("\n--- Test copying a file ---");
+        printToSerialOrRS485("Source file name: " + String(sourceFile.getPathAsString()));
         
         if (sourceFile.copyTo(destinationFolder)) {
-          printFormatted("File copied successfully!");
+          printToSerialOrRS485("File copied successfully!");
           sourceFile.close();
           sourceFile.remove();
           destinationFolder.remove();
           return true;
         } else {
-          printFormatted("File copying failed. Error: " + String(getErrno()));
+          printToSerialOrRS485("File copying failed. Error: " + String(getErrno()));
           return false;
         }
       } else {
-        printFormatted("Test copying a file - Failed. Error: " + String(getErrno()));
+        printToSerialOrRS485("Test copying a file - Failed. Error: " + String(getErrno()));
         return false;
       }
 
     } else {
-      printFormatted("Test copying a file - Failed to create destination folder. Error: " + String(getErrno()));
+      printToSerialOrRS485("Test copying a file - Failed to create destination folder. Error: " + String(getErrno()));
       return false;
     }
 }
@@ -227,11 +227,11 @@ bool testMovingFile(Folder root) {
     if (destinationFolder.exists()) {
       UFile movedFile = sourceFileMove;
       if (movedFile.exists()) {
-        printFormatted("\n--- Test moving a file ---");
-        printFormatted("Source file name: " + String(sourceFileMove.getPathAsString()));
-        printFormatted("Destination file name: " + String(destinationFolder.getPathAsString()) + "/test_source_move.txt");
+        printToSerialOrRS485("\n--- Test moving a file ---");
+        printToSerialOrRS485("Source file name: " + String(sourceFileMove.getPathAsString()));
+        printToSerialOrRS485("Destination file name: " + String(destinationFolder.getPathAsString()) + "/test_source_move.txt");
         if (sourceFileMove.moveTo(destinationFolder)) {
-          printFormatted("File moved successfully!");
+          printToSerialOrRS485("File moved successfully!");
           sourceFileMove.close();
           movedFile.close();
           movedFile.remove();
@@ -239,19 +239,19 @@ bool testMovingFile(Folder root) {
           sourceFileMove.remove();
           return true;
         } else {
-          printFormatted("File moving failed. Error: " + String(getErrno()));
+          printToSerialOrRS485("File moving failed. Error: " + String(getErrno()));
           return false;
         }
       } else {
-        printFormatted("Test moving a file - Failed. Error: " + String(getErrno()));
+        printToSerialOrRS485("Test moving a file - Failed. Error: " + String(getErrno()));
         return false;
       }
     } else {
-      printFormatted("Test moving a file - Failed to create destination folder. Error: " + String(getErrno()));
+      printToSerialOrRS485("Test moving a file - Failed to create destination folder. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    printFormatted("Test moving a file - Failed. Error: " + String(getErrno()));
+    printToSerialOrRS485("Test moving a file - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -263,20 +263,20 @@ void printFolderContents(Folder dir, int indentation = 0) {
   // Print directories
   for (Folder subdir : directories) {
     for (int i = 0; i < indentation; i++) {
-      printFormatted("  ");
+      printToSerialOrRS485("  ");
     }
-    printFormatted("[D] ");
-    printFormatted(subdir.getPath());
+    printToSerialOrRS485("[D] ");
+    printToSerialOrRS485(subdir.getPath());
     printFolderContents(subdir, indentation + 1);
   }
 
   // Print files
   for (UFile file : files) {
     for (int i = 0; i < indentation; i++) {
-      printFormatted("  ");
+      printToSerialOrRS485("  ");
     }
-    printFormatted("[F] ");
-    printFormatted(file.getPath());
+    printToSerialOrRS485("[F] ");
+    printToSerialOrRS485(file.getPath());
   }
 }
 
@@ -284,8 +284,8 @@ void runTests(Arduino_UnifiedStorage * storage, String storageType) {
     if (storage->begin()) {
         Folder root = storage->getRootFolder();
     
-        printFormatted("\n=== Testing " + storageType + " ===");
-        printFormatted("========= File Tests =========");
+        printToSerialOrRS485("\n=== Testing " + storageType + " ===");
+        printToSerialOrRS485("========= File Tests =========");
 
         testFileCreationWithOpen(root); 
         testFileCreationWithCreate(root);
@@ -298,11 +298,11 @@ void runTests(Arduino_UnifiedStorage * storage, String storageType) {
         testCopyingFile(root);
         testMovingFile(root);
 
-        printFormatted("\n========= FS Contents after File Tests =========");
-        printFormatted("Should be empty if deletion was successful");
+        printToSerialOrRS485("\n========= FS Contents after File Tests =========");
+        printToSerialOrRS485("Should be empty if deletion was successful");
 
         printFolderContents(root);
-        printFormatted("=============================\n");
+        printToSerialOrRS485("=============================\n");
 
         storage -> unmount();
     }

@@ -2,7 +2,8 @@
 #define InternalStorage_H
 
 #include "Arduino_UnifiedStorage.h"
-
+#include "Partitioning.h"
+#include "Types.h"
 /**
  * Represents internal storage using the Arduino Unified Storage library.
  */
@@ -78,30 +79,22 @@ public:
      * 
      * @return The block device as a BlockDevice object.
      */
-    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_OPTA)
-        mbed::BlockDevice *getBlockDevice();
-    #endif
 
-    #if defined(ARDUINO_PORTENTA_C33)
-        BlockDevice *getBlockDevice();
-    #endif
+    BlockDeviceType *getBlockDevice();
+
+    static bool partition(std::vector<Partition> partitions);
 
 
     private:
-        #if defined(ARDUINO_PORTENTA_C33)
-        BlockDevice * blockDevice;
-        MBRBlockDevice * userData;
-        FileSystem * userDataFileSystem;
+        BlockDeviceType * blockDevice;
+        MBRBlockDeviceType * userData;
+        FileSystemType * userDataFileSystem;
         int partitionNumber = 2;
-        #elif defined(ARDUINO_PORTENTA_H7_M7)  ||  defined(ARDUINO_OPTA)
-        mbed::BlockDevice * blockDevice;
-        mbed::MBRBlockDevice * userData;
-        mbed::FileSystem * userDataFileSystem;
-        int partitionNumber = 2;
-        #endif
 
         char * partitionName ;        
         FileSystems fileSystem;
+        bool entireDrive = false;
 };
+
 
 #endif

@@ -160,8 +160,8 @@ void setup() {
   Serial.begin(115200);
   while(!Serial);
 
-  usbStorage.registerHotplugCallback(connectionCallback);
-  usbStorage.registerUnplugCallback(disconnectionCallback);
+  usbStorage.onConnect(connectionCallback);
+  usbStorage.onDisconnect(disconnectionCallback);
 
   pinMode(USB_MOUNTED_LED, OUTPUT);
   Serial.print("Formatting internal storage... \n");

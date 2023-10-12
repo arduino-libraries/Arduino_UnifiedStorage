@@ -22,16 +22,16 @@ INSTRUCTIONS
 
 #include "Arduino_UnifiedStorage.h"
 #include <vector>
-#include <Output.h>
 
 constexpr auto baudrate { 115200 };
 
 
 #define USB_MOUNTED_LED LED_D0
+#define SUCCESFULLY_COPIED_LED
 
 
 
-InternalStorage internalStorage = InternalStorage();
+InternalStorage internalStorage = InternalStorage(true, "userData", FS_FAT);
 USBStorage usbStorage = USBStorage();
 std::vector<String> sensorDataBuffer;
 
@@ -90,10 +90,10 @@ void performUpdate() {
   backingUP = true;
   unsigned lastUpdateBytes = lastUpdateFile.readAsString().toInt();  // Read the last update size from the file
 
-  printFormatted("Last update bytes: " + String(lastUpdateBytes) + "\n");
+  printToSerialOrRS485("Last update bytes: " + String(lastUpdateBytes) + "\n");
 
   if (lastUpdateBytes >= bytesWritten) {
-    printFormatted("No new data to copy. \n");
+    printToSerialOrRS485("No new data to copy. \n");
     backupFile.close();
     lastUpdateFile.close();
     backingUP = false;
@@ -102,14 +102,14 @@ void performUpdate() {
 
   logFile.seek(lastUpdateBytes);  // Move the file pointer to the last update position
   unsigned long totalBytesToMove = bytesWritten - lastUpdateBytes;
-  printFormatted("New update bytes: " + String(totalBytesToMove) + "\n");
+  printToSerialOrRS485("New update bytes: " + String(totalBytesToMove) + "\n");
 
   uint8_t* buffer = new uint8_t[totalBytesToMove];
 
   size_t bytesRead = logFile.read(buffer, totalBytesToMove);
   size_t bytesMoved = backupFile.write(buffer, bytesRead);  // Only write the bytes that haven't been backed up yet
 
-  printFormatted("Successfully copied " + String(bytesMoved) + " new bytes.");
+  printToSerialOrRS485("Successfully copied " + String(bytesMoved) + " new bytes.");
 
   lastUpdateFile.changeMode(FileMode::WRITE);  // Open the last update file in write mode
   lastUpdateFile.write(String(lastUpdateBytes + bytesMoved));  // Update the last update size
@@ -130,25 +130,24 @@ void performUpdate() {
 // Function to backup data to USB storage
 void backupToUSB() {
   if (usbAvailable) {
-    printFormatted("USB Mass storage is available \n");
+    printToSerialOrRS485("USB Mass storage is available \n");
     delay(100);
     if (!usbStorage.isMounted()) {
 
-      printFormatted("Mounting USB Mass Storage \n");
+      printToSerialOrRS485("Mounting USB Mass Storage \n");
       digitalWrite(USB_MOUNTED_LED, LOW);
       if(usbStorage.begin()){
         performUpdate();
       } 
 
     } else if (usbStorage.isMounted()) {
-      printFormatted("USB Mass storage is connected, performing update \n");
+      printToSerialOrRS485("USB Mass storage is connected, performing update \n");
       performUpdate();
 
     }
   } else {
-    printFormatted("USB Mass storage is not available \n");
+    printToSerialOrRS485("USB Mass storage is not available \n");
   }
-
 
 }
 
@@ -157,21 +156,21 @@ void setup() {
   beginRS485(baudrate);
 
 
-  usbStorage.registerHotplugCallback(connectionCallback);
-  usbStorage.registerUnplugCallback(disconnectionCallback);
+  usbStorage.onConnect(connectionCallback);
+  usbStorage.onDisconnect(disconnectionCallback);
 
   pinMode(USB_MOUNTED_LED, OUTPUT);
-  printFormatted("Formatting internal storage... \n");
+  printToSerialOrRS485("Formatting internal storage... \n");
   int formatted = internalStorage.format(FS_LITTLEFS);
-  printFormatted("QSPI Format status: " + String(formatted) + "\n");
+  printToSerialOrRS485("QSPI Format status: " + String(formatted) + "\n");
  
 
 
   if (!internalStorage.begin()) {
-    printFormatted("Failed to initialize internal storage \n");
+    printToSerialOrRS485("Failed to initialize internal storage \n");
     return;
   } else {
-    printFormatted("Initialized storage \n");
+    printToSerialOrRS485("Initialized storage \n");
   }
 
 }

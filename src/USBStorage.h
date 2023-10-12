@@ -57,13 +57,13 @@ public:
      */
     bool isMounted();
 
-    void registerHotplugCallback(void (* const callbackFunction)());
+    void onConnect(void (* const callbackFunction)());
 
-    void deregisterHotplugCallback();
+    void removeConnectCallback();
 
-    void registerUnplugCallback(void (* const callbackFunction)());
+    void onDisconnect(void (* const callbackFunction)());
 
-    void deregisterUnplugCallback();
+    void removeDisconnectCallback();
 
 
 private:
