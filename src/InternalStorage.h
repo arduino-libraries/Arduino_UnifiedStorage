@@ -4,6 +4,7 @@
 #include "Arduino_UnifiedStorage.h"
 #include "Partitioning.h"
 #include "Types.h"
+
 /**
  * Represents internal storage using the Arduino Unified Storage library.
  */

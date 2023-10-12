@@ -1,4 +1,5 @@
-#if defined(ARDUINO_PORTENTA_C33)
+
+#if defined(USES_RENESAS_CORE)
     #include "BlockDevice.h"
     #include "MBRBlockDevice.h"
     #include "LittleFileSystem.h"
@@ -11,7 +12,7 @@
     typedef LittleFileSystem LittleFileSystemType;
     typedef FileSystem FileSystemType;
 
-#elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_OPTA)
+#elif defined(USES_MBED_CORE)
     #include "QSPIFBlockDevice.h"
     #include "MBRBlockDevice.h"
     #include "FATFileSystem.h"
