@@ -336,7 +336,7 @@ Represents internal storage using the Arduino Unified Storage library.
 `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_internal_storage_1a87142ddbdad62217e33851b32572082d)`()` | Retrieves the root folder of the internal storage.
 `public void ` [`setQSPIPartition`](#class_internal_storage_1a2ca8680537077ca3e189be2ca6dcc634)`(int partition)` | Sets the QSPI partition number.
 `public void ` [`setQSPIPartitionName`](#class_internal_storage_1ae0fbe264a758a4026548df66ec05f8c8)`(const char * name)` | Sets the QSPI partition name.
-`public virtual bool ` [`format`](#class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601)`(FileSystems fs)` | Formats the internal storage with the selceted file system.
+`public virtual bool ` [`format`](#class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601)`(FileSystems fs)` | Formats the internal storage with the selected file system.
 
 ## Members
 
@@ -410,7 +410,7 @@ Sets the QSPI partition name.
 
 ### `public virtual bool ` [`format`](#class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601)`(FileSystems fs)` <a id="class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601" class="anchor"></a>
 
-Formats the internal storage with the selceted file system.
+Formats the internal storage with the selected file system.
 
 #### Returns
 true if successful, false if failed.
