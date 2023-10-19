@@ -1,4 +1,4 @@
-# Unified Storage Library
+# 💾 Unified Storage Library 
 
 [![Check Arduino](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/check-arduino.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/check-arduino.yml) [![Compile Examples](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/compile-examples.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/compile-examples.yml) [![Spell Check](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/spell-check.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/spell-check.yml) [![Sync Labels](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/sync-labels.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/sync-labels.yml)
 
@@ -10,7 +10,7 @@ The Arduino_UnifiedStorage library provides a unified interface to access differ
 * [**examples/AdvancedUSBInternalOperations**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/AdvancedUSBInternalOperations/AdvancedUSBInternalOperations.ino) - Navigate file structure and demonstrate file operations between USB and internal storage
 * [**examples/BackupInternalPartitions**](https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/BackupInternalPartitions/BackupInternalPartitions.ino) - Back up all partitions on the internal storage to a USB Mass Storage device.
 
-## Instructions
+## 👀 Instructions
 1. Download and install this library 
 2. Check compatibility with your platform
 3. To use internal storage, you need to make sure it is partitioned and formatted correctly:
@@ -28,7 +28,7 @@ The Arduino_UnifiedStorage library provides a unified interface to access differ
 *  When asked if you'd like to use LittleFS on the data partition, select "n". Most of the examples assume that the drive is formatted as FAT. You can use the library to format to LittleFS later. 
 *  Reboot the board
 
-## Features
+## ✨ Features
 * Access files and directories on internal storage, SD cards, and USB mass storage devices.
 * Read and write data to files.
 * Create, remove, and rename files and directories.
@@ -48,3 +48,7 @@ This library has been tested with the following STM32 and Renesas based Arduino 
 
 
 Note: Due to an unforeseen compatibility issue on the Portenta Breakout Board, inserting a USB drive on the USB-A port of the breakout board may occasionally cause a reboot on Portenta C33 boards. You can work around this issue by connecting your USB Mass Storage device through a USB hub. This limitation only affects Portenta C33 boards.
+
+## 📖 Documentation
+
+For more information about this library please read the documentation [here](./docs).
