@@ -1,7 +1,7 @@
 
 #include "Arduino.h"
-#include "Arduino_POSIXStorage.h"
 #include "Types.h"
+#include "Arduino_POSIXStorage.h"
 #include <vector>
 
 struct Partition {
@@ -17,6 +17,5 @@ class Partitioning{
         static bool isPartitionSchemeValid(BlockDeviceType * bd, std::vector<Partition> partitions);
         static bool formatPartition(BlockDeviceType * bd, int partitionNumber, FileSystems fs);
         static bool createAndFormatPartitions(BlockDeviceType * bd, std::vector<Partition> partitions);
-
-        
+       
 };

@@ -19,7 +19,7 @@
 }
 
  bool Partitioning::isPartitionSchemeValid(BlockDeviceType * bd, std::vector<Partition> partitions){
-    size_t driveSize = bd -> size() / 1024;
+    size_t driveSize = bd -> size() / 1024; // 
     int totalSize = 0;
 
     for (size_t i = 1; i < partitions.size() + 1; ++i) {

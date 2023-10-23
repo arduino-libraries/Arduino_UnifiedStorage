@@ -5,9 +5,16 @@
 
 #include "Arduino.h"
 #include "Arduino_POSIXStorage.h"
+#include "Boards.h"
+#include "Utils.h"
+#include "Types.h"
+#include "Partitioning.h"
+
 #include "Folder.h"
 #include "UFile.h"
-#include "Utils.h"
+
+
+
 
 
 
@@ -52,15 +59,17 @@ class Arduino_UnifiedStorage {
 };
 
 
-#if defined(ARDUINO_PORTENTA_C33) || defined(ARDUINO_PORTENTA_H7_M7)
-    #include "USBStorage.h"
-    #include "SDStorage.h"
-    #include "InternalStorage.h"
-#elif defined(ARDUINO_OPTA)
-    #include "USBStorage.h"
-    #include "InternalStorage.h"
-#endif
+    #if defined(HAS_USB)
+        #include "USBStorage.h"
+    #endif
 
+    #if defined(HAS_SD)
+        #include "SDStorage.h"
+    #endif
+
+    #if defined(HAS_QSPI)
+        #include "InternalStorage.h"
+    #endif
 
 #endif
 

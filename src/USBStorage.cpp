@@ -20,7 +20,7 @@ void USBStorage::onConnect(void (* const callbackFunction)()){
     register_hotplug_callback(DEV_USB, callbackFunction);
 }
 
-void USBStorage::removeConnectCallback(){
+void USBStorage::removeOnConnectCallback(){
     deregister_hotplug_callback(DEV_USB);
 }
 
@@ -28,7 +28,7 @@ void USBStorage::onDisconnect(void (* const callbackFunction)()){
     register_unplug_callback(DEV_USB, callbackFunction);
 }
 
-void USBStorage::removeDisconnectCallback(){
+void USBStorage::removeOnDisconnectCallback(){
     deregister_unplug_callback(DEV_USB);
 }
 
