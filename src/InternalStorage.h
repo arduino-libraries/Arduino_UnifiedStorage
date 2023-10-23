@@ -2,8 +2,8 @@
 #define InternalStorage_H
 
 #include "Arduino_UnifiedStorage.h"
-#include "Partitioning.h"
 #include "Types.h"
+
 
 /**
  * Represents internal storage using the Arduino Unified Storage library.
@@ -84,6 +84,8 @@ public:
     BlockDeviceType *getBlockDevice();
 
     static bool partition(std::vector<Partition> partitions);
+    // partition() -> one Partition
+    // restoreDefaultPartitions();
 
 
     private:

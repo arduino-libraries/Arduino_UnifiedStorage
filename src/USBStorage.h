@@ -1,8 +1,9 @@
-#include "Arduino_UnifiedStorage.h"
+
 
 #ifndef USBStorage_H
 #define USBStorage_H
 
+#include "Arduino_UnifiedStorage.h"
 /**
  * Represents a USB storage using the Arduino Unified Storage library.
  */
@@ -59,19 +60,18 @@ public:
 
     void onConnect(void (* const callbackFunction)());
 
-    void removeConnectCallback();
+    void removeOnConnectCallback();
 
     void onDisconnect(void (* const callbackFunction)());
 
-    void removeDisconnectCallback();
+    void removeOnDisconnectCallback();
 
 
 private:
     FileSystems fileSystem = FS_FAT;
     bool mounted = false;
     unsigned long previousMillis; 
-    unsigned int interval = 500;
-
+    unsigned int interval = 500; // document what this does too, make it constexp (mountRetryInterval)
 };
 
 #endif

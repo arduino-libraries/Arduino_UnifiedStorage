@@ -20,6 +20,8 @@ bool InternalStorage::partition(std::vector<Partition> partitions){
     Partitioning::partitionDrive(QSPIFBlockDeviceType::get_default_instance(), partitions);
 }
 
+
+
 bool InternalStorage::begin(){
         this -> blockDevice = BlockDeviceType::get_default_instance();
         this -> userData = new MBRBlockDeviceType(this->blockDevice, this->partitionNumber);

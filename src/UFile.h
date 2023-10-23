@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <string.h>
+#include <vector>
 #include "Utils.h"
 
 class Folder;

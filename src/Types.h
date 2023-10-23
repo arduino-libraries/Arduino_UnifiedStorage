@@ -1,4 +1,6 @@
 
+#include "Boards.h"
+
 #if defined(USES_RENESAS_CORE)
     #include "BlockDevice.h"
     #include "MBRBlockDevice.h"
@@ -15,6 +17,7 @@
 #elif defined(USES_MBED_CORE)
     #include "QSPIFBlockDevice.h"
     #include "MBRBlockDevice.h"
+    #include "LittleFileSystem.h"
     #include "FATFileSystem.h"
 
     typedef QSPIFBlockDevice QSPIFBlockDeviceType;
@@ -23,5 +26,4 @@
     typedef mbed::FATFileSystem FATFileSystemType;
     typedef mbed::LittleFileSystem LittleFileSystemType;
     typedef mbed::FileSystem FileSystemType;
-
 #endif 
