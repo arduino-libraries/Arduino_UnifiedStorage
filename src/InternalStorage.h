@@ -68,7 +68,7 @@ public:
     void setQSPIPartitionName(const char *name);
 
     /**
-     * Formats the internal storage with the selceted file system.
+     * Formats the internal storage with the selected file system.
      * 
      * @return true if successful, false if failed.
      */
