@@ -13,20 +13,8 @@ The Arduino_UnifiedStorage library provides a unified interface to access differ
 ## 👀 Instructions
 1. Download and install this library 
 2. Check compatibility with your platform
-3. To use internal storage, you need to make sure it is partitioned and formatted correctly:
 
-### Formatting the Portenta H7 / Portenta Machine Control / Opta Internal Storage
-* Flash the `QSPIFormat` example that can be found in the `STM32H747_System` folder
-* Open the serial monitor and select answer with "n" when this appears "Do you want to use partition scheme 1? Y/[n]"
-* The sketch will warn you that the content of the QSPI flash will be erased. Answer with "Y".
-* When asked if you'd like to use LittleFS on the data partition, select "n". Most of the examples assume that the drive is formatted as FAT. You can use the library to format to LittleFS later. 
-* Reboot the board
- 
-### Formatting the Portenta C33 Internal Storage
-*  Flash the `QSPIFormat` example that can be found in the `Storage` folder for Portenta C33.
-*  Open the Serial Monitor. The sketch will warn you that the content of the QSPI flash will be erased. Answer with "Y".
-*  When asked if you'd like to use LittleFS on the data partition, select "n". Most of the examples assume that the drive is formatted as FAT. You can use the library to format to LittleFS later. 
-*  Reboot the board
+
 
 ## ✨ Features
 * Access files and directories on internal storage, SD cards, and USB mass storage devices.
@@ -36,6 +24,7 @@ The Arduino_UnifiedStorage library provides a unified interface to access differ
 * List files and subfolders in a directory.
 * Manipulate files and folders from one storage medium to another
 * Format partitions and drives (FAT and LittleFS)
+* Create and modify partitions on the internal storage
 
 ## Compatibility
 This library has been tested with the following STM32 and Renesas based Arduino boards. The availability of storage mediums depends on the hardware interfaces:

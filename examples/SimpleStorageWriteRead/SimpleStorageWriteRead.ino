@@ -51,13 +51,13 @@ void printFolderContents(Folder dir, int indentation = 0) {
 // Uncomment one of the three lines below to select between SD card, USB or internal storage
 //SDStorage unifiedStorage = SDStorage();             // Create an instance for interacting with SD card storage
 //USBStorage unifiedStorage = USBStorage()            // Create an instance for interacting with USB storage
-InternalStorage internalStorage = InternalStorage();  // Create an instance for interacting with internal Flash storage (default)
+InternalStorage internalStorage = InternalStorage();// Create an instance for interacting with internal Flash storage (default)
 
 void setup() {
   Serial.begin(115200);
   while (!Serial);
 
-  if(!internalStorage.begin(FS_FAT)){
+  if(!internalStorage.begin()){
     Serial.println("Error mounting storage device.");
   }
   
@@ -90,7 +90,6 @@ void setup() {
 
   // Read data from file1
   file1.seek(0); // Move the file pointer to the beginning
-  Serial.println(file1.available());
   while (file1.available()) {
   char data = file1.read();
     Serial.write(data);

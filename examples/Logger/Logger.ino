@@ -22,19 +22,21 @@ INSTRUCTIONS
 
 #include "Arduino_UnifiedStorage.h"
 #include <vector>
-#include <Output.h>
 
-constexpr auto baudrate { 115200 };
 
 #if defined(ARDUINO_PORTENTA_H7_M7)
 #define USB_MOUNTED_LED LED_BLUE
 #elif defined(ARDUINO_PORTENTA_C33)
 #define USB_MOUNTED_LED LEDB
+#elif defined(ARDUINO_OPTA)
+#define USB_MOUNTED_LED LED_D0
 #endif
 
 
 InternalStorage internalStorage = InternalStorage();
 USBStorage usbStorage = USBStorage();
+Folder backupFolder = Folder();
+bool usbIntialized = false;
 std::vector<String> sensorDataBuffer;
 
 unsigned long bytesWritten = 0;
@@ -47,10 +49,12 @@ volatile bool usbAvailable = false;
 bool backingUP = false;
 
 void connectionCallback(){
+    printToSerialOrRS485("CONNECTION CALLBACK RAISED !!!");
     usbAvailable = true;
 }
 
 void disconnectionCallback(){
+    printToSerialOrRS485("DISCONNECTION CALLBACK RAISED !!!");
     usbAvailable = false;
 }
 // Function to run a given method periodically
@@ -67,7 +71,7 @@ void runPeriodically(void (*method)(), unsigned long interval, unsigned long* va
 void logDataToRAM() {
   int timeStamp = millis();
   int sensorReading = analogRead(A0);
-  String line = String(timeStamp) + "," + String(sensorReading) + "\n";
+  String line = String(timeStamp) + "," + String(random(9999)) + "\n";
   sensorDataBuffer.push_back(line);
 }
 
@@ -84,18 +88,17 @@ void moveDataToQSPI() {
 
 
 void performUpdate() {
-  Folder usbRoot = usbStorage.getRootFolder();  // Get the root folder of the USB storage
   UFile logFile = internalStorage.getRootFolder().createFile("log.txt", FileMode::READ);
-  UFile backupFile = usbRoot.createFile("backup_file.txt", FileMode::APPEND);  // Create or open the backup file
-  UFile lastUpdateFile = usbRoot.createFile("diff.txt", FileMode::READ);  // Create or open the last update file
+  UFile backupFile = backupFolder.createFile("backup_file.txt", FileMode::APPEND);  // Create or open the backup file
+  UFile lastUpdateFile = backupFolder.createFile("diff.txt", FileMode::READ);  // Create or open the last update file
 
   backingUP = true;
   unsigned lastUpdateBytes = lastUpdateFile.readAsString().toInt();  // Read the last update size from the file
 
-  Serial.print("Last update bytes: " + String(lastUpdateBytes) + "\n");
+  printToSerialOrRS485("Last update bytes: " + String(lastUpdateBytes) + "\n");
 
   if (lastUpdateBytes >= bytesWritten) {
-    Serial.print("No new data to copy. \n");
+    printToSerialOrRS485("No new data to copy. \n");
     backupFile.close();
     lastUpdateFile.close();
     backingUP = false;
@@ -104,14 +107,14 @@ void performUpdate() {
 
   logFile.seek(lastUpdateBytes);  // Move the file pointer to the last update position
   unsigned long totalBytesToMove = bytesWritten - lastUpdateBytes;
-  Serial.print("New update bytes: " + String(totalBytesToMove) + "\n");
+  printToSerialOrRS485("New update bytes: " + String(totalBytesToMove) + "\n");
 
   uint8_t* buffer = new uint8_t[totalBytesToMove];
 
   size_t bytesRead = logFile.read(buffer, totalBytesToMove);
   size_t bytesMoved = backupFile.write(buffer, bytesRead);  // Only write the bytes that haven't been backed up yet
 
-  Serial.print("Successfully copied " + String(bytesMoved) + " new bytes.");
+  printToSerialOrRS485("Successfully copied " + String(bytesMoved) + " new bytes. \n");
 
   lastUpdateFile.changeMode(FileMode::WRITE);  // Open the last update file in write mode
   lastUpdateFile.write(String(lastUpdateBytes + bytesMoved));  // Update the last update size
@@ -131,24 +134,34 @@ void performUpdate() {
 
 // Function to backup data to USB storage
 void backupToUSB() {
-  if (usbAvailable) {
-    Serial.print("USB Mass storage is available \n");
+  if(usbAvailable && !usbIntialized){
+      usbStorage.begin();
+      printToSerialOrRS485("First drive insertion, creating folders... \n");
+      Folder usbRoot = usbStorage.getRootFolder();
+      String folderName = "LoggerBackup" + String(random(9999));
+      backupFolder = usbRoot.createSubfolder(folderName);
+      printToSerialOrRS485("Succesfully created backup folder: " + backupFolder.getPathAsString() + "\n");
+      usbStorage.unmount();
+      usbIntialized = true;
+  }
+  else if(usbAvailable && usbIntialized) {
+    printToSerialOrRS485("USB Mass storage is available \n");
     delay(100);
     if (!usbStorage.isMounted()) {
 
-      Serial.print("Mounting USB Mass Storage \n");
+      printToSerialOrRS485("Mounting USB Mass Storage \n");
       digitalWrite(USB_MOUNTED_LED, LOW);
       if(usbStorage.begin()){
         performUpdate();
       } 
 
     } else if (usbStorage.isMounted()) {
-      Serial.print("USB Mass storage is connected, performing update \n");
+      printToSerialOrRS485("USB Mass storage is connected, performing update \n");
       performUpdate();
 
     }
   } else {
-    Serial.print("USB Mass storage is not available \n");
+    printToSerialOrRS485("USB Mass storage is not available \n");
   }
 
 
@@ -157,24 +170,30 @@ void backupToUSB() {
 
 void setup() {
   //beginRS485(baudrate);
-  Serial.begin(115200);
-  while(!Serial);
+  randomSeed(analogRead(A0));
+
+  #if !defined(ARDUINO_OPTA)
+    Serial.begin(115200);
+    while(!Serial);
+  #else
+    beginRS485(115200);
+  #endif
 
   usbStorage.onConnect(connectionCallback);
   usbStorage.onDisconnect(disconnectionCallback);
 
   pinMode(USB_MOUNTED_LED, OUTPUT);
-  Serial.print("Formatting internal storage... \n");
+  printToSerialOrRS485("Formatting internal storage... \n");
   int formatted = internalStorage.format(FS_LITTLEFS);
-  Serial.print("QSPI Format status: " + String(formatted) + "\n");
- 
+  printToSerialOrRS485("QSPI Format status: " + String(formatted) + "\n");
+
 
 
   if (!internalStorage.begin()) {
-    Serial.print("Failed to initialize internal storage \n");
+    printToSerialOrRS485("Failed to initialize internal storage \n");
     return;
   } else {
-    Serial.print("Initialized storage \n");
+    printToSerialOrRS485("Initialized storage \n");
   }
 
 }

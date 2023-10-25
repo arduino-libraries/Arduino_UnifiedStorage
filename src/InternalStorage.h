@@ -53,19 +53,6 @@ public:
      */
     Folder getRootFolder() override;
 
-    /**
-     * Sets the QSPI partition number.
-     * 
-     * @param partition The partition number.
-     */
-    void setQSPIPartition(int partition);
-
-    /**
-     * Sets the QSPI partition name.
-     * 
-     * @param name The name of the partition.
-     */
-    void setQSPIPartitionName(const char *name);
 
     /**
      * Formats the internal storage with the selected file system.
@@ -84,19 +71,21 @@ public:
     BlockDeviceType *getBlockDevice();
 
     static bool partition(std::vector<Partition> partitions);
-    // partition() -> one Partition
-    // restoreDefaultPartitions();
 
+    static std::vector<Partition> readPartitions();
+
+    static bool partition(); 
+
+    static bool restoreDefaultPartitions();
 
     private:
         BlockDeviceType * blockDevice;
-        MBRBlockDeviceType * userData;
-        FileSystemType * userDataFileSystem;
-        int partitionNumber = 2;
+        MBRBlockDeviceType * mbrBlockDevice;
+        FileSystemType * fileSystem;
+        int partitionNumber;
+        char * partitionName;        
+        FileSystems fileSystemType;
 
-        char * partitionName ;        
-        FileSystems fileSystem;
-        bool entireDrive = false;
 };
 
 

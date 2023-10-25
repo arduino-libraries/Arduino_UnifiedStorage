@@ -108,6 +108,7 @@ size_t UFile::read(uint8_t* buffer, size_t size) {
 
 String UFile::readAsString() {
     if (filePointer == nullptr) {
+        Serial.println("file pointer not valid");
         return String("");
     }
 
@@ -140,6 +141,7 @@ size_t UFile::write(uint8_t value) {
 size_t UFile::write(String data) {
     if (filePointer == nullptr) {
         // File pointer is not valid
+                Serial.println("file pointer not valid");
         return 0;
     }
 

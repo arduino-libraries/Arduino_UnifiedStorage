@@ -70,19 +70,10 @@ void move(Folder * source, Folder * dest){
 }
 
 
-#if defined(ARDUINO_PORTENTA_C33)
-void backupPartitionsC33(Folder * backupFolder){
-
-    Serial.println("* backup location: " + String(backupFolder -> getPathAsString()));
-
-    int otaMounted = ota.begin(FS_FAT);
-    Serial.println("* ota partition mount: " + String(otaMounted));
-
-    int dataMounted = data.begin(FS_FAT);
-    Serial.println("* data partition mount: " + String(dataMounted));
 
 
-    if(otaMounted == 1){
+
+void backupPartitions(){
         Folder otaRoot = ota.getRootFolder();
         addSomeFakeFiles(&otaRoot);
         Folder otaFolder = backupFolder -> createSubfolder("ota");
@@ -91,66 +82,7 @@ void backupPartitionsC33(Folder * backupFolder){
     } else {
         Serial.println("OTA partition not mounted, cannot proceed");
     }
-
-
-    if(dataMounted == 1){
-        Folder dataRoot = data.getRootFolder();
-        addSomeFakeFiles(&dataRoot); 
-        Folder dataFolder = backupFolder -> createSubfolder("data");
-        move(&dataRoot, &dataFolder);
-        data.unmount();
-    } else {
-        Serial.println("Data partition not mounted, cannot proceed");
-    }
 }
-#endif 
-
-
-#if defined(ARDUINO_PORTENTA_H7_M7)
-void backupPartitionsH7(Folder * backupFolder){
-    Serial.println("* backup location: " + String(backupFolder -> getPathAsString()));
-
-    int wifiMounted = wifi.begin(FS_FAT);
-    Serial.println("* wifi partition mount: " + String(wifiMounted));
-
-    int otaMounted = ota.begin(FS_FAT);
-    Serial.println("* ota partition mount: " + String(otaMounted));
-
-    int dataMounted = data.begin(FS_FAT);
-    Serial.println("* data partition mounted: " + String(dataMounted));
-
-    if(wifiMounted == 1){
-        Folder wifiRoot = wifi.getRootFolder();
-        addSomeFakeFiles(&wifiRoot);
-        Folder wifiFolder = backupFolder -> createSubfolder("wifi");
-        move(&wifiRoot, &wifiFolder);
-        wifi.unmount();
-    } else {
-        Serial.println("WiFi partition not mounted, cannot proceed");
-    }
-
-    if(otaMounted == 1){
-        Folder otaRoot = ota.getRootFolder();
-        addSomeFakeFiles(&otaRoot);
-        Folder otaFolder = backupFolder -> createSubfolder("ota");
-        move(&otaRoot, &otaFolder);
-        ota.unmount();
-    } else {
-        Serial.println("OTA partition not mounted, cannot proceed");
-    }
-
-
-    if(dataMounted == 1){
-        Folder dataRoot = data.getRootFolder();
-        addSomeFakeFiles(&dataRoot); 
-        Folder dataFolder = backupFolder -> createSubfolder("data");
-        move(&dataRoot, &dataFolder);
-        data.unmount();
-    } else {
-        Serial.println("Data partition not mounted, cannot proceed");
-    }
-}
-#endif 
 
 void setup(){
     randomSeed(analogRead(A0));
@@ -167,12 +99,13 @@ void setup(){
     String folderName = "InternalBackup_" + String(millis());
     Folder backupFolder = thumbRoot.createSubfolder(folderName);
 
-
-    #if defined(ARDUINO_PORTENTA_H7_M7)
-        backupPartitionsH7(&backupFolder);
-    #elif defined(ARDUINO_PORTENTA_C33)
-        backupPartitionsC33(&backupFolder);
-    #endif
+    int partitionIndex = 0;
+    for (auto part: InternalStorage::readPartitions()){
+        partitionBackupFolderName = "Part" + String(partitionIndex);
+        backupFolder.createFolder(partitionBackupFolderName);
+        
+        
+    }
 
     thumbDrive.unmount();
 

@@ -52,12 +52,13 @@ public:
     bool format(FileSystems fs) override;
 
     /**
-     * Checks if the USB storage is connected.
+     * Checks if the USB storage is mounted.
      * 
-     * @return true if connected, false otherwise.
+     * @return true if mounted, false otherwise.
      */
     bool isMounted();
 
+    
     void onConnect(void (* const callbackFunction)());
 
     void removeOnConnectCallback();

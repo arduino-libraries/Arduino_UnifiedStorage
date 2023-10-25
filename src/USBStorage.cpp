@@ -1,8 +1,5 @@
 #include "USBStorage.h"
 
-#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_OPTA)
-    #include <Arduino_USBHostMbed5.h>
-#endif
 
 // The maximum number of attempts to mount the USB drive
 constexpr auto MAX_MOUNT_ATTEMPTS = 10;
@@ -41,6 +38,8 @@ bool USBStorage::begin(){
         attempts +=1;
         err = mount(DEV_USB, this->fileSystem, MNT_DEFAULT);
         delay(1000);
+        Serial.println(err);
+        Serial.println(errno);
     }
 
     if(err == 0){

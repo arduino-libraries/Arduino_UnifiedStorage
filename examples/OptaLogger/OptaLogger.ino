@@ -31,7 +31,7 @@ constexpr auto baudrate { 115200 };
 
 
 
-InternalStorage internalStorage = InternalStorage(true, "userData", FS_FAT);
+InternalStorage internalStorage = InternalStorage(]);
 USBStorage usbStorage = USBStorage();
 std::vector<String> sensorDataBuffer;
 
