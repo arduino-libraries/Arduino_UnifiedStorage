@@ -80,5 +80,4 @@ bool  USBStorage::format(FileSystems fs){
         this -> fileSystem = FS_LITTLEFS;
         return mkfs(DEV_USB, FS_LITTLEFS) == 0;
     }
-
 }
