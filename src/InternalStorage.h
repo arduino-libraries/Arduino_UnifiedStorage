@@ -10,8 +10,13 @@
  */
 class InternalStorage : public Arduino_UnifiedStorage {
 public:
+    
+
     /**
-     * Default constructor for the InternalStorage class.
+     * Constructs an InternalStorage object with default settings.
+     * If no partitions are available, it restores the default partitioning scheme (See restoreDefaultPartitions() for more info).
+     * If partitions are available, it sets the partition number, file system type, and partition name based on the last partition available.
+     * When using the default partitioning scheme the last partition would be the user partition. 
      */
     InternalStorage();
 

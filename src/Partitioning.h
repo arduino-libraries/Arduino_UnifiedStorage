@@ -4,9 +4,12 @@
 #include "Arduino_POSIXStorage.h"
 #include <vector>
 
-constexpr int MBRBlockSize = 4096;
-constexpr int MBRPartitionType = 0x0B;
+constexpr int mbrBlockSize = 4096;
+constexpr int mbrPartitionType = 0x0B;
 constexpr char * mountPointName = "mountPoint";
+constexpr int maximumMBRPartitions = 4;
+constexpr int emptyPartitionType = 0x00;
+constexpr uint8_t mbrMagicNumbers[] = {0x55, 0xAA};
 
 
 struct Partition {

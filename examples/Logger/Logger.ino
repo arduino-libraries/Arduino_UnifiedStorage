@@ -23,6 +23,7 @@
 */
 
 #include "Arduino_UnifiedStorage.h"
+#include "Logger.h"
 #include <vector>
 
 
@@ -46,18 +47,15 @@ unsigned long lastLog = 0;
 unsigned long lastMove = 0;
 unsigned long lastBackup = 0;
 
-
 volatile bool usbAvailable = false;
 bool backingUP = false;
 
 void connectionCallback(){
-    printToSerialOrRS485("CONNECTION CALLBACK RAISED !!!");
     usbAvailable = true;
     usbStorage.removeOnConnectCallback();
 }
 
 void disconnectionCallback(){
-    printToSerialOrRS485("DISCONNECTION CALLBACK RAISED !!!");
     usbAvailable = false;
     usbStorage.onConnect(connectionCallback);
 
@@ -76,7 +74,7 @@ void runPeriodically(void (*method)(), unsigned long interval, unsigned long* va
 void logDataToRAM() {
   int timeStamp = millis();
   int sensorReading = analogRead(A0);
-  String line = String(timeStamp) + "," + String(random(9999)) + "\n";
+  String line = String(timeStamp) + "," + String(random(9999));
   sensorDataBuffer.push_back(line);
 }
 
@@ -100,10 +98,10 @@ void performUpdate() {
   backingUP = true;
   unsigned lastUpdateBytes = lastUpdateFile.readAsString().toInt();  // Read the last update size from the file
 
-  printToSerialOrRS485("Last update bytes: " + String(lastUpdateBytes) + "\n");
+  printlnToSerialOrRS485("Last update bytes: " + String(lastUpdateBytes));
 
   if (lastUpdateBytes >= bytesWritten) {
-    printToSerialOrRS485("No new data to copy. \n");
+    printlnToSerialOrRS485("No new data to copy. ");
     backupFile.close();
     lastUpdateFile.close();
     backingUP = false;
@@ -112,14 +110,14 @@ void performUpdate() {
 
   logFile.seek(lastUpdateBytes);  // Move the file pointer to the last update position
   unsigned long totalBytesToMove = bytesWritten - lastUpdateBytes;
-  printToSerialOrRS485("New update bytes: " + String(totalBytesToMove) + "\n");
+  printlnToSerialOrRS485("New update bytes: " + String(totalBytesToMove));
 
   uint8_t* buffer = new uint8_t[totalBytesToMove];
 
   size_t bytesRead = logFile.read(buffer, totalBytesToMove);
   size_t bytesMoved = backupFile.write(buffer, bytesRead);  // Only write the bytes that haven't been backed up yet
 
-  printToSerialOrRS485("Successfully copied " + String(bytesMoved) + " new bytes. \n");
+  printlnToSerialOrRS485("Successfully copied " + String(bytesMoved) + " new bytes. ");
 
   lastUpdateFile.changeMode(FileMode::WRITE);  // Open the last update file in write mode
   lastUpdateFile.write(String(lastUpdateBytes + bytesMoved));  // Update the last update size
@@ -141,32 +139,32 @@ void performUpdate() {
 void backupToUSB() {
   if(usbAvailable && !usbIntialized){
       usbStorage.begin();
-      printToSerialOrRS485("First drive insertion, creating folders... \n");
+      printlnToSerialOrRS485("First drive insertion, creating folders... ");
       Folder usbRoot = usbStorage.getRootFolder();
       String folderName = "LoggerBackup" + String(random(9999));
       backupFolder = usbRoot.createSubfolder(folderName);
-      printToSerialOrRS485("Succesfully created backup folder: " + backupFolder.getPathAsString() + "\n");
+      printlnToSerialOrRS485("Succesfully created backup folder: " + backupFolder.getPathAsString());
       usbStorage.unmount();
       usbIntialized = true;
   }
   else if(usbAvailable && usbIntialized) {
-    printToSerialOrRS485("USB Mass storage is available \n");
+    printlnToSerialOrRS485("USB Mass storage is available ");
     delay(100);
     if (!usbStorage.isMounted()) {
 
-      printToSerialOrRS485("Mounting USB Mass Storage \n");
+      printlnToSerialOrRS485("Mounting USB Mass Storage ");
       digitalWrite(USB_MOUNTED_LED, LOW);
       if(usbStorage.begin()){
         performUpdate();
       } 
 
     } else if (usbStorage.isMounted()) {
-      printToSerialOrRS485("USB Mass storage is connected, performing update \n");
+      printlnToSerialOrRS485("USB Mass storage is connected, performing update ");
       performUpdate();
 
     }
   } else {
-    printToSerialOrRS485("USB Mass storage is not available \n");
+    printlnToSerialOrRS485("USB Mass storage is not available ");
   }
 
 
@@ -188,17 +186,17 @@ void setup() {
   usbStorage.onDisconnect(disconnectionCallback);
 
   pinMode(USB_MOUNTED_LED, OUTPUT);
-  printToSerialOrRS485("Formatting internal storage... \n");
+  printlnToSerialOrRS485("Formatting internal storage... ");
   int formatted = internalStorage.format(FS_LITTLEFS);
-  printToSerialOrRS485("QSPI Format status: " + String(formatted) + "\n");
+  printlnToSerialOrRS485("QSPI Format status: " + String(formatted));
 
 
 
   if (!internalStorage.begin()) {
-    printToSerialOrRS485("Failed to initialize internal storage \n");
+    printlnToSerialOrRS485("Failed to initialize internal storage ");
     return;
   } else {
-    printToSerialOrRS485("Initialized storage \n");
+    printlnToSerialOrRS485("Initialized storage ");
   }
 
 }

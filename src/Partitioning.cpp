@@ -3,11 +3,11 @@
 
  bool Partitioning::eraseMBRSector(BlockDeviceType * blockDevice)
 {
-    unsigned char buffer[MBRBlockSize];
+    unsigned char buffer[mbrBlockSize];
     memset(buffer, 0xFF, sizeof(buffer));
 
     if(blockDevice-> program(buffer, 0, sizeof(buffer)) == 0){
-        if(blockDevice -> erase(0, MBRBlockSize) == 0){
+        if(blockDevice -> erase(0, mbrBlockSize) == 0){
             return true;
         } else {
             return false;
@@ -26,7 +26,7 @@
         totalSize += thisPartition.size;
     }
 
-    if(totalSize <= driveSize && partitions.size() <= 4){
+    if(totalSize <= driveSize && partitions.size() <= maximumMBRPartitions){
         return true;
     } else {
         return false;
@@ -66,7 +66,7 @@
     for (size_t i = 1; i < partitions.size() + 1; ++i) {
         int thisPartitionEnd = (partitions[i - 1].size * 1024) + lastPartitionEnd;
 
-        if(MBRBlockDeviceType::partition(blockDevice, i, MBRPartitionType, lastPartitionEnd, thisPartitionEnd) == 0){
+        if(MBRBlockDeviceType::partition(blockDevice, i, mbrPartitionType, lastPartitionEnd, thisPartitionEnd) == 0){
             success = formatPartition(blockDevice, i, partitions[i - 1].fileSystemType);
         } else {
             success = false;
@@ -101,7 +101,7 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
     
     auto ret = blockDevice->init();
     if (ret) {
-        Serial.println("ERROR! Unable to read the Block Device.");
+        debugPrint("ERROR! Unable to read the Block Device.");
         return partitions;
     }
 
@@ -115,18 +115,20 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
 
     ret = blockDevice->read(buffer, 512 - buffer_size, buffer_size);
     if (ret) {
-        Serial.println("ERROR! Unable to read the Master Boot Record");
+        debugPrint("ERROR! Unable to read the Master Boot Record");
 
         delete[] buffer;
         return partitions;
     }
 
+
     auto table_start_offset = buffer_size - sizeof(mbrTable);
     auto table = reinterpret_cast<mbrTable*>(&buffer[table_start_offset]);
-
-    if (table->signature[0] != 0x55 || table->signature[1] != 0xAA) {
-        Serial.println("MBR Not Found");
-        Serial.println("Flash Memory doesn't have partitions.");
+    
+    if (table->signature[0] != mbrMagicNumbers[0] || table->signature[1] != mbrMagicNumbers[1]) {
+ 
+        debugPrint("MBR Not Found");
+        debugPrint("Flash Memory doesn't have partitions.");
         delete[] buffer;
         return partitions;
     }
@@ -136,9 +138,15 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
     for (auto const& entry : table->entries) {
         partitionIndex ++;
         Partition partition;
-        partition.size = (entry.lbaSize * 4096) >> 10;
 
-        if (entry.type == 0x00) {
+        /*This code calculates the size of a partition in kilobytes.
+        It takes the Logical Block Address (LBA) size of the partition, 
+        multiplies it by 4096 (the size of a block in bytes),
+        and then shifts the result 10 bits to the right to convert it to kilobytes. 
+        */
+       partition.size = (entry.lbaSize * 4096) >> 10;
+
+        if (entry.type == emptyPartitionType) {
             // Skip empty partitions
             continue;
         }

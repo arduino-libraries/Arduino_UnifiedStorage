@@ -21,7 +21,7 @@
     3. `listPartitions`: This function reads the MBR sector on the QSPI drive and retrieves the partitioning scheme, if this sketch is succesful it should return exactly the partitioning scheme you created
 
 
-    Instructions:
+    INSTRUCTIONS:
     1. Check compatibility with your board and make sure you have "POSIXStorage" and "Arduino_UnifiedStorage" installed
     2. Connect your board to the serial monitor
     3. Wait for the sketch to run 
