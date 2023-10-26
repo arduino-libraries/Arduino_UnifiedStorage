@@ -60,14 +60,15 @@ bool Partitioning::formatPartition(BlockDeviceType * blockDevice, int partitionN
 
 bool Partitioning::createAndFormatPartitions(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
        
-    bool success = false;
+    bool success = true; // initialize to true
     int lastPartitionEnd = 0;
 
     for (size_t i = 1; i < partitions.size() + 1; ++i) {
-        int thisPartitionEnd = (partitions[i - 1].size * 1024) + lastPartitionEnd;
+        auto currentPartition = partitions[i - 1];
+        int thisPartitionEnd = (currentPartition.size * 1024) + lastPartitionEnd;
 
         if(MBRBlockDeviceType::partition(blockDevice, i, mbrPartitionType, lastPartitionEnd, thisPartitionEnd) == 0){
-            success = formatPartition(blockDevice, i, partitions[i - 1].fileSystemType);
+            success &= formatPartition(blockDevice, i, currentPartition.fileSystemType); // use bitwise AND to check if all partitions are successful
         } else {
             success = false;
         }
