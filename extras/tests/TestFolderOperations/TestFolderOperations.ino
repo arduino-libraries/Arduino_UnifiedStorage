@@ -28,20 +28,20 @@ void printFolderContents(Folder dir, int indentation = 0) {
   // Print directories
   for (Folder subdir : directories) {
     for (int i = 0; i < indentation; i++) {
-      printToSerialOrRS485("  ");
+      Serial.print("  ");
     }
-    printToSerialOrRS485("[D] ");
-    printToSerialOrRS485(subdir.getPath());
+    Serial.print("[D] ");
+    Serial.print(subdir.getPath());
     printFolderContents(subdir, indentation + 1);
   }
 
   // Print files
   for (UFile file : files) {
     for (int i = 0; i < indentation; i++) {
-      printToSerialOrRS485("  ");
+      Serial.print("  ");
     }
-    printToSerialOrRS485("[F] ");
-    printToSerialOrRS485(file.getPath());
+    Serial.print("[F] ");
+    Serial.print(file.getPath());
   }
 }
 
@@ -49,12 +49,12 @@ void printFolderContents(Folder dir, int indentation = 0) {
 bool testFolderCreation(Folder root) {
   Folder subfolder = root.createSubfolder("test_folder");
   if (subfolder.exists()) {
-    printToSerialOrRS485("\n--- Test creating folder using root.createSubfolder ---");
-    printToSerialOrRS485("Test creating folder using root.createSubfolder - Success");
+    Serial.print("\n--- Test creating folder using root.createSubfolder ---");
+    Serial.print("Test creating folder using root.createSubfolder - Success");
     subfolder.remove();
     return true;
   } else {
-    printToSerialOrRS485("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
+    Serial.print("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -62,18 +62,18 @@ bool testFolderCreation(Folder root) {
 bool testFolderRenaming(Folder root) {
   Folder sourceFolder = root.createSubfolder("source_folder");
   if (sourceFolder.exists()) {
-    printToSerialOrRS485("\n--- Test renaming folder ---");
-    printToSerialOrRS485("Source folder name: " + String(sourceFolder.getPathAsString()));
+    Serial.print("\n--- Test renaming folder ---");
+    Serial.print("Source folder name: " + String(sourceFolder.getPathAsString()));
     if (sourceFolder.rename("renamed_folder")) {
-      printToSerialOrRS485("Folder renamed to: " + String(sourceFolder.getPathAsString()));
+      Serial.print("Folder renamed to: " + String(sourceFolder.getPathAsString()));
       sourceFolder.remove();
       return true;
     } else {
-      printToSerialOrRS485("Folder renaming failed. Error: " + String(getErrno()));
+      Serial.print("Folder renaming failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    printToSerialOrRS485("Test folder renaming - Failed. Error: " + String(getErrno()));
+    Serial.print("Test folder renaming - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -83,24 +83,24 @@ bool testCopyingFolder(Folder root) {
   Folder copyDestination = root.createSubfolder("copy_destination");
 
   if (sourceFolder.exists()) {
-    printToSerialOrRS485("\n--- Test copying a folder ---");
-    printToSerialOrRS485("Source folder name: " + String(sourceFolder.getPathAsString()));
-    printToSerialOrRS485("Destination folder name: " + String(copyDestination.getPathAsString()));
+    Serial.print("\n--- Test copying a folder ---");
+    Serial.print("Source folder name: " + String(sourceFolder.getPathAsString()));
+    Serial.print("Destination folder name: " + String(copyDestination.getPathAsString()));
 
    
 
     if (sourceFolder.copyTo(copyDestination, true)) {
-      printToSerialOrRS485("Folder copied successfully!");
+      Serial.print("Folder copied successfully!");
       sourceFolder.remove();
       copyDestination.remove();
       return true;
     } else {
-      printToSerialOrRS485("Folder copying failed. Error: " + String(getErrno()));
+      Serial.print("Folder copying failed. Error: " + String(getErrno()));
       sourceFolder.remove();
       return false;
     }
   } else {
-    printToSerialOrRS485("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
+    Serial.print("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -112,20 +112,20 @@ bool testMovingFolder(Folder root) {
   Folder moveDestination = root.createSubfolder("move_destination");
 
   if (sourceFolderMove.exists()) {
-    printToSerialOrRS485("\n--- Test moving a folder ---");
-    printToSerialOrRS485("Source folder name: " + String(sourceFolderMove.getPathAsString()));
-    printToSerialOrRS485("Destination folder name: " + String(moveDestination.getPathAsString()));
+    Serial.print("\n--- Test moving a folder ---");
+    Serial.print("Source folder name: " + String(sourceFolderMove.getPathAsString()));
+    Serial.print("Destination folder name: " + String(moveDestination.getPathAsString()));
     if (sourceFolderMove.moveTo(moveDestination)) {
-      printToSerialOrRS485("Folder moved successfully!");
+      Serial.print("Folder moved successfully!");
       sourceFolderMove.remove();
       moveDestination.remove();
       return true;
     } else {
-      printToSerialOrRS485("Folder moving failed. Error: " + String(getErrno()));
+      Serial.print("Folder moving failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    printToSerialOrRS485("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
+    Serial.print("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 
@@ -139,17 +139,17 @@ void runTests(Arduino_UnifiedStorage * storage, String storageType) {
         Folder root = storage->getRootFolder();
 
 
-        printToSerialOrRS485("========= Folder Tests =========");
+        Serial.print("========= Folder Tests =========");
 
         testFolderCreation(root);
         testFolderRenaming(root);
         testCopyingFolder(root);
         testMovingFolder(root);
 
-        printToSerialOrRS485("========= FS Contents after Folder Tests =========");
+        Serial.print("========= FS Contents after Folder Tests =========");
         printFolderContents(root);
         storage->unmount();
-        printToSerialOrRS485("");
+        Serial.print("");
     }
 }
 
