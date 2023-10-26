@@ -19,10 +19,23 @@ struct Partition {
 
 struct __attribute__((packed)) mbrEntry {
     uint8_t status;
+    /**
+     * @brief The starting CHS (Cylinder-Head-Sector) address of the partition.
+     */
     uint8_t chsStart[3];
     uint8_t type;
+    /**
+     * @brief The ending CHS (Cylinder-Head-Sector) address of the partition.
+     */
     uint8_t chsStop[3];
+    
+    /**
+     * @brief The logical block address offset of the partition.
+     */
     uint32_t lbaOffset;
+    /**
+     * @brief The size of each Logical Block Address (LBA) in bytes.
+     */
     uint32_t lbaSize;
 };
 
