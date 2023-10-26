@@ -94,7 +94,6 @@ public:
      */
     static bool restoreDefaultPartitions();
 
-
     /**
      * Reads the partitioning scheme from the MBR sector of the internal storage drive and returns a vector of structs of type Partition that represents the partitioning scheme
      * @return vector of structs of type Partition 

@@ -30,8 +30,3 @@
     #define QSPI_STORAGE_SIZE 16384
     #define HAS_SERIAL
 #endif 
-
-
-
-
-

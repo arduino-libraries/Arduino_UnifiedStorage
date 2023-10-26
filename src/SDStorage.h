@@ -54,7 +54,6 @@ class SDStorage: public Arduino_UnifiedStorage  {
         
     private:
         FileSystems fileSystem = FS_FAT;
-        
 };
 
 #endif

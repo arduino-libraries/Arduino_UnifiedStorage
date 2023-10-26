@@ -58,7 +58,6 @@ public:
      */
     bool isMounted();
 
-    
     void onConnect(void (* const callbackFunction)());
 
     void removeOnConnectCallback();

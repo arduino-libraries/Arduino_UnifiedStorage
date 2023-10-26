@@ -1,7 +1,7 @@
 
 #include <Partitioning.h>
 
- bool Partitioning::eraseMBRSector(BlockDeviceType * blockDevice)
+bool Partitioning::eraseMBRSector(BlockDeviceType * blockDevice)
 {
     unsigned char buffer[mbrBlockSize];
     memset(buffer, 0xFF, sizeof(buffer));
@@ -17,7 +17,7 @@
     }
 }
 
- bool Partitioning::isPartitionSchemeValid(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
+bool Partitioning::isPartitionSchemeValid(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
     size_t driveSize = blockDevice -> size() / 1024; // 
     int totalSize = 0;
 
@@ -33,7 +33,7 @@
     }
 }
 
- bool Partitioning::formatPartition(BlockDeviceType * blockDevice, int partitionNumber, FileSystems fileSystemType){
+bool Partitioning::formatPartition(BlockDeviceType * blockDevice, int partitionNumber, FileSystems fileSystemType){
     MBRBlockDeviceType * thisPartition;
     thisPartition = new MBRBlockDeviceType(blockDevice, partitionNumber);
     if(thisPartition != NULL){
@@ -58,7 +58,7 @@
     }
 }
 
- bool Partitioning::createAndFormatPartitions(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
+bool Partitioning::createAndFormatPartitions(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
        
     bool success = false;
     int lastPartitionEnd = 0;
@@ -78,7 +78,7 @@
     return success;
 }
 
- bool Partitioning::partitionDrive(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
+bool Partitioning::partitionDrive(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
     blockDevice -> init();
 
     if(isPartitionSchemeValid(blockDevice, partitions)){
@@ -151,7 +151,6 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
             continue;
         }
 
-
         MBRBlockDeviceType * mbrBlocKDevice = new MBRBlockDeviceType(blockDevice, partitionIndex);
         FATFileSystemType  * fatProbeFileSystem =  new FATFileSystemType("probing");
         LittleFileSystemType * littleFsProbeFilesystem =  new LittleFileSystemType("probing");
@@ -166,7 +165,6 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
             partition.fileSystemType = FS_LITTLEFS;
             partitions.push_back(partition);
         }
-
  
     }
 

@@ -205,4 +205,5 @@ private:
   std::string path;
   FileMode fileMode;
 };
+
 #endif

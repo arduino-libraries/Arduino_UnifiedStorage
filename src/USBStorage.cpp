@@ -1,9 +1,7 @@
 #include "USBStorage.h"
 
-
 // The maximum number of attempts to mount the USB drive
 constexpr auto MAX_MOUNT_ATTEMPTS = 10;
-
 
 USBStorage::USBStorage(){
 }
@@ -49,17 +47,14 @@ bool USBStorage::begin(){
     }
 
     return err == 0;
-
-
 }
 
 bool USBStorage::unmount(){
-  auto unmountResult = umount(DEV_USB);
-    
+    auto unmountResult = umount(DEV_USB);
 
-  if(unmountResult == 0){
-      this -> mounted = false;
-  }
+    if(unmountResult == 0){
+        this -> mounted = false;
+    }
 
     return unmountResult == 0;
 }
@@ -74,7 +69,6 @@ bool USBStorage::isMounted(){
 }
 
 bool  USBStorage::format(FileSystems fs){
-    
     if(fs == FS_FAT){
         this -> begin();
         this -> unmount();
@@ -88,4 +82,3 @@ bool  USBStorage::format(FileSystems fs){
     }
 
 }
-

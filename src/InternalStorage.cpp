@@ -14,7 +14,6 @@ InternalStorage::InternalStorage(){
     }
 }
 
-
 InternalStorage::InternalStorage(int partition, const char * name, FileSystems fileSystemType){
     this -> partitionNumber = partition;
     this -> partitionName = (char *)name;
@@ -86,7 +85,6 @@ bool InternalStorage::format(FileSystems fs){
 
     return false;
 }
-
 
 BlockDeviceType * InternalStorage::getBlockDevice(){
     return this -> blockDevice;

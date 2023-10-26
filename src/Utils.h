@@ -1,5 +1,3 @@
-
-
 #ifndef Utils_H
 #define Utils_H
 #define PATH_MAX 255
@@ -8,7 +6,6 @@
 #include "Arduino_POSIXStorage.h"
 #include <iostream>
 
-   
 [[gnu::unused]] static const char* createPartitionName(int number) {
     if (number < 1 || number > 26) {
         // Handle out-of-range numbers or errors as needed

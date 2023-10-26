@@ -1,7 +1,5 @@
-
 #ifndef UnifiedStorage_H
 #define UnifiedStorage_H
-
 
 #include "Arduino.h"
 #include "Arduino_POSIXStorage.h"
@@ -12,12 +10,6 @@
 
 #include "Folder.h"
 #include "UFile.h"
-
-
-
-
-
-
 
 /**
  * Abstract class representing the common features of the supported storage methods 
@@ -58,7 +50,6 @@ class Arduino_UnifiedStorage {
 
 };
 
-
     #if defined(HAS_USB)
         #include "USBStorage.h"
     #endif
@@ -72,4 +63,3 @@ class Arduino_UnifiedStorage {
     #endif
 
 #endif
-

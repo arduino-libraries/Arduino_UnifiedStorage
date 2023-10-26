@@ -41,9 +41,7 @@ bool Folder::remove() {
     if(this->exists()){
         std::vector<UFile> files = this->getFiles();
         for (UFile file : files) {
- 
             file.remove();
-
         }
 
         // Remove all subfolders in the directory
@@ -178,8 +176,6 @@ bool Folder::copyTo(Folder destination, bool overwrite) {
     return this->copyTo(destination.getPath(), overwrite);
 }
 
-
-
 bool Folder::copyTo(const char* destinationPath, bool overwrite) {
     std::string source = this->path;
     std::string fileName = getLastPathComponent(this->path.c_str());
@@ -189,7 +185,6 @@ bool Folder::copyTo(const char* destinationPath, bool overwrite) {
     if (dir == nullptr) {
         return false;
     }
-
 
     if(opendir(destination.c_str())){
         if(overwrite){
@@ -203,8 +198,6 @@ bool Folder::copyTo(const char* destinationPath, bool overwrite) {
     }
 
     // Create destination directory if it doesn't exist
-
-
     struct dirent* entry;
     while ((entry = readdir(dir)) != nullptr) {
         if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
@@ -263,8 +256,6 @@ bool Folder::moveTo(Folder destination, bool overwrite) {
 
 bool Folder::moveTo(const char* destination, bool overwrite) {
     std::string newPath = replaceFirstPathComponent(this->path.c_str(), destination);
-
-
 
     if (!this->copyTo(destination, overwrite)) {
         return false; // Return false if the copy operation fails
