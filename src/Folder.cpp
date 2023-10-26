@@ -16,8 +16,7 @@ Folder::Folder(const char* path) {
         int result = mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO);
         if (result == 0) {
             this->path = std::string(path);
-
-        } // else ...not sure about this one yet
+        }
     }
 }
 

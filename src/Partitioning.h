@@ -35,14 +35,14 @@ struct __attribute__((packed)) mbrTable {
 class Partitioning{
     public:
         /**
-         * This method erases the first block (4096 bytes) of the BlockDevice to delete any already existing MBR partition table
+         * Erases the first block (4096 bytes) of the BlockDevice to delete any already existing MBR partition table
          * @param The BlockDevice on which the MBR sector is situated.
          * @returns True upon success, False on failure
         */
         static bool eraseMBRSector(BlockDeviceType * blockDevice);
 
         /**
-         * This method partitions the BlockDevice according to the partitioning schemme given by the vector of Partition structs
+         * Partitions the BlockDevice according to the partitioning schemme given by the vector of Partition structs
          * @param blockDevice - the BlockDevice which we would like to partition.
          * @param partitions - a vector of Partition structs that represents the partitioning scheme 
          * @returns True upon success, False on failure
@@ -50,14 +50,42 @@ class Partitioning{
         static bool partitionDrive(BlockDeviceType * blockDevice, std::vector<Partition> partitions);
 
         /**
-         * This method reads and unpacks the MBR partition information and returns a list of partitions it can find on the drive
+         * Reads and unpacks the MBR partition information and returns a list of partitions it can find on the drive
          * @param  blockDevice on which the MBR sector is situated.
          * @returns std::vector of Partition containing size and filesystem information about each partition
         */
         static std::vector<Partition> readPartitions(BlockDeviceType * blockDevice);
     private:
+        /**
+         * Checks if the given partition scheme is valid for the specified block device.
+         * It does that by checking if the sum of the partition sizes is equal to the size of the block device and
+         * by ensuring that there are a maximum of 4 partitions.
+         *
+         * @param blockDevice The block device to check the partition scheme against.
+         * @param partitions The partition scheme to check for validity.
+         * @return True if the partition scheme is valid for the block device, false otherwise.
+         */
         static bool isPartitionSchemeValid(BlockDeviceType * blockDevice, std::vector<Partition> partitions);
+        
+        
+        /**
+         * Formats the specified partition of the given block device with the specified file system type.
+         *
+         * @param blockDevice The block device to format the partition on.
+         * @param partitionNumber The number of the partition to format.
+         * @param fileSystemType The file system type to format the partition with.
+         * @return True if the partition was formatted successfully, false otherwise.
+         */
         static bool formatPartition(BlockDeviceType * blockDevice, int partitionNumber, FileSystems fileSystemType);
+        
+        /**
+         * Creates and formats partitions on the specified block device.
+         * The partitioning splits the block device into partitions of the specified sizes and formats them with the specified file system types.
+         *
+         * @param blockDevice Pointer to the block device to partition and format.
+         * @param partitions Vector of Partition objects representing the partitions to create and format.
+         * @return True if all partitions were successfully created and formatted, false otherwise.
+         */
         static bool createAndFormatPartitions(BlockDeviceType * blockDevice, std::vector<Partition> partitions);
        
 };

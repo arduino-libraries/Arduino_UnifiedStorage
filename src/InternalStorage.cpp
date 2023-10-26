@@ -33,12 +33,11 @@ bool InternalStorage::partition(){
     Partitioning::partitionDrive(QSPIFBlockDeviceType::get_default_instance(), {{QSPI_STORAGE_SIZE, FS_LITTLEFS}});
 }
 
-
 bool InternalStorage::restoreDefaultPartitions(){
     Partitioning::partitionDrive(QSPIFBlockDeviceType::get_default_instance(), {
-        {1024, FS_FAT},
-        {5120, FS_FAT},
-        {8192, FS_LITTLEFS}
+        {1024, FS_FAT}, // 1 MB for certificates
+        {5120, FS_FAT}, // 5 MB for OTA firmware updates
+        {8192, FS_LITTLEFS} // 8 MB for user data
     });
 }
 
