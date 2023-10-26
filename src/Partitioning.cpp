@@ -122,7 +122,6 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
         return partitions;
     }
 
-
     auto table_start_offset = buffer_size - sizeof(mbrTable);
     auto table = reinterpret_cast<mbrTable*>(&buffer[table_start_offset]);
     
@@ -134,7 +133,6 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
         return partitions;
     }
 
-    auto part { 1u };
     int partitionIndex = 0;
     for (auto const& entry : table->entries) {
         partitionIndex ++;
