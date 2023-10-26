@@ -1,6 +1,6 @@
 #ifndef Utils_H
 #define Utils_H
-#define PATH_MAX 255
+#define PATH_MAX_LENGTH 255
 
 #include "Arduino.h"
 #include "Arduino_POSIXStorage.h"
@@ -40,11 +40,11 @@
     struct dirent* entry;
     while ((entry = readdir(dir)) != nullptr) {
         if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
-            char sourcePath[PATH_MAX];
-            snprintf(sourcePath, PATH_MAX, "%s/%s", source, entry->d_name);
+            char sourcePath[PATH_MAX_LENGTH];
+            snprintf(sourcePath, PATH_MAX_LENGTH, "%s/%s", source, entry->d_name);
 
-            char destinationPath[PATH_MAX];
-            snprintf(destinationPath, PATH_MAX, "%s/%s", destination, entry->d_name);
+            char destinationPath[PATH_MAX_LENGTH];
+            snprintf(destinationPath, PATH_MAX_LENGTH, "%s/%s", destination, entry->d_name);
 
             struct stat fileInfo;
             if (stat(sourcePath, &fileInfo) != 0) {
