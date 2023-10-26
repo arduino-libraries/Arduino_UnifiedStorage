@@ -82,19 +82,19 @@ bool Partitioning::createAndFormatPartitions(BlockDeviceType * blockDevice, std:
 bool Partitioning::partitionDrive(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
     blockDevice -> init();
 
-    if(isPartitionSchemeValid(blockDevice, partitions)){
-        if(eraseMBRSector(blockDevice)){
-            if(createAndFormatPartitions(blockDevice, partitions)){
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    } else {
+    if(!isPartitionSchemeValid(blockDevice, partitions)){
         return false;
     }
+
+    if(!eraseMBRSector(blockDevice)){
+        return false;
+    }
+
+    if(!createAndFormatPartitions(blockDevice, partitions)){
+        return false;
+    }
+
+    return true;
 }
 
 std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevice){
