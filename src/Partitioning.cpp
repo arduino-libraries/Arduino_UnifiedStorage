@@ -100,8 +100,8 @@ bool Partitioning::partitionDrive(BlockDeviceType * blockDevice, std::vector<Par
 std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevice){
     std::vector<Partition> partitions;
     
-    auto ret = blockDevice->init();
-    if (ret) {
+    auto returnCode = blockDevice->init();
+    if (returnCode) {
         debugPrint("ERROR! Unable to read the Block Device.");
         return partitions;
     }
@@ -114,8 +114,8 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
 
     auto buffer = new uint8_t[buffer_size];
 
-    ret = blockDevice->read(buffer, 512 - buffer_size, buffer_size);
-    if (ret) {
+    returnCode = blockDevice->read(buffer, 512 - buffer_size, buffer_size);
+    if (returnCode) {
         debugPrint("ERROR! Unable to read the Master Boot Record");
 
         delete[] buffer;
