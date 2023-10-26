@@ -1,23 +1,25 @@
 /*
-This example demonstrates the usage of the "Arduino_UnifiedStorage" library for logging and backing up data to USB storage in case a USB Mass Storage device is inserted. 
+  This example demonstrates the usage of the "Arduino_UnifiedStorage" library for logging and backing up data to USB storage in case a USB Mass Storage device is inserted. 
 
-The code defines two main functions: "logData" and "performUpdate". 
-The "logData" function logs sensor data by reading an analog sensor and writing the data to the log file.
+  The "logData" function simulates sensor data by reading reading a random value every 100ms and saving it in memory.
+  Afterwards, every 1000ms "moveDataToQSPI" moves those readings to a file in the Internal Storage of your board.
 
-The "performUpdate" function performs the update process by:
-*  reading the last update size from a file (number of bytes)
-*  copying the new data from the log file to a backup file 
-*  and updating the last update size.
+  If a USB device is connected "performUpdate" function performs the update process every 10 seconds by:
+  *  reading the last update size from a file (number of bytes)
+  *  copying the new data from the log file to a backup file 
+  *  and updating the last update size.
 
-INSTRUCTIONS
-* Make sure the QSPI storage of your board is properly partitioned. 
-    * You can do that by flashing the QSPIFormat example that can be found in the STM32H747_System folder
-    * Open the serial monitor and select answer with "Y" when this appears "Do you want to use partition scheme 1? Y/[n]"
-    * Reboot the board
-* This sketch will log data, and check if there is any USB MSD Device connected to the USB Port of the Opta. 
-  The USB device is mounted and unmounted after every update operation. The first status LED is on when the USB drive is mounted. 
-  So as long as the status LED is off you can safely remove the drive. 
-  The sketch will log to internal storage in the meantime, and wait for the USB drive to be inserted again. 
+  INSTRUCTIONS
+  - Make sure you have "POSIXStorage" and "Arduino_UnifiedStorage" installed
+  - If you are using this sketch on an Arduino OPTA, use another board or an USB adaptor to view RS485 messages
+  - This sketch will log data, and check if there is any USB MSD Device connected to the USB Port of your board.
+  - Insert a USB Drive whenever you want 
+  - Every 10 seconds data is transfered from the internal storage to the USB Mass storage device
+  - Unplug the USB device and inspect its contents. 
+  
+  NOTES: The USB device is mounted and unmounted after every update operation. The first status LED is on when the USB drive is mounted. 
+    So as long as the status LED is off you can safely remove the drive. 
+    The sketch will log to internal storage in the meantime, and wait for the USB drive to be inserted again. 
 */
 
 #include "Arduino_UnifiedStorage.h"
@@ -51,11 +53,14 @@ bool backingUP = false;
 void connectionCallback(){
     printToSerialOrRS485("CONNECTION CALLBACK RAISED !!!");
     usbAvailable = true;
+    usbStorage.removeOnConnectCallback();
 }
 
 void disconnectionCallback(){
     printToSerialOrRS485("DISCONNECTION CALLBACK RAISED !!!");
     usbAvailable = false;
+    usbStorage.onConnect(connectionCallback);
+
 }
 // Function to run a given method periodically
 void runPeriodically(void (*method)(), unsigned long interval, unsigned long* variable) {

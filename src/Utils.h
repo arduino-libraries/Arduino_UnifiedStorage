@@ -9,6 +9,21 @@
 #include <iostream>
 
    
+[[gnu::unused]] static const char* createPartitionName(int number) {
+    if (number < 1 || number > 26) {
+        // Handle out-of-range numbers or errors as needed
+        return nullptr;
+    }
+
+    char partitionName[13]; // "partition_" + letter + '\0'
+    snprintf(partitionName, sizeof(partitionName), "%c", 'a' + number - 1);
+
+    // Dynamically allocate memory for the string and copy the generated value
+    char* dynamicName = new char[strlen(partitionName) + 1];
+    strcpy(dynamicName, partitionName);
+
+    return dynamicName;
+}
 
 #if defined(ARDUINO_OPTA)
 #include <ArduinoRS485.h>

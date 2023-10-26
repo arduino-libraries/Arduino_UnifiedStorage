@@ -11,6 +11,12 @@
     switching file modes to read, resetting file pointers to the start,
     and printing the read data to the serial monitor using a while loop.
 
+    INSTRUCTIONS
+      1. Check compatibility with your board and make sure you have "POSIXStorage" and "Arduino_UnifiedStorage" installed
+      2. Connect your board to the serial monitor
+      3. Wait for the sketch to run 
+
+
     Created 28th July 2023
     By Cristian Dragomir
 

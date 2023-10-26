@@ -67,16 +67,34 @@ public:
      * 
      * @return The block device as a BlockDevice object.
      */
-
     BlockDeviceType *getBlockDevice();
 
+    /**
+     * Partitions the internal storage according to the partitioning scheme given in the `partitions` parameter erasing the existing partitions
+     * @param partitions - vector of structs of type Partition that represents the partitioning scheme
+     * @return true if successful, false if failed.
+     */
     static bool partition(std::vector<Partition> partitions);
 
-    static std::vector<Partition> readPartitions();
 
+    /**
+     * Creates one partition spaning over the whole size of the internal storage drive erasing the existing partitions.
+     * @return true if successful, false if failed.
+     */
     static bool partition(); 
 
+    /**
+     * Restores the default partitioning scheme (1MB FAT32 for Certificates, 5MB FAT32 for OTA, 8MB user storage) to the internal storage drive erasing the existing partitions.
+     * @return true if successful, false if failed.
+     */
     static bool restoreDefaultPartitions();
+
+
+    /**
+     * Reads the partitioning scheme from the MBR sector of the internal storage drive and returns a vector of structs of type Partition that represents the partitioning scheme
+     * @return vector of structs of type Partition 
+    */
+    static std::vector<Partition> readPartitions();
 
     private:
         BlockDeviceType * blockDevice;
