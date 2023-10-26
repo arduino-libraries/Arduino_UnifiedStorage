@@ -83,7 +83,7 @@ public:
 
 
     /**
-     * Creates one partition spaning over the whole size of the internal storage drive erasing the existing partitions.
+     * Creates one partition spanning over the whole size of the internal storage drive erasing the existing partitions.
      * @return true if successful, false if failed.
      */
     static bool partition(); 

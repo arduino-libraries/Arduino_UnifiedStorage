@@ -6,13 +6,13 @@
 
     In the setup function, the code initializes serial communication, and registers a callback for the insertion of the USB Drive. 
     
-    If the device is succesfully mounted, a folder for this instance of a backup will be created on the USB Drive.
+    If the device is successfully mounted, a folder for this instance of a backup will be created on the USB Drive.
 
     Afterwards the sketch does the following:
         - lists all partitions available on the InternalStorage
         - mounts each partition
         - creates a sub folder for each partition,
-        - copies everything on that partition to the coresponding subfolder.
+        - copies everything on that partition to the corresponding subfolder.
     
     The "addSomeFakeFiles" function generates random files in the specified folder, simulating real data.
     The "move" function is responsible for transferring folders and files between storage locations.
@@ -20,7 +20,7 @@
     INSTRUCTIONS
     - Make sure you have "POSIXStorage" and "Arduino_UnifiedStorage" installed
     - Insert a USB Drive whenever you want 
-    - Wait for the sketch to finish, it will display the following "DONE, you can restart the board now" when succesful
+    - Wait for the sketch to finish, it will display the following "DONE, you can restart the board now" when successful
     - Unplug the USB device and inspect its contents. 
 
     Created: 31th August 2023

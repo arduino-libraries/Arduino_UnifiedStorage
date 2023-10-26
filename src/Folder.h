@@ -23,7 +23,7 @@ class Folder {
     /**
      * @brief Creates a directory with the specified name.
      * If the directory already exists, it returns a Folder object representing the existing directory.
-     * Otherwise, it tries to create a new directory with the specified name. If it failes the `path` property of the Folder object will be null.
+     * Otherwise, it tries to create a new directory with the specified name. If it fails the `path` property of the Folder object will be null.
      * @param const char * dirname - The name of the directory.
      */
     Folder(const char * dirname);
@@ -31,7 +31,7 @@ class Folder {
     /**
      * @brief Creates a directory with the specified name.
      * If the directory already exists, it returns a Folder object representing the existing directory.
-     * Otherwise, it tries to create a new directory with the specified name. If it failes the `path` property of the Folder object will be empty.
+     * Otherwise, it tries to create a new directory with the specified name. If it fails the `path` property of the Folder object will be empty.
      * @param String dirname - The name of the directory.
      */
     Folder(String dirname);
