@@ -1,9 +1,8 @@
 #include "USBStorage.h"
-
+#include "Arduino_POSIXStorage.h"
 
 // The maximum number of attempts to mount the USB drive
 constexpr auto MAX_MOUNT_ATTEMPTS = 10;
-
 
 USBStorage::USBStorage(){
 }
@@ -29,7 +28,6 @@ void USBStorage::removeOnDisconnectCallback(){
     deregister_unplug_callback(DEV_USB);
 }
 
-
 bool USBStorage::begin(){
     int attempts = 0;
     int err = mount(DEV_USB, this->fileSystem, MNT_DEFAULT);
@@ -49,17 +47,14 @@ bool USBStorage::begin(){
     }
 
     return err == 0;
-
-
 }
 
 bool USBStorage::unmount(){
-  auto unmountResult = umount(DEV_USB);
-    
+    auto unmountResult = umount(DEV_USB);
 
-  if(unmountResult == 0){
-      this -> mounted = false;
-  }
+    if(unmountResult == 0){
+        this -> mounted = false;
+    }
 
     return unmountResult == 0;
 }
@@ -74,7 +69,6 @@ bool USBStorage::isMounted(){
 }
 
 bool  USBStorage::format(FileSystems fs){
-    
     if(fs == FS_FAT){
         this -> begin();
         this -> unmount();
@@ -86,6 +80,4 @@ bool  USBStorage::format(FileSystems fs){
         this -> fileSystem = FS_LITTLEFS;
         return mkfs(DEV_USB, FS_LITTLEFS) == 0;
     }
-
 }
-

@@ -83,7 +83,7 @@ public:
 
 
     /**
-     * Creates one partition spaning over the whole size of the internal storage drive erasing the existing partitions.
+     * Creates one partition spanning over the whole size of the internal storage drive erasing the existing partitions.
      * @return true if successful, false if failed.
      */
     static bool partition(); 
@@ -93,7 +93,6 @@ public:
      * @return true if successful, false if failed.
      */
     static bool restoreDefaultPartitions();
-
 
     /**
      * Reads the partitioning scheme from the MBR sector of the internal storage drive and returns a vector of structs of type Partition that represents the partitioning scheme

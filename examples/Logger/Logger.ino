@@ -14,7 +14,7 @@
   - If you are using this sketch on an Arduino OPTA, use another board or an USB adaptor to view RS485 messages
   - This sketch will log data, and check if there is any USB MSD Device connected to the USB Port of your board.
   - Insert a USB Drive whenever you want 
-  - Every 10 seconds data is transfered from the internal storage to the USB Mass storage device
+  - Every 10 seconds data is transferred from the internal storage to the USB Mass storage device
   - Unplug the USB device and inspect its contents. 
   
   NOTES: The USB device is mounted and unmounted after every update operation. The first status LED is on when the USB drive is mounted. 
@@ -143,7 +143,7 @@ void backupToUSB() {
       Folder usbRoot = usbStorage.getRootFolder();
       String folderName = "LoggerBackup" + String(random(9999));
       backupFolder = usbRoot.createSubfolder(folderName);
-      printlnToSerialOrRS485("Succesfully created backup folder: " + backupFolder.getPathAsString());
+      printlnToSerialOrRS485("Successfully created backup folder: " + backupFolder.getPathAsString());
       usbStorage.unmount();
       usbIntialized = true;
   }

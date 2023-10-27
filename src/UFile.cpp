@@ -161,18 +161,11 @@ size_t UFile::write(const uint8_t* buffer, size_t size) {
 }
 
 bool UFile::remove() {
-    // Remove the file;
-    if(this->exists() && !path.empty()){
-            int result = ::remove(path.c_str());
-            if (result == 0) {
-                return true;
-            } else {
-                // Error occurred while removing the file
-                return false;
-            }
-        } else {
-            return false; // Handle the case when the path is not valid
-        }
+    if (!this->exists() || path.empty()) {
+        return false; // Handle the case when the path is not valid
+    }
+
+    return ::remove(path.c_str()) == 0;
 }
 
 bool UFile::rename(const char* newFilename) {

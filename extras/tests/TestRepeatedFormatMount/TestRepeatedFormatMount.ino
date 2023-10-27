@@ -1,11 +1,8 @@
 #include <Arduino_UnifiedStorage.h>
+#include "Utils.h"
+#include "Boards.h"
 
-#if !defined(ARDUINO_OPTA)
-#define HAS_SD 
-#endif
-
-#define HAS_USB 
-#define HAS_QSPI 
+#define ARDUINO_UNIFIED_STORAGE_DEBUG
 
 #if defined(HAS_USB)
 USBStorage usb = USBStorage();
@@ -20,33 +17,33 @@ InternalStorage internal = InternalStorage();
 #endif
 
 void runRepeatedMountTest(Arduino_UnifiedStorage * storage, String storageType, int n = 10){
-  printToSerialOrRS485("Running repeated mount test for " + storageType); printToSerialOrRS485("\n");
+  debugPrint("Running repeated mount test for " + storageType); 
 
   for(size_t i=0;i<n;i++){
     int mountResult = storage->begin();
 
-    printToSerialOrRS485("Mounting drive"); printToSerialOrRS485("\n");
+    debugPrint("Mounting drive"); 
     if(mountResult != 1) {
-      printToSerialOrRS485(mountResult);
-      printToSerialOrRS485(getErrno());
-      printToSerialOrRS485("\n");
+      debugPrint(mountResult);
+      debugPrint(getErrno());
+      
     }
 
     Folder root = storage->getRootFolder();
     UFile file = root.createFile("file.txt", FileMode::WRITE);
     file.write("writing stuff to the file");
     file.changeMode(FileMode::READ);
-    printToSerialOrRS485(file.readAsString()); printToSerialOrRS485("\n");
+    debugPrint(file.readAsString()); 
     file.close();
     file.remove();
 
     int umountResult = storage->unmount();
     if(!umountResult) {
-      printToSerialOrRS485("Unmounting drive"); printToSerialOrRS485("\n");
-      printToSerialOrRS485(umountResult);
-      printToSerialOrRS485(getErrno());
+      debugPrint("Unmounting drive"); 
+      debugPrint(umountResult);
+      debugPrint(getErrno());
     } else {
-      printToSerialOrRS485("Successfully unmounted"); printToSerialOrRS485("\n");
+      debugPrint("Successfully unmounted"); 
     }
   }
 }
@@ -61,43 +58,43 @@ void setup(){
     #endif 
     
     #if defined(HAS_QSPI)
-    printToSerialOrRS485("RUNNING FORMAT AND REPEATED MOUNT - QSPI Storage \n"); printToSerialOrRS485("\n");
-    printToSerialOrRS485("Formatting QSPI drive as LittleFS: " + String(internal.format(FS_LITTLEFS))); printToSerialOrRS485("\n");
+    debugPrint("RUNNING FORMAT AND REPEATED MOUNT - QSPI Storage"); 
+    debugPrint("Formatting QSPI drive as LittleFS: " + String(internal.format(FS_LITTLEFS))); 
     runRepeatedMountTest(&internal, "QSPI");
-    printToSerialOrRS485("Formatting QSPI drive as FAT32: " + String(internal.format(FS_FAT))); printToSerialOrRS485("\n");
+    debugPrint("Formatting QSPI drive as FAT32: " + String(internal.format(FS_FAT))); 
     runRepeatedMountTest(&internal, "QSPI");
-    printToSerialOrRS485("Formatting SD drive as LittleFS again: " + String(internal.format(FS_LITTLEFS))); printToSerialOrRS485("\n");
+    debugPrint("Formatting SD drive as LittleFS again: " + String(internal.format(FS_LITTLEFS))); 
     runRepeatedMountTest(&internal, "QSPI");
-    printToSerialOrRS485("Formatting SD drive as FAT32 again: " + String(internal.format(FS_FAT))); printToSerialOrRS485("\n");
+    debugPrint("Formatting SD drive as FAT32 again: " + String(internal.format(FS_FAT))); 
     runRepeatedMountTest(&internal, "QSPI");
     #endif 
 
     // format storage as FAT32
     #if defined(HAS_USB)
-    printToSerialOrRS485("RUNNING FORMAT AND REPEATED MOUNT - USB \n"); printToSerialOrRS485("\n");
-    printToSerialOrRS485("Formatting USB drive as LittleFS: " + String(usb.format(FS_FAT))); printToSerialOrRS485("\n");
-    printToSerialOrRS485("" + String(errno));
+    debugPrint("RUNNING FORMAT AND REPEATED MOUNT - USB"); 
+    debugPrint("Formatting USB drive as LittleFS: " + String(usb.format(FS_FAT))); 
+    debugPrint("" + String(errno));
     runRepeatedMountTest(&usb, "USB");
-    printToSerialOrRS485("Formatting USB drive as FAT32: " + String(usb.format(FS_FAT)));  printToSerialOrRS485("\n");
+    debugPrint("Formatting USB drive as FAT32: " + String(usb.format(FS_FAT)));  
     runRepeatedMountTest(&usb, "USB");
         
-    printToSerialOrRS485("Formatting USB drive as LittleFS again: " + String(usb.format(FS_LITTLEFS))); printToSerialOrRS485("\n");
+    debugPrint("Formatting USB drive as LittleFS again: " + String(usb.format(FS_LITTLEFS))); 
     runRepeatedMountTest(&usb, "USB");
-    printToSerialOrRS485("Formatting USB drive as FAT32 again: " + String(usb.format(FS_FAT))); printToSerialOrRS485("\n");
-    runRepeatedMountTest(&usb, "USB"); printToSerialOrRS485("\n");
+    debugPrint("Formatting USB drive as FAT32 again: " + String(usb.format(FS_FAT))); 
+    runRepeatedMountTest(&usb, "USB"); 
     #endif 
 
 
 
     #if defined(HAS_SD)
-    printToSerialOrRS485("RUNNING FORMAT AND REPEATED MOUNT - SD Card \n");
-    printToSerialOrRS485("Formatting SD drive as LittleFS: " + String(sd.format(FS_LITTLEFS)));
+    debugPrint("RUNNING FORMAT AND REPEATED MOUNT - SD Card");
+    debugPrint("Formatting SD drive as LittleFS: " + String(sd.format(FS_LITTLEFS)));
     runRepeatedMountTest(&&sd, "SD");
-    printToSerialOrRS485("Formatting SD drive as FAT32: " + String(sd.format(FS_FAT)));
+    debugPrint("Formatting SD drive as FAT32: " + String(sd.format(FS_FAT)));
     runRepeatedMountTest(&&sd, "SD");
-    printToSerialOrRS485("Formatting SD drive as LittleFS again: " + String(sd.format(FS_LITTLEFS)));
+    debugPrint("Formatting SD drive as LittleFS again: " + String(sd.format(FS_LITTLEFS)));
     runRepeatedMountTest(&&sd, "SD");
-    printToSerialOrRS485("Formatting SD drive as FAT32 again: " + String(sd.format(FS_FAT)));
+    debugPrint("Formatting SD drive as FAT32 again: " + String(sd.format(FS_FAT)));
     runRepeatedMountTest(&&sd, "SD");
     #endif 
 

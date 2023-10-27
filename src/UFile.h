@@ -179,7 +179,6 @@ public:
    */
   String getPathAsString();
 
-
   /**
    * @brief Returns the number of bytes available to read
    * @return The number of bytes available to read as int
@@ -205,4 +204,5 @@ private:
   std::string path;
   FileMode fileMode;
 };
+
 #endif

@@ -15,18 +15,23 @@ class Folder {
 
   public:
     /**
-     * @brief Blank Constructor.
+     * @brief Creates an empty Folder object. 
+     * Please note that any operation on this object will fail until a valid directory is assigned to it.
      */
     Folder();
 
     /**
-     * @brief Constructor.
+     * @brief Creates a directory with the specified name.
+     * If the directory already exists, it returns a Folder object representing the existing directory.
+     * Otherwise, it tries to create a new directory with the specified name. If it fails the `path` property of the Folder object will be null.
      * @param const char * dirname - The name of the directory.
      */
     Folder(const char * dirname);
 
     /**
-     * @brief Constructor.
+     * @brief Creates a directory with the specified name.
+     * If the directory already exists, it returns a Folder object representing the existing directory.
+     * Otherwise, it tries to create a new directory with the specified name. If it fails the `path` property of the Folder object will be empty.
      * @param String dirname - The name of the directory.
      */
     Folder(String dirname);

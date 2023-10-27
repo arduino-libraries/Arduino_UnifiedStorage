@@ -18,7 +18,7 @@
     The code defines the following main functions:
     1. `testWriting`: This function tests writing to a file in a specified storage partition by creating a file, writing data to it, reading the data, and then removing the file.
     2. `testAllPartitions`: This function tests all partitions in a list of partitions by creating an InternalStorage object for each partition, mounting it, and testing file operations within each partition.
-    3. `listPartitions`: This function reads the MBR sector on the QSPI drive and retrieves the partitioning scheme, if this sketch is succesful it should return exactly the partitioning scheme you created
+    3. `listPartitions`: This function reads the MBR sector on the QSPI drive and retrieves the partitioning scheme, if this sketch is successful it should return exactly the partitioning scheme you created
 
 
     INSTRUCTIONS:

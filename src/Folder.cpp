@@ -16,8 +16,7 @@ Folder::Folder(const char* path) {
         int result = mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO);
         if (result == 0) {
             this->path = std::string(path);
-
-        } // else ...not sure about this one yet
+        }
     }
 }
 
@@ -37,30 +36,30 @@ UFile Folder::createFile(String fileName, FileMode fmode) {
 }
 
 bool Folder::remove() {
-    // Remove all files in the directory
-    if(this->exists()){
-        std::vector<UFile> files = this->getFiles();
-        for (UFile file : files) {
- 
-            file.remove();
-
-        }
-
-        // Remove all subfolders in the directory
-        std::vector<Folder> folders = this->getFolders();
-        for (Folder directory : folders) {
-            directory.remove();
-        }
-
-        // Remove the current directory
-        if (::remove(this->path.c_str()) == 0) {
-            return true;
-        } else {
-            // Error occurred while removing the directory
-            return false;
-        }
+    // Check if the directory exists
+    if(!this->exists()){
+        return false;
     }
- 
+
+    // Remove all files in the directory
+    std::vector<UFile> files = this->getFiles();
+    for (UFile file : files) {
+        file.remove();
+    }
+
+    // Remove all subfolders in the directory
+    std::vector<Folder> folders = this->getFolders();
+    for (Folder directory : folders) {
+        directory.remove();
+    }
+
+    // Remove the current directory
+    if (::remove(this->path.c_str()) == 0) {
+        return true;
+    } else {
+        // Error occurred while removing the directory
+        return false;
+    }
 }
 
 bool Folder::rename(const char* newDirname) {
@@ -178,8 +177,6 @@ bool Folder::copyTo(Folder destination, bool overwrite) {
     return this->copyTo(destination.getPath(), overwrite);
 }
 
-
-
 bool Folder::copyTo(const char* destinationPath, bool overwrite) {
     std::string source = this->path;
     std::string fileName = getLastPathComponent(this->path.c_str());
@@ -189,7 +186,6 @@ bool Folder::copyTo(const char* destinationPath, bool overwrite) {
     if (dir == nullptr) {
         return false;
     }
-
 
     if(opendir(destination.c_str())){
         if(overwrite){
@@ -203,8 +199,6 @@ bool Folder::copyTo(const char* destinationPath, bool overwrite) {
     }
 
     // Create destination directory if it doesn't exist
-
-
     struct dirent* entry;
     while ((entry = readdir(dir)) != nullptr) {
         if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
@@ -263,8 +257,6 @@ bool Folder::moveTo(Folder destination, bool overwrite) {
 
 bool Folder::moveTo(const char* destination, bool overwrite) {
     std::string newPath = replaceFirstPathComponent(this->path.c_str(), destination);
-
-
 
     if (!this->copyTo(destination, overwrite)) {
         return false; // Return false if the copy operation fails

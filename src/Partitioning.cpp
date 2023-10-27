@@ -1,7 +1,9 @@
-
 #include <Partitioning.h>
+#include "Utils.h"
 
- bool Partitioning::eraseMBRSector(BlockDeviceType * blockDevice)
+#define ARDUINO_UNIFIED_STORAGE_DEBUG
+
+bool Partitioning::eraseMBRSector(BlockDeviceType * blockDevice)
 {
     unsigned char buffer[mbrBlockSize];
     memset(buffer, 0xFF, sizeof(buffer));
@@ -17,7 +19,7 @@
     }
 }
 
- bool Partitioning::isPartitionSchemeValid(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
+bool Partitioning::isPartitionSchemeValid(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
     size_t driveSize = blockDevice -> size() / 1024; // 
     int totalSize = 0;
 
@@ -33,7 +35,7 @@
     }
 }
 
- bool Partitioning::formatPartition(BlockDeviceType * blockDevice, int partitionNumber, FileSystems fileSystemType){
+bool Partitioning::formatPartition(BlockDeviceType * blockDevice, int partitionNumber, FileSystems fileSystemType){
     MBRBlockDeviceType * thisPartition;
     thisPartition = new MBRBlockDeviceType(blockDevice, partitionNumber);
     if(thisPartition != NULL){
@@ -58,16 +60,17 @@
     }
 }
 
- bool Partitioning::createAndFormatPartitions(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
+bool Partitioning::createAndFormatPartitions(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
        
-    bool success = false;
+    bool success = true; // initialize to true
     int lastPartitionEnd = 0;
 
     for (size_t i = 1; i < partitions.size() + 1; ++i) {
-        int thisPartitionEnd = (partitions[i - 1].size * 1024) + lastPartitionEnd;
+        auto currentPartition = partitions[i - 1];
+        int thisPartitionEnd = (currentPartition.size * 1024) + lastPartitionEnd;
 
         if(MBRBlockDeviceType::partition(blockDevice, i, mbrPartitionType, lastPartitionEnd, thisPartitionEnd) == 0){
-            success = formatPartition(blockDevice, i, partitions[i - 1].fileSystemType);
+            success &= formatPartition(blockDevice, i, currentPartition.fileSystemType); // use bitwise AND to check if all partitions are successful
         } else {
             success = false;
         }
@@ -78,29 +81,29 @@
     return success;
 }
 
- bool Partitioning::partitionDrive(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
+bool Partitioning::partitionDrive(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
     blockDevice -> init();
 
-    if(isPartitionSchemeValid(blockDevice, partitions)){
-        if(eraseMBRSector(blockDevice)){
-            if(createAndFormatPartitions(blockDevice, partitions)){
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    } else {
+    if(!isPartitionSchemeValid(blockDevice, partitions)){
         return false;
     }
+
+    if(!eraseMBRSector(blockDevice)){
+        return false;
+    }
+
+    if(!createAndFormatPartitions(blockDevice, partitions)){
+        return false;
+    }
+
+    return true;
 }
 
 std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevice){
     std::vector<Partition> partitions;
     
-    auto ret = blockDevice->init();
-    if (ret) {
+    auto returnCode = blockDevice->init();
+    if (returnCode) {
         debugPrint("ERROR! Unable to read the Block Device.");
         return partitions;
     }
@@ -113,14 +116,13 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
 
     auto buffer = new uint8_t[buffer_size];
 
-    ret = blockDevice->read(buffer, 512 - buffer_size, buffer_size);
-    if (ret) {
+    returnCode = blockDevice->read(buffer, 512 - buffer_size, buffer_size);
+    if (returnCode) {
         debugPrint("ERROR! Unable to read the Master Boot Record");
 
         delete[] buffer;
         return partitions;
     }
-
 
     auto table_start_offset = buffer_size - sizeof(mbrTable);
     auto table = reinterpret_cast<mbrTable*>(&buffer[table_start_offset]);
@@ -133,7 +135,6 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
         return partitions;
     }
 
-    auto part { 1u };
     int partitionIndex = 0;
     for (auto const& entry : table->entries) {
         partitionIndex ++;
@@ -151,7 +152,6 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
             continue;
         }
 
-
         MBRBlockDeviceType * mbrBlocKDevice = new MBRBlockDeviceType(blockDevice, partitionIndex);
         FATFileSystemType  * fatProbeFileSystem =  new FATFileSystemType("probing");
         LittleFileSystemType * littleFsProbeFilesystem =  new LittleFileSystemType("probing");
@@ -166,7 +166,6 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
             partition.fileSystemType = FS_LITTLEFS;
             partitions.push_back(partition);
         }
-
  
     }
 

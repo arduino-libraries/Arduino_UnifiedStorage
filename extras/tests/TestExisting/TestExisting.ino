@@ -1,4 +1,7 @@
 #include <Arduino_UnifiedStorage.h>
+#include "Utils.h"
+
+#define ARDUINO_UNIFIED_STORAGE_DEBUG
 
 
 InternalStorage internalStorage = InternalStorage();
@@ -25,26 +28,26 @@ void setup() {
 
 
     // Test copyTo
-    printToSerialOrRS485("Testing copyTo... \n");
+    debugPrint("Testing copyTo...");
     Folder sourceFolder2 =  root.createSubfolder("source_folder");
-    printToSerialOrRS485("Folder 1 created \n");
+    debugPrint("Folder 1 created");
 
-    printToSerialOrRS485("Trying to create a folder on top of an existing one... without overwrite \n");
+    debugPrint("Trying to create a folder on top of an existing one... without overwrite");
     Folder sourceFolder3 =  root.createSubfolder("source_folder");
     
-    printToSerialOrRS485("Trying to create a folder on top of an existing one... with overwrite \n");
+    debugPrint("Trying to create a folder on top of an existing one... with overwrite");
     Folder sourceFolder4 =  root.createSubfolder("source_folder", true);
 
     Folder destinationFolder2 = root.createSubfolder("destination_folder");
-    printToSerialOrRS485("Folder 2 created \n");
+    debugPrint("Folder 2 created");
 
 
 
     bool copyResult = sourceFolder2.copyTo(destinationFolder2, true); // Overwrite if exists
     if (copyResult) {
-        printToSerialOrRS485("Copy successful \n");
+        debugPrint("Copy successful");
     } else {
-        printToSerialOrRS485("Copy failed \n");
+        debugPrint("Copy failed");
     }
 
 
@@ -54,12 +57,12 @@ void setup() {
     Folder sourceFolder =  root.createSubfolder("source");
     Folder destinationFolder = root.createSubfolder("destination");
 
-    printToSerialOrRS485("Testing moveTo...  \n");
+    debugPrint("Testing moveTo... ");
     bool moveResult = sourceFolder.moveTo(destinationFolder, true); // Overwrite if exists
     if (moveResult) {
-        printToSerialOrRS485("Move successful \n");
+        debugPrint("Move successful");
     } else {
-        printToSerialOrRS485("Move failed \n");
+        debugPrint("Move failed");
     }
 
 
@@ -73,10 +76,10 @@ void setup() {
 
 
     bool success = someFile.copyTo(someOtherFolder);
-    printToSerialOrRS485("trying to copy file without overwrite: %d\n", success);
+    debugPrint("trying to copy file without overwrite: %d", success);
 
     success = someFile.copyTo(someOtherFolder,true);
-    printToSerialOrRS485("trying to copy file with overwrite: %d \n", success);
+    debugPrint("trying to copy file with overwrite: %d ", success);
 
 }
 

@@ -1,11 +1,8 @@
 #include "SDStorage.h"
 
-
-
 #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_C33)
 
 SDStorage::SDStorage(){
-
 }
 
 bool SDStorage::begin(){
@@ -41,6 +38,5 @@ bool SDStorage::format(FileSystems fs){
 
     return err == 0;
 }
-
 
 #endif

@@ -1,14 +1,49 @@
-
-
 #ifndef Utils_H
 #define Utils_H
-#define PATH_MAX 255
+#define PATH_MAX_LENGTH 255
 
 #include "Arduino.h"
 #include "Arduino_POSIXStorage.h"
 #include <iostream>
 
-   
+#if !defined(HAS_SERIAL) && defined(HAS_RS485)
+#include <ArduinoRS485.h>
+
+static void beginRS485(const int baudrate){
+    const auto bitduration { 1.f / baudrate };
+    const auto wordlen { 9.6f }; // OR 10.0f depending on the channel configuration
+    const auto preDelayBR { bitduration * wordlen * 3.5f * 1e6 };
+    const auto postDelayBR { bitduration * wordlen * 3.5f * 1e6 };
+
+    RS485.begin(baudrate);
+    RS485.setDelays(preDelayBR, postDelayBR);
+    RS485.noReceive();
+}
+
+void debugPrintRS485(String s){
+    static bool rs485Initialized = false;
+    if (!rs485Initialized) {
+      beginRS485(115200);
+      rs485Initialized = true;
+    }
+    RS485.beginTransmission();
+    RS485.write(s.c_str(), strlen(s.c_str()));
+    RS485.write('\n');
+    RS485.endTransmission();
+}
+
+#endif
+
+static void debugPrint(String s){
+  #if defined(ARDUINO_UNIFIED_STORAGE_DEBUG)
+    #if defined(HAS_SERIAL)
+      Serial.println(s);
+    #elif defined(HAS_RS485)    
+      debugPrintRS485(s);        
+    #endif
+  #endif
+}
+
 [[gnu::unused]] static const char* createPartitionName(int number) {
     if (number < 1 || number > 26) {
         // Handle out-of-range numbers or errors as needed
@@ -27,69 +62,71 @@
 
 
 [[gnu::unused]] static bool copyFolder(const char* source, const char* destination) {
-    DIR* dir = opendir(source);
-    if (dir == nullptr) {
-        printf("Failed to open source directory\n");
-        return false;
+  DIR* dir = opendir(source);
+  if (dir == nullptr) {
+    printf("Failed to open source directory\n");
+    return false;
+  }
+
+  // Create destination directory if it doesn't exist
+  if (mkdir(destination, 0777) != 0 && errno != EEXIST) {
+    printf("Failed to create destination directory\n");
+    closedir(dir);
+    return false;
+  }
+
+  struct dirent* entry;
+  while ((entry = readdir(dir)) != nullptr) {
+    // Skip "." and ".."
+    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+      continue;
     }
 
-    // Create destination directory if it doesn't exist
-    if (mkdir(destination, 0777) != 0 && errno != EEXIST) {
-        printf("Failed to create destination directory\n");
+    char sourcePath[PATH_MAX_LENGTH];
+    snprintf(sourcePath, PATH_MAX_LENGTH, "%s/%s", source, entry->d_name);
+
+    char destinationPath[PATH_MAX_LENGTH];
+    snprintf(destinationPath, PATH_MAX_LENGTH, "%s/%s", destination, entry->d_name);
+
+    struct stat fileInfo;
+    if (stat(sourcePath, &fileInfo) != 0) {
+      closedir(dir);
+      return false;
+    }
+
+    if (S_ISDIR(fileInfo.st_mode)) {
+      // Recursively copy subdirectories
+      if (!copyFolder(sourcePath, destinationPath)) {
         closedir(dir);
         return false;
+      }
+    } else {
+      // Copy regular files
+      FILE* sourceFile = fopen(sourcePath, "r");
+      if (sourceFile == nullptr) {
+        closedir(dir);
+        return false;
+      }
+
+      FILE* destinationFile = fopen(destinationPath, "w");
+      if (destinationFile == nullptr) {
+        fclose(sourceFile);
+        closedir(dir);
+        return false;
+      }
+
+      int c;
+      while ((c = fgetc(sourceFile)) != EOF) {
+        fputc(c, destinationFile);
+      }
+
+      fclose(sourceFile);
+      fclose(destinationFile);
     }
+  }
 
-    struct dirent* entry;
-    while ((entry = readdir(dir)) != nullptr) {
-        if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
-            char sourcePath[PATH_MAX];
-            snprintf(sourcePath, PATH_MAX, "%s/%s", source, entry->d_name);
-
-            char destinationPath[PATH_MAX];
-            snprintf(destinationPath, PATH_MAX, "%s/%s", destination, entry->d_name);
-
-            struct stat fileInfo;
-            if (stat(sourcePath, &fileInfo) != 0) {
-                closedir(dir);
-                return false;
-            }
-
-            if (S_ISDIR(fileInfo.st_mode)) {
-                // Recursively copy subdirectories
-                if (!copyFolder(sourcePath, destinationPath)) {
-                    closedir(dir);
-                    return false;
-                }
-            } else {
-                // Copy regular files
-                FILE* sourceFile = fopen(sourcePath, "r");
-                if (sourceFile == nullptr) {
-
-                    closedir(dir);
-                    return false;
-                }
-
-                FILE* destinationFile = fopen(destinationPath, "w");
-                if (destinationFile == nullptr) {
-                    fclose(sourceFile);
-                    closedir(dir);
-                    return false;
-                }
-
-                int c;
-                while ((c = fgetc(sourceFile)) != EOF) {
-                    fputc(c, destinationFile);
-                }
-
-                fclose(sourceFile);
-                fclose(destinationFile);
-            }
-        }
-    }
-
-    closedir(dir);
-    return true;
+  closedir(dir);
+  return true;
 }
 
 [[gnu::unused]] static std::string replaceLastPathComponent(const std::string& path, const std::string& newComponent) {

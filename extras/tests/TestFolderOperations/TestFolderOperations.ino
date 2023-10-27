@@ -1,13 +1,8 @@
 #include <Arduino_UnifiedStorage.h>
+#include "Boards.h"
+#include "Utils.h"
 
-
-#if !defined(ARDUINO_OPTA)
-#define HAS_SD 
-#endif
-
-#define HAS_USB 
-
-#define HAS_QSPI 
+#define ARDUINO_UNIFIED_STORAGE_DEBUG
 
 #if defined(HAS_USB)
 USBStorage usb = USBStorage();
@@ -28,20 +23,20 @@ void printFolderContents(Folder dir, int indentation = 0) {
   // Print directories
   for (Folder subdir : directories) {
     for (int i = 0; i < indentation; i++) {
-      printToSerialOrRS485("  ");
+      debugPrint("  ");
     }
-    printToSerialOrRS485("[D] ");
-    printToSerialOrRS485(subdir.getPath());
+    debugPrint("[D] ");
+    debugPrint(subdir.getPath());
     printFolderContents(subdir, indentation + 1);
   }
 
   // Print files
   for (UFile file : files) {
     for (int i = 0; i < indentation; i++) {
-      printToSerialOrRS485("  ");
+      debugPrint("  ");
     }
-    printToSerialOrRS485("[F] ");
-    printToSerialOrRS485(file.getPath());
+    debugPrint("[F] ");
+    debugPrint(file.getPath());
   }
 }
 
@@ -49,12 +44,12 @@ void printFolderContents(Folder dir, int indentation = 0) {
 bool testFolderCreation(Folder root) {
   Folder subfolder = root.createSubfolder("test_folder");
   if (subfolder.exists()) {
-    printToSerialOrRS485("\n--- Test creating folder using root.createSubfolder ---");
-    printToSerialOrRS485("Test creating folder using root.createSubfolder - Success");
+    debugPrint("\n--- Test creating folder using root.createSubfolder ---");
+    debugPrint("Test creating folder using root.createSubfolder - Success");
     subfolder.remove();
     return true;
   } else {
-    printToSerialOrRS485("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
+    debugPrint("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -62,18 +57,18 @@ bool testFolderCreation(Folder root) {
 bool testFolderRenaming(Folder root) {
   Folder sourceFolder = root.createSubfolder("source_folder");
   if (sourceFolder.exists()) {
-    printToSerialOrRS485("\n--- Test renaming folder ---");
-    printToSerialOrRS485("Source folder name: " + String(sourceFolder.getPathAsString()));
+    debugPrint("\n--- Test renaming folder ---");
+    debugPrint("Source folder name: " + String(sourceFolder.getPathAsString()));
     if (sourceFolder.rename("renamed_folder")) {
-      printToSerialOrRS485("Folder renamed to: " + String(sourceFolder.getPathAsString()));
+      debugPrint("Folder renamed to: " + String(sourceFolder.getPathAsString()));
       sourceFolder.remove();
       return true;
     } else {
-      printToSerialOrRS485("Folder renaming failed. Error: " + String(getErrno()));
+      debugPrint("Folder renaming failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    printToSerialOrRS485("Test folder renaming - Failed. Error: " + String(getErrno()));
+    debugPrint("Test folder renaming - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -83,24 +78,24 @@ bool testCopyingFolder(Folder root) {
   Folder copyDestination = root.createSubfolder("copy_destination");
 
   if (sourceFolder.exists()) {
-    printToSerialOrRS485("\n--- Test copying a folder ---");
-    printToSerialOrRS485("Source folder name: " + String(sourceFolder.getPathAsString()));
-    printToSerialOrRS485("Destination folder name: " + String(copyDestination.getPathAsString()));
+    debugPrint("\n--- Test copying a folder ---");
+    debugPrint("Source folder name: " + String(sourceFolder.getPathAsString()));
+    debugPrint("Destination folder name: " + String(copyDestination.getPathAsString()));
 
    
 
     if (sourceFolder.copyTo(copyDestination, true)) {
-      printToSerialOrRS485("Folder copied successfully!");
+      debugPrint("Folder copied successfully!");
       sourceFolder.remove();
       copyDestination.remove();
       return true;
     } else {
-      printToSerialOrRS485("Folder copying failed. Error: " + String(getErrno()));
+      debugPrint("Folder copying failed. Error: " + String(getErrno()));
       sourceFolder.remove();
       return false;
     }
   } else {
-    printToSerialOrRS485("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
+    debugPrint("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -112,20 +107,20 @@ bool testMovingFolder(Folder root) {
   Folder moveDestination = root.createSubfolder("move_destination");
 
   if (sourceFolderMove.exists()) {
-    printToSerialOrRS485("\n--- Test moving a folder ---");
-    printToSerialOrRS485("Source folder name: " + String(sourceFolderMove.getPathAsString()));
-    printToSerialOrRS485("Destination folder name: " + String(moveDestination.getPathAsString()));
+    debugPrint("\n--- Test moving a folder ---");
+    debugPrint("Source folder name: " + String(sourceFolderMove.getPathAsString()));
+    debugPrint("Destination folder name: " + String(moveDestination.getPathAsString()));
     if (sourceFolderMove.moveTo(moveDestination)) {
-      printToSerialOrRS485("Folder moved successfully!");
+      debugPrint("Folder moved successfully!");
       sourceFolderMove.remove();
       moveDestination.remove();
       return true;
     } else {
-      printToSerialOrRS485("Folder moving failed. Error: " + String(getErrno()));
+      debugPrint("Folder moving failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    printToSerialOrRS485("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
+    debugPrint("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 
@@ -139,17 +134,17 @@ void runTests(Arduino_UnifiedStorage * storage, String storageType) {
         Folder root = storage->getRootFolder();
 
 
-        printToSerialOrRS485("========= Folder Tests =========");
+        debugPrint("========= Folder Tests =========");
 
         testFolderCreation(root);
         testFolderRenaming(root);
         testCopyingFolder(root);
         testMovingFolder(root);
 
-        printToSerialOrRS485("========= FS Contents after Folder Tests =========");
+        debugPrint("========= FS Contents after Folder Tests =========");
         printFolderContents(root);
         storage->unmount();
-        printToSerialOrRS485("");
+        debugPrint("");
     }
 }
 
@@ -171,7 +166,7 @@ void setup(){
     #endif 
 
     #if defined(HAS_SD)
-        runTests(&&sd, "SD");
+        runTests(&sd, "SD");
     #endif 
 
 }
