@@ -1,8 +1,10 @@
+#define ARDUINO_UNIFIED_STORAGE_DEBUG
+
 #include <Arduino_UnifiedStorage.h>
 #include "Boards.h"
 #include "Utils.h"
 
-#define ARDUINO_UNIFIED_STORAGE_DEBUG
+
 
 #if defined(HAS_USB)
 USBStorage usb = USBStorage();
@@ -16,29 +18,6 @@ SDStorage sd = SDStorage();
 InternalStorage internal = InternalStorage();
 #endif
 
-void printFolderContents(Folder dir, int indentation = 0) {
-  std::vector<Folder> directories = dir.getFolders();
-  std::vector<UFile>files = dir.getFiles();
-
-  // Print directories
-  for (Folder subdir : directories) {
-    for (int i = 0; i < indentation; i++) {
-      debugPrint("  ");
-    }
-    debugPrint("[D] ");
-    debugPrint(subdir.getPath());
-    printFolderContents(subdir, indentation + 1);
-  }
-
-  // Print files
-  for (UFile file : files) {
-    for (int i = 0; i < indentation; i++) {
-      debugPrint("  ");
-    }
-    debugPrint("[F] ");
-    debugPrint(file.getPath());
-  }
-}
 
 
 bool testFolderCreation(Folder root) {
@@ -141,8 +120,6 @@ void runTests(Arduino_UnifiedStorage * storage, String storageType) {
         testCopyingFolder(root);
         testMovingFolder(root);
 
-        debugPrint("========= FS Contents after Folder Tests =========");
-        printFolderContents(root);
         storage->unmount();
         debugPrint("");
     }
@@ -156,13 +133,12 @@ void setup(){
         beginRS485(115200);
     #endif 
 
-    
-    #if defined(HAS_USB)
-        runTests(&usb, "USB");
-    #endif 
-
     #if defined(HAS_QSPI)
         runTests(&internal, "QSPI");
+    #endif 
+
+    #if defined(HAS_USB)
+        runTests(&usb, "USB");
     #endif 
 
     #if defined(HAS_SD)

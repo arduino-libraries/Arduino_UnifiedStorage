@@ -1,8 +1,5 @@
-#include <Arduino_UnifiedStorage.h>
-#include "Utils.h"
-#include "Boards.h"
-
 #define ARDUINO_UNIFIED_STORAGE_DEBUG
+#include <Arduino_UnifiedStorage.h>
 
 #if defined(HAS_USB)
 USBStorage usb = USBStorage();
@@ -24,9 +21,9 @@ void runRepeatedMountTest(Arduino_UnifiedStorage * storage, String storageType, 
 
     debugPrint("Mounting drive"); 
     if(mountResult != 1) {
-      debugPrint(mountResult);
-      debugPrint(getErrno());
-      
+      debugPrint("Mounting drive failed: " + String(getErrno()));
+    } else {
+      debugPrint("Successfully mounted"); 
     }
 
     Folder root = storage->getRootFolder();
@@ -39,9 +36,7 @@ void runRepeatedMountTest(Arduino_UnifiedStorage * storage, String storageType, 
 
     int umountResult = storage->unmount();
     if(!umountResult) {
-      debugPrint("Unmounting drive"); 
-      debugPrint(umountResult);
-      debugPrint(getErrno());
+      debugPrint("Unmounting drive failed: " + String(getErrno())); 
     } else {
       debugPrint("Successfully unmounted"); 
     }
@@ -89,13 +84,13 @@ void setup(){
     #if defined(HAS_SD)
     debugPrint("RUNNING FORMAT AND REPEATED MOUNT - SD Card");
     debugPrint("Formatting SD drive as LittleFS: " + String(sd.format(FS_LITTLEFS)));
-    runRepeatedMountTest(&&sd, "SD");
+    runRepeatedMountTest(&sd, "SD");
     debugPrint("Formatting SD drive as FAT32: " + String(sd.format(FS_FAT)));
-    runRepeatedMountTest(&&sd, "SD");
+    runRepeatedMountTest(&sd, "SD");
     debugPrint("Formatting SD drive as LittleFS again: " + String(sd.format(FS_LITTLEFS)));
-    runRepeatedMountTest(&&sd, "SD");
+    runRepeatedMountTest(&sd, "SD");
     debugPrint("Formatting SD drive as FAT32 again: " + String(sd.format(FS_FAT)));
-    runRepeatedMountTest(&&sd, "SD");
+    runRepeatedMountTest(&sd, "SD");
     #endif 
 
 

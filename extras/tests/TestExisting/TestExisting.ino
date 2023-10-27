@@ -1,7 +1,7 @@
-#include <Arduino_UnifiedStorage.h>
-#include "Utils.h"
 
 #define ARDUINO_UNIFIED_STORAGE_DEBUG
+
+#include <Arduino_UnifiedStorage.h>
 
 
 InternalStorage internalStorage = InternalStorage();
@@ -19,10 +19,8 @@ void setup() {
 
 
 
-
-    internalStorage.format(FS_LITTLEFS);
     internalStorage.begin();
-   c
+   
 
     Folder root = internalStorage.getRootFolder();
 
@@ -34,9 +32,12 @@ void setup() {
 
     debugPrint("Trying to create a folder on top of an existing one... without overwrite");
     Folder sourceFolder3 =  root.createSubfolder("source_folder");
+   
     
     debugPrint("Trying to create a folder on top of an existing one... with overwrite");
     Folder sourceFolder4 =  root.createSubfolder("source_folder", true);
+
+
 
     Folder destinationFolder2 = root.createSubfolder("destination_folder");
     debugPrint("Folder 2 created");
@@ -49,8 +50,6 @@ void setup() {
     } else {
         debugPrint("Copy failed");
     }
-
-
 
 
     // Test moveTo
@@ -76,10 +75,10 @@ void setup() {
 
 
     bool success = someFile.copyTo(someOtherFolder);
-    debugPrint("trying to copy file without overwrite: %d", success);
+    debugPrint("trying to copy file without overwrite: " + String(success));
 
     success = someFile.copyTo(someOtherFolder,true);
-    debugPrint("trying to copy file with overwrite: %d ", success);
+    debugPrint("trying to copy file with overwrite: " + String(success));
 
 }
 
