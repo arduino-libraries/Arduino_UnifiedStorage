@@ -1,5 +1,7 @@
-
 #include <Partitioning.h>
+#include "Utils.h"
+
+#define ARDUINO_UNIFIED_STORAGE_DEBUG
 
 bool Partitioning::eraseMBRSector(BlockDeviceType * blockDevice)
 {

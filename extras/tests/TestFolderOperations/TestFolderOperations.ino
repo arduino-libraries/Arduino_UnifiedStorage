@@ -1,5 +1,8 @@
 #include <Arduino_UnifiedStorage.h>
 #include "Boards.h"
+#include "Utils.h"
+
+#define ARDUINO_UNIFIED_STORAGE_DEBUG
 
 #if defined(HAS_USB)
 USBStorage usb = USBStorage();
@@ -20,20 +23,20 @@ void printFolderContents(Folder dir, int indentation = 0) {
   // Print directories
   for (Folder subdir : directories) {
     for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
+      debugPrint("  ");
     }
-    Serial.print("[D] ");
-    Serial.print(subdir.getPath());
+    debugPrint("[D] ");
+    debugPrint(subdir.getPath());
     printFolderContents(subdir, indentation + 1);
   }
 
   // Print files
   for (UFile file : files) {
     for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
+      debugPrint("  ");
     }
-    Serial.print("[F] ");
-    Serial.print(file.getPath());
+    debugPrint("[F] ");
+    debugPrint(file.getPath());
   }
 }
 
@@ -41,12 +44,12 @@ void printFolderContents(Folder dir, int indentation = 0) {
 bool testFolderCreation(Folder root) {
   Folder subfolder = root.createSubfolder("test_folder");
   if (subfolder.exists()) {
-    Serial.print("\n--- Test creating folder using root.createSubfolder ---");
-    Serial.print("Test creating folder using root.createSubfolder - Success");
+    debugPrint("\n--- Test creating folder using root.createSubfolder ---");
+    debugPrint("Test creating folder using root.createSubfolder - Success");
     subfolder.remove();
     return true;
   } else {
-    Serial.print("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
+    debugPrint("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -54,18 +57,18 @@ bool testFolderCreation(Folder root) {
 bool testFolderRenaming(Folder root) {
   Folder sourceFolder = root.createSubfolder("source_folder");
   if (sourceFolder.exists()) {
-    Serial.print("\n--- Test renaming folder ---");
-    Serial.print("Source folder name: " + String(sourceFolder.getPathAsString()));
+    debugPrint("\n--- Test renaming folder ---");
+    debugPrint("Source folder name: " + String(sourceFolder.getPathAsString()));
     if (sourceFolder.rename("renamed_folder")) {
-      Serial.print("Folder renamed to: " + String(sourceFolder.getPathAsString()));
+      debugPrint("Folder renamed to: " + String(sourceFolder.getPathAsString()));
       sourceFolder.remove();
       return true;
     } else {
-      Serial.print("Folder renaming failed. Error: " + String(getErrno()));
+      debugPrint("Folder renaming failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    Serial.print("Test folder renaming - Failed. Error: " + String(getErrno()));
+    debugPrint("Test folder renaming - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -75,24 +78,24 @@ bool testCopyingFolder(Folder root) {
   Folder copyDestination = root.createSubfolder("copy_destination");
 
   if (sourceFolder.exists()) {
-    Serial.print("\n--- Test copying a folder ---");
-    Serial.print("Source folder name: " + String(sourceFolder.getPathAsString()));
-    Serial.print("Destination folder name: " + String(copyDestination.getPathAsString()));
+    debugPrint("\n--- Test copying a folder ---");
+    debugPrint("Source folder name: " + String(sourceFolder.getPathAsString()));
+    debugPrint("Destination folder name: " + String(copyDestination.getPathAsString()));
 
    
 
     if (sourceFolder.copyTo(copyDestination, true)) {
-      Serial.print("Folder copied successfully!");
+      debugPrint("Folder copied successfully!");
       sourceFolder.remove();
       copyDestination.remove();
       return true;
     } else {
-      Serial.print("Folder copying failed. Error: " + String(getErrno()));
+      debugPrint("Folder copying failed. Error: " + String(getErrno()));
       sourceFolder.remove();
       return false;
     }
   } else {
-    Serial.print("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
+    debugPrint("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -104,20 +107,20 @@ bool testMovingFolder(Folder root) {
   Folder moveDestination = root.createSubfolder("move_destination");
 
   if (sourceFolderMove.exists()) {
-    Serial.print("\n--- Test moving a folder ---");
-    Serial.print("Source folder name: " + String(sourceFolderMove.getPathAsString()));
-    Serial.print("Destination folder name: " + String(moveDestination.getPathAsString()));
+    debugPrint("\n--- Test moving a folder ---");
+    debugPrint("Source folder name: " + String(sourceFolderMove.getPathAsString()));
+    debugPrint("Destination folder name: " + String(moveDestination.getPathAsString()));
     if (sourceFolderMove.moveTo(moveDestination)) {
-      Serial.print("Folder moved successfully!");
+      debugPrint("Folder moved successfully!");
       sourceFolderMove.remove();
       moveDestination.remove();
       return true;
     } else {
-      Serial.print("Folder moving failed. Error: " + String(getErrno()));
+      debugPrint("Folder moving failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    Serial.print("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
+    debugPrint("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 
@@ -131,17 +134,17 @@ void runTests(Arduino_UnifiedStorage * storage, String storageType) {
         Folder root = storage->getRootFolder();
 
 
-        Serial.print("========= Folder Tests =========");
+        debugPrint("========= Folder Tests =========");
 
         testFolderCreation(root);
         testFolderRenaming(root);
         testCopyingFolder(root);
         testMovingFolder(root);
 
-        Serial.print("========= FS Contents after Folder Tests =========");
+        debugPrint("========= FS Contents after Folder Tests =========");
         printFolderContents(root);
         storage->unmount();
-        Serial.print("");
+        debugPrint("");
     }
 }
 

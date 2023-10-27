@@ -6,6 +6,44 @@
 #include "Arduino_POSIXStorage.h"
 #include <iostream>
 
+#if !defined(HAS_SERIAL) && defined(HAS_RS485)
+#include <ArduinoRS485.h>
+
+static void beginRS485(const int baudrate){
+    const auto bitduration { 1.f / baudrate };
+    const auto wordlen { 9.6f }; // OR 10.0f depending on the channel configuration
+    const auto preDelayBR { bitduration * wordlen * 3.5f * 1e6 };
+    const auto postDelayBR { bitduration * wordlen * 3.5f * 1e6 };
+
+    RS485.begin(baudrate);
+    RS485.setDelays(preDelayBR, postDelayBR);
+    RS485.noReceive();
+}
+
+void debugPrintRS485(String s){
+    static bool rs485Initialized = false;
+    if (!rs485Initialized) {
+      beginRS485(115200);
+      rs485Initialized = true;
+    }
+    RS485.beginTransmission();
+    RS485.write(s.c_str(), strlen(s.c_str()));
+    RS485.write('\n');
+    RS485.endTransmission();
+}
+
+#endif
+
+static void debugPrint(String s){
+  #if defined(ARDUINO_UNIFIED_STORAGE_DEBUG)
+    #if defined(HAS_SERIAL)
+      Serial.println(s);
+    #elif defined(HAS_RS485)    
+      debugPrintRS485(s);        
+    #endif
+  #endif
+}
+
 [[gnu::unused]] static const char* createPartitionName(int number) {
     if (number < 1 || number > 26) {
         // Handle out-of-range numbers or errors as needed
