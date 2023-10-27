@@ -9,7 +9,7 @@
 #if !defined(HAS_SERIAL) && defined(HAS_RS485)
 #include <ArduinoRS485.h>
 
-static void beginRS485(const int baudrate){
+[[gnu::unused]] static void beginRS485(const int baudrate){
     const auto bitduration { 1.f / baudrate };
     const auto wordlen { 9.6f }; // OR 10.0f depending on the channel configuration
     const auto preDelayBR { bitduration * wordlen * 3.5f * 1e6 };
@@ -20,7 +20,7 @@ static void beginRS485(const int baudrate){
     RS485.noReceive();
 }
 
-void debugPrintRS485(String s){
+[[gnu::unused]] void debugPrintRS485(String s){
     static bool rs485Initialized = false;
     if (!rs485Initialized) {
       beginRS485(115200);
@@ -34,7 +34,7 @@ void debugPrintRS485(String s){
 
 #endif
 
-static void debugPrint(String s){
+[[gnu::unused]] static void debugPrint(String s){
   #if defined(ARDUINO_UNIFIED_STORAGE_DEBUG)
     #if defined(HAS_SERIAL)
       Serial.println(s);

@@ -68,6 +68,7 @@ jobs:
             - source-path: ./
             - name: Arduino_USBHostMbed5
             - name: Arduino_POSIXStorage
+            - name: Arduino_RS485
             # Additional library dependencies can be listed here.
             # See: https://github.com/arduino/compile-sketches#libraries
           sketch-paths: |
