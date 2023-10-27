@@ -36,28 +36,30 @@ UFile Folder::createFile(String fileName, FileMode fmode) {
 }
 
 bool Folder::remove() {
-    // Remove all files in the directory
-    if(this->exists()){
-        std::vector<UFile> files = this->getFiles();
-        for (UFile file : files) {
-            file.remove();
-        }
-
-        // Remove all subfolders in the directory
-        std::vector<Folder> folders = this->getFolders();
-        for (Folder directory : folders) {
-            directory.remove();
-        }
-
-        // Remove the current directory
-        if (::remove(this->path.c_str()) == 0) {
-            return true;
-        } else {
-            // Error occurred while removing the directory
-            return false;
-        }
+    // Check if the directory exists
+    if(!this->exists()){
+        return false;
     }
- 
+
+    // Remove all files in the directory
+    std::vector<UFile> files = this->getFiles();
+    for (UFile file : files) {
+        file.remove();
+    }
+
+    // Remove all subfolders in the directory
+    std::vector<Folder> folders = this->getFolders();
+    for (Folder directory : folders) {
+        directory.remove();
+    }
+
+    // Remove the current directory
+    if (::remove(this->path.c_str()) == 0) {
+        return true;
+    } else {
+        // Error occurred while removing the directory
+        return false;
+    }
 }
 
 bool Folder::rename(const char* newDirname) {
