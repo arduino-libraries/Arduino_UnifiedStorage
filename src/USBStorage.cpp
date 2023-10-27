@@ -1,4 +1,5 @@
 #include "USBStorage.h"
+#include "Arduino_POSIXStorage.h"
 
 // The maximum number of attempts to mount the USB drive
 constexpr auto MAX_MOUNT_ATTEMPTS = 10;
@@ -26,7 +27,6 @@ void USBStorage::onDisconnect(void (* const callbackFunction)()){
 void USBStorage::removeOnDisconnectCallback(){
     deregister_unplug_callback(DEV_USB);
 }
-
 
 bool USBStorage::begin(){
     int attempts = 0;
