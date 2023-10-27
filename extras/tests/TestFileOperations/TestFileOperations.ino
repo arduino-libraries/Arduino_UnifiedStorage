@@ -320,7 +320,7 @@ void setup(){
     
     #if defined(HAS_SD)
         sd.format(FS_FAT);
-        runTests(&&sd, "SD");
+        runTests(&sd, "SD");
     #endif 
 
     #if defined(HAS_USB)
