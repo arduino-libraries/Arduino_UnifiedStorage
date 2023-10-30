@@ -20,7 +20,7 @@
     RS485.noReceive();
 }
 
-[[gnu::unused]] void debugPrintRS485(String s){
+[[gnu::unused]] static void debugPrintRS485(String s){
     static bool rs485Initialized = false;
     if (!rs485Initialized) {
       beginRS485(115200);

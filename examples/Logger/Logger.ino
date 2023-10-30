@@ -21,9 +21,8 @@
     So as long as the status LED is off you can safely remove the drive. 
     The sketch will log to internal storage in the meantime, and wait for the USB drive to be inserted again. 
 */
-
+#define ARDUINO_UNIFIED_STORAGE_DEBUG
 #include "Arduino_UnifiedStorage.h"
-#include "Logger.h"
 #include <vector>
 
 
@@ -98,10 +97,10 @@ void performUpdate() {
   backingUP = true;
   unsigned lastUpdateBytes = lastUpdateFile.readAsString().toInt();  // Read the last update size from the file
 
-  printlnToSerialOrRS485("Last update bytes: " + String(lastUpdateBytes));
+  debugPrint("Last update bytes: " + String(lastUpdateBytes));
 
   if (lastUpdateBytes >= bytesWritten) {
-    printlnToSerialOrRS485("No new data to copy. ");
+    debugPrint("No new data to copy. ");
     backupFile.close();
     lastUpdateFile.close();
     backingUP = false;
@@ -110,14 +109,14 @@ void performUpdate() {
 
   logFile.seek(lastUpdateBytes);  // Move the file pointer to the last update position
   unsigned long totalBytesToMove = bytesWritten - lastUpdateBytes;
-  printlnToSerialOrRS485("New update bytes: " + String(totalBytesToMove));
+  debugPrint("New update bytes: " + String(totalBytesToMove));
 
   uint8_t* buffer = new uint8_t[totalBytesToMove];
 
   size_t bytesRead = logFile.read(buffer, totalBytesToMove);
   size_t bytesMoved = backupFile.write(buffer, bytesRead);  // Only write the bytes that haven't been backed up yet
 
-  printlnToSerialOrRS485("Successfully copied " + String(bytesMoved) + " new bytes. ");
+  debugPrint("Successfully copied " + String(bytesMoved) + " new bytes. ");
 
   lastUpdateFile.changeMode(FileMode::WRITE);  // Open the last update file in write mode
   lastUpdateFile.write(String(lastUpdateBytes + bytesMoved));  // Update the last update size
@@ -139,32 +138,32 @@ void performUpdate() {
 void backupToUSB() {
   if(usbAvailable && !usbIntialized){
       usbStorage.begin();
-      printlnToSerialOrRS485("First drive insertion, creating folders... ");
+      debugPrint("First drive insertion, creating folders... ");
       Folder usbRoot = usbStorage.getRootFolder();
       String folderName = "LoggerBackup" + String(random(9999));
       backupFolder = usbRoot.createSubfolder(folderName);
-      printlnToSerialOrRS485("Successfully created backup folder: " + backupFolder.getPathAsString());
+      debugPrint("Successfully created backup folder: " + backupFolder.getPathAsString());
       usbStorage.unmount();
       usbIntialized = true;
   }
   else if(usbAvailable && usbIntialized) {
-    printlnToSerialOrRS485("USB Mass storage is available ");
+    debugPrint("USB Mass storage is available ");
     delay(100);
     if (!usbStorage.isMounted()) {
 
-      printlnToSerialOrRS485("Mounting USB Mass Storage ");
+      debugPrint("Mounting USB Mass Storage ");
       digitalWrite(USB_MOUNTED_LED, LOW);
       if(usbStorage.begin()){
         performUpdate();
       } 
 
     } else if (usbStorage.isMounted()) {
-      printlnToSerialOrRS485("USB Mass storage is connected, performing update ");
+      debugPrint("USB Mass storage is connected, performing update ");
       performUpdate();
 
     }
   } else {
-    printlnToSerialOrRS485("USB Mass storage is not available ");
+    debugPrint("USB Mass storage is not available ");
   }
 
 
@@ -186,17 +185,17 @@ void setup() {
   usbStorage.onDisconnect(disconnectionCallback);
 
   pinMode(USB_MOUNTED_LED, OUTPUT);
-  printlnToSerialOrRS485("Formatting internal storage... ");
+  debugPrint("Formatting internal storage... ");
   int formatted = internalStorage.format(FS_LITTLEFS);
-  printlnToSerialOrRS485("QSPI Format status: " + String(formatted));
+  debugPrint("QSPI Format status: " + String(formatted));
 
 
 
   if (!internalStorage.begin()) {
-    printlnToSerialOrRS485("Failed to initialize internal storage ");
+    debugPrint("Failed to initialize internal storage ");
     return;
   } else {
-    printlnToSerialOrRS485("Initialized storage ");
+    debugPrint("Initialized storage ");
   }
 
 }

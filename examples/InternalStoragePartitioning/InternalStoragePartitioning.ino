@@ -36,7 +36,7 @@
 #include <vector>
 
 // Create a vector of partitions with one partition of 16MB using LittleFS
-std::vector<Partition> partitioningScheme  = {{2048, FS_FAT}, {6144, FS_FAT} {8192, FS_LITTLEFS}};
+std::vector<Partition> partitioningScheme  = {{2048, FS_FAT}, {6144, FS_FAT}, {8192, FS_LITTLEFS}};
 
 
 // Function to test writing to a file in the specified storage partition
@@ -64,7 +64,7 @@ void testAllPartitions(std::vector<Partition> partitions) {
         const char *partitionName = createPartitionName(i);
         
         // Create an InternalStorage object for the partition
-        InternalStorage thisPartition = InternalStorage(i, partitionName, partitions[i - 1].fileSystem);
+        InternalStorage thisPartition = InternalStorage(i, partitionName, partitions[i - 1].fileSystemType);
 
         // Check if the partition can be mounted
         if (thisPartition.begin()) {
@@ -90,7 +90,7 @@ void listPartitions(){
         partitionIndex ++;
         Serial.println("Partition " + String(partitionIndex));
         Serial.println("\t * Size: " + String(partition.size));
-        Serial.println("\t * Type: " + prettyPrintFileSystemType(partitions.fileSystem));
+        Serial.println("\t * Type: " + prettyPrintFileSystemType(partition.fileSystemType));
         Serial.println();
     }
 }

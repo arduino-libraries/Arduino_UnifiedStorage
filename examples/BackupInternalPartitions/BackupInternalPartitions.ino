@@ -89,22 +89,14 @@ void setup(){
     Serial.begin(115200);
     while(!Serial);
 
-    thumbDrive.onConnect(onConnected);
-
-    Serial.println("Waiting for a USB thumb drive to be plugged in...");
-
-}
-
-
-void loop(){
-    if(connected && !done){
-        Serial.println("USB Thumb Drive has been inserted");
+    Serial.println("USB Thumb Drive has been inserted");
         bool thumbMounted = thumbDrive.begin(FS_FAT);
         if(thumbMounted){
             Serial.println("USB Thumb Drive has been mounted");
 
             Folder thumbRoot = thumbDrive.getRootFolder();
             String folderName = "InternalBackup_" + String(millis());
+            Serial.println(folderName);
             Folder backupFolder = thumbRoot.createSubfolder(folderName);
 
             int partitionIndex = 0;
@@ -132,9 +124,15 @@ void loop(){
             }
 
             thumbDrive.unmount();
-            done = true;
+     
 
             Serial.println("DONE, you can restart the board now");
         }
-    }
+
+
+}
+
+
+void loop(){
+
 }

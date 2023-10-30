@@ -1,160 +1,170 @@
 #define ARDUINO_UNIFIED_STORAGE_DEBUG
-
 #include <Arduino_UnifiedStorage.h>
 
+#if !defined(ARDUINO_OPTA)
+#define HAS_SD 
+#endif
+
+#define HAS_USB 
+#define HAS_QSPI 
+
+#if defined(HAS_USB)
+USBStorage usb = USBStorage();
+#endif
+
+#if defined(HAS_SD)
+SDStorage sd = SDStorage();
+#endif
+
+#if defined(HAS_QSPI)
+InternalStorage qspi = InternalStorage();
+#endif
 
 
 void test(String operation, Arduino_UnifiedStorage* sourceStorage, Arduino_UnifiedStorage* destinationStorage, const char* storageTypeA, const char* storageTypeB) {
-    debugPrint("Testing " + operation + " from " + String(storageTypeA) + " to " + String(storageTypeB));
-    sourceStorage->ls();
-    destinationStorage->ls();
-    debugPrint("Result: " + String(sourceStorage->move(destinationStorage, "/test.txt", "/test.txt")));
-    sourceStorage->ls();
-    destinationStorage->ls();
-    delay(1000);
+    debugPrint("----------------------------------------------------------");
+    debugPrint("Running test for " + operation + " from " + String(storageTypeA) + " to " + String(storageTypeB) + "\n");
+
+    int mountSource = sourceStorage -> begin();
+    int mountDest =  destinationStorage->begin();
+
+    debugPrint("Mount " + String(storageTypeA) + ": " + mountSource);
+    debugPrint("Mount " + String(storageTypeB) + ": " + mountDest);
+
+    if(mountSource && mountDest){
+   
+        String fileName = "test_" + String(millis()) + ".txt";
+        // Create a file in the source storage
+        UFile fileToMove = sourceStorage->getRootFolder().createFile(fileName, FileMode::WRITE);
+        fileToMove.write(reinterpret_cast<const uint8_t*>("Test data"), 9);
+        fileToMove.close();
+
+        int opperationResult = -1;
+        if (operation == "move") {
+            opperationResult = fileToMove.moveTo(destinationStorage->getRootFolder(), true);
+            fileToMove.close();
+            fileToMove.remove();
+        } else if(operation == "copy"){
+            opperationResult = fileToMove.copyTo(destinationStorage->getRootFolder(), true);
+            fileToMove.close();
+            fileToMove.remove();
+        }
+
+        if (opperationResult) {
+            debugPrint(operation + " from " + String(storageTypeA) + " to " + String(storageTypeB) + " successful \n");
+        }
+
+        int unmountSource = sourceStorage->unmount();
+        int unmountDest = destinationStorage->unmount();
+
+        delay(1000);
+        
+    }  else {
+        debugPrint("cannot execute test, fs not mounted \n");
+    }
 }
+
 
 #if defined(HAS_USB) && defined(HAS_SD)
 void sd_and_usb(){
-    debugPrint("TESTING SD AND USB \n\n");
+    debugPrint("TESTING SD AND USB \n\n\n\n");
 
-    debugPrint("-----------------------------"); 
-    debugPrint("Formatting USB to FAT: " +  String(usb.format(FS_FAT)));
-    delay(1000);
-    debugPrint("Formatting SD to FAT: "  + String(sd.format(FS_FAT)));
-    delay(1000);
-    debugPrint("-----------------------------");
+    debugPrint("-----------------------------"); debugPrint("\n");
+    debugPrint("Formatting USB to FAT: " +  String(usb.format(FS_FAT)));debugPrint("\n");
+    debugPrint("Formatting SD to FAT: "  + String(sd.format(FS_FAT)));debugPrint("\n");
+    debugPrint("-----------------------------");debugPrint("\n");
 
 
     test("move", &usb, &sd, "USB FAT", "SD FAT");
-    delay(1000);
     test("copy", &usb, &sd, "USB FAT", "SD FAT");
-    delay(1000);
     
     test("move", &sd, &usb, "SD FAT", "USB FAT");
-    delay(1000);
     test("copy", &sd, &usb, "SD FAT", "USB FAT");
-    delay(1000);
 
-    debugPrint("-----------------------------");
-    debugPrint("Formatting USB to LittleFS:" + String(usb.format(FS_LITTLEFS)));
-    delay(1000);
-    debugPrint("-----------------------------");
+    debugPrint("-----------------------------");debugPrint("\n");
+    debugPrint("Formatting USB to LittleFS:" + String(usb.format(FS_LITTLEFS)));debugPrint("\n");
+    debugPrint("-----------------------------");debugPrint("\n");
 
     test("move", &usb, &sd, "USB LittleFS", "SD FAT ");
-    delay(1000);
     test("copy", &usb, &sd, "USB LittleFS", "SD FAT ");
-    delay(1000);
 
     test("move", &sd, &usb, "SD FAT", "USB LittleFS");
-    delay(1000);
     test("copy", &sd, &usb, "SD FAT", "USB LittleFS");
-    delay(1000);
 
-    debugPrint("-----------------------------");
-    debugPrint("Formatting SD to LittleFS: "+ String(sd.format(FS_LITTLEFS)));
-    delay(1000);
-    debugPrint("-----------------------------");
+    debugPrint("-----------------------------");debugPrint("\n");
+    debugPrint("Formatting SD to LittleFS: "+ String(sd.format(FS_LITTLEFS)));debugPrint("\n");
+    debugPrint("-----------------------------");debugPrint("\n");
 
     test("move", &sd, &usb, "SD LittleFS", "USB LittleFS");
-    delay(1000);
     test("copy", &sd, &usb, "SD LittleFS", "USB LittleFS");
-    delay(1000);
 
     test("move", &usb, &sd, "USB LittleFS", "SD LittleFS");
-    delay(1000);
     test("copy", &usb, &sd, "USB LittleFS", "SD LittleFS");
-    delay(1000);
 
-    debugPrint("-----------------------------");
-    debugPrint("Formatting USB to FAT: " + String(usb.format(FS_FAT)));
-    delay(1000);
-    debugPrint("-----------------------------");
+    debugPrint("-----------------------------");debugPrint("\n");
+    debugPrint("Formatting USB to FAT: " + String(usb.format(FS_FAT)));debugPrint("\n");
+    debugPrint("-----------------------------");debugPrint("\n");
 
     test("move", &usb, &sd, "USB FAT", "SD LittleFS");
-    delay(1000);
     test("copy", &usb, &sd, "USB FAT", "SD LittleFS");
-    delay(1000);
 
     test("move", &sd, &usb, "SD LittleFS", "USB FAT");
-    delay(1000);
     test("copy", &sd, &usb, "SD LittleFS", "USB FAT");
-    delay(1000);
 }
 #endif
 
+
 #if defined(HAS_QSPI) && defined(HAS_SD)
 void qspi_and_sd() {
-    debugPrint("TESTING QSPI AND SD \n\n");
+    debugPrint("TESTING QSPI AND SD \n\n\n\n");
     debugPrint("-----------------------------");
     debugPrint("Formatting QSPI to FAT: " + String(qspi.format(FS_FAT)));
-    delay(1000);
     debugPrint("Formatting SD to FAT: " +  String(sd.format(FS_FAT)));
-    delay(1000);
     debugPrint("-----------------------------");
 
     test("move", &qspi, &sd, "QSPI FAT", "SD FAT");
-    delay(1000);
     test("copy", &qspi, &sd, "QSPI FAT", "SD FAT");
-    delay(1000);
     
     test("move", &sd, &qspi, "SD FAT", "QSPI FAT");
-    delay(1000);
     test("copy", &sd, &qspi, "SD FAT", "QSPI FAT");
-    delay(1000);
 
     debugPrint("-----------------------------");
     debugPrint("Formatting QSPI to LittleFS:" + String(qspi.format(FS_LITTLEFS)));
-    delay(1000);
     debugPrint("-----------------------------");
 
     test("move", &qspi, &sd, "QSPI LittleFS", "SD FAT");
-    delay(1000);
     test("copy", &qspi, &sd, "QSPI LittleFS", "SD FAT");
-    delay(1000);
 
     test("move", &sd, &qspi, "SD FAT", "QSPI LittleFS");
-    delay(1000);
     test("copy", &sd, &qspi, "SD FAT", "QSPI LittleFS");
-    delay(1000);
 
     debugPrint("-----------------------------");
     debugPrint("Formatting SD to LittleFS: "+ String(sd.format(FS_LITTLEFS)));
-    delay(1000);
     debugPrint("-----------------------------");
 
     test("move", &qspi, &sd, "QSPI LittleFS", "SD LittleFS");
-    delay(1000);
     test("copy", &qspi, &sd, "QSPI LittleFS", "SD LittleFS");
-    delay(1000);
 
     test("move", &sd, &qspi, "SD LittleFS", "QSPI LittleFS");
-    delay(1000);
     test("copy", &sd, &qspi, "SD LittleFS", "QSPI LittleFS");
-    delay(1000);
 
     debugPrint("-----------------------------");
     debugPrint("Formatting QSPI to FAT: " + String(qspi.format(FS_FAT)));
-    delay(1000);
     debugPrint("-----------------------------");
     
     test("move", &sd, &qspi, "SD LittleFS", "QSPI FAT");
-    delay(1000);
     test("copy", &sd, &qspi, "SD LittleFS", "QSPI FAT");
-    delay(1000);
 
     test("move", &qspi, &sd, "QSPI FAT", "SD LittleFS");
-    delay(1000);
     test("copy", &qspi, &sd, "QSPI FAT", "SD LittleFS");
-    delay(1000);
 }
 #endif
 
 #if defined(HAS_QSPI) && defined(HAS_USB)
 void qspi_and_usb() {
 
-    debugPrint("TESTING QSPI AND USB \n\n");
-    debugPrint("-----------------------------");
+    debugPrint("TESTING QSPI AND USB \n\n\n\n");
+    debugPrint("-----------------------------");debugPrint("\n");
     qspi.begin();
     qspi.unmount();
     usb.begin();
@@ -162,63 +172,46 @@ void qspi_and_usb() {
   
     debugPrint("Formatting USB to FAT: " +  String(usb.format(FS_FAT)));debugPrint("now formatting qspi");
     delay(1000);
-    debugPrint("Formatting QSPI to FAT: " + String(qspi.format(FS_FAT)));
-    debugPrint("-----------------------------");
+    debugPrint("Formatting QSPI to FAT: " + String(qspi.format(FS_FAT)));debugPrint("\n");
+    debugPrint("-----------------------------");debugPrint("\n");
 
     test("move", &qspi, &usb, "QSPI FAT", "USB FAT");
-    delay(1000);
     test("copy", &qspi, &usb, "QSPI FAT", "USB FAT");
-    delay(1000);
     
     test("move", &usb, &qspi, "USB FAT", "QSPI FAT");
-    delay(1000);
     test("copy", &usb, &qspi, "USB FAT", "QSPI FAT");
-    delay(1000);
 
-    debugPrint("-----------------------------");
-    debugPrint("Formatting QSPI to LittleFS:" + String(qspi.format(FS_LITTLEFS)));
-    delay(1000);
-    debugPrint("-----------------------------");
+    debugPrint("-----------------------------");debugPrint("\n");
+    debugPrint("Formatting QSPI to LittleFS:" + String(qspi.format(FS_LITTLEFS)));debugPrint("\n");
+    debugPrint("-----------------------------");debugPrint("\n");
 
     test("move", &qspi, &usb, "QSPI LittleFS", "USB FAT");
-    delay(1000);
     test("copy", &qspi, &usb, "QSPI LittleFS", "USB FAT");
-    delay(1000);
 
     test("move", &usb, &qspi, "USB FAT", "QSPI LittleFS");
-    delay(1000);
     test("copy", &usb, &qspi, "USB FAT", "QSPI LittleFS");
-    delay(1000);
 
-    debugPrint("-----------------------------");
-    debugPrint("Formatting USB to LittleFS: "+ String(usb.format(FS_LITTLEFS)));
-    delay(1000);
-    debugPrint("-----------------------------");
+    debugPrint("-----------------------------");debugPrint("\n");
+    debugPrint("Formatting USB to LittleFS: "+ String(usb.format(FS_LITTLEFS)));debugPrint("\n");
+    debugPrint("-----------------------------");debugPrint("\n");
 
     test("move", &qspi, &usb, "QSPI LittleFS", "USB LittleFS");
-    delay(1000);
     test("copy", &qspi, &usb, "QSPI LittleFS", "USB LittleFS");
-    delay(1000);
+
 
     test("move", &usb, &qspi, "USB LittleFS", "QSPI LittleFS");
-    delay(1000);
     test("copy", &usb, &qspi, "USB LittleFS", "QSPI LittleFS");
-    delay(1000);
 
-    debugPrint("-----------------------------");
-    debugPrint("Formatting QSPI to FAT:" + String(qspi.format(FS_FAT)));
-    delay(1000);
-    debugPrint("-----------------------------");
+    debugPrint("-----------------------------");debugPrint("\n");
+    debugPrint("Formatting QSPI to FAT:" + String(qspi.format(FS_FAT)));debugPrint("\n");
+    debugPrint("-----------------------------");debugPrint("\n");
 
     test("move", &usb, &qspi, "USB LittleFS", "QSPI FAT");
-    delay(1000);
     test("copy", &usb, &qspi, "USB LittleFS", "QSPI FAT");
-    delay(1000);
 
     test("move", &qspi, &usb, "QSPI FAT", "USB LittleFS");
-    delay(1000);
     test("copy", &qspi, &usb, "QSPI FAT", "USB LittleFS");
-    delay(1000);
+
 }
 #endif
 
@@ -244,9 +237,9 @@ void setup(){
         debugPrint("\t * Formatting USB to FAT:" + String(usb.format(FS_FAT)));
     #elif defined(HAS_USB) && defined(HAS_QSPI)
         qspi_and_usb();
-        debugPrint("Tests finished, formatting all partitions back to FAT:");
-        debugPrint("\t * Formatting QSPI to FAT:" + String(qspi.format(FS_FAT)));
-        debugPrint("\t * Formatting USB to FAT:" + String(usb.format(FS_FAT)));
+        debugPrint("Tests finished, formatting all partitions back to FAT:");debugPrint("\n");
+        debugPrint("\t * Formatting QSPI to FAT:" + String(qspi.format(FS_FAT)));debugPrint("\n");
+        debugPrint("\t * Formatting USB to FAT:" + String(usb.format(FS_FAT)));debugPrint("\n");
     #elif defined(HAS_SD) && defined(HAS_QSPI)
         qspi_and_sd();
         debugPrint("Tests finished, formatting all partitions back to FAT:");

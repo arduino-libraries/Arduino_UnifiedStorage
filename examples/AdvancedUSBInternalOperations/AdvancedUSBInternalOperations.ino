@@ -63,13 +63,13 @@ void setup() {
   while (!Serial);
 
   // Mount the USB storage
-  if(usbStorage.begin(FS_FAT)){
+  if(usbStorage.begin()){
     Serial.println("USB storage mounted.");
   } else {
     Serial.println(errno);
   }
 
-  if(internalStorage.begin(FS_FAT)){
+  if(internalStorage.begin()){
       Serial.println("Internal storage mounted.");
   } else {
      Serial.println(errno);
