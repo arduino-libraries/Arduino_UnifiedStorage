@@ -6,8 +6,16 @@
 #include "Arduino_POSIXStorage.h"
 #include <iostream>
 
+[[gnu::unused]] static String prettyPrintFileSystemType(FileSystems f){
+    if(f == 0) return "FAT";
+    else if(f == 1) return "LitlleFS";
+    else return "";
+}
+
+
 #if !defined(HAS_SERIAL) && defined(HAS_RS485)
 #include <ArduinoRS485.h>
+
 
 [[gnu::unused]] static void beginRS485(const int baudrate){
     const auto bitduration { 1.f / baudrate };
@@ -82,15 +90,22 @@
       continue;
     }
 
-    char sourcePath[PATH_MAX_LENGTH];
-    snprintf(sourcePath, PATH_MAX_LENGTH, "%s/%s", source, entry->d_name);
 
-    char destinationPath[PATH_MAX_LENGTH];
-    snprintf(destinationPath, PATH_MAX_LENGTH, "%s/%s", destination, entry->d_name);
+    size_t sourcePathLength = strlen(source) + strlen(entry->d_name) + 1;
+    size_t destinationPathLength = strlen(destination) + strlen(entry->d_name) + 1;
+
+    char* sourcePath = new char[sourcePathLength];
+    char* destinationPath = new char[destinationPathLength];
+
+    snprintf(sourcePath, sourcePathLength, "%s/%s", source, entry->d_name);
+
+    snprintf(destinationPath, destinationPathLength, "%s/%s", destination, entry->d_name);
 
     struct stat fileInfo;
     if (stat(sourcePath, &fileInfo) != 0) {
       closedir(dir);
+      delete(sourcePath);
+      delete(destinationPath);
       return false;
     }
 
@@ -98,6 +113,8 @@
       // Recursively copy subdirectories
       if (!copyFolder(sourcePath, destinationPath)) {
         closedir(dir);
+        delete(sourcePath);
+        delete(destinationPath);
         return false;
       }
     } else {
@@ -105,6 +122,8 @@
       FILE* sourceFile = fopen(sourcePath, "r");
       if (sourceFile == nullptr) {
         closedir(dir);
+        delete(sourcePath);
+        delete(destinationPath);
         return false;
       }
 
@@ -112,6 +131,8 @@
       if (destinationFile == nullptr) {
         fclose(sourceFile);
         closedir(dir);
+        delete(sourcePath);
+        delete(destinationPath);
         return false;
       }
 

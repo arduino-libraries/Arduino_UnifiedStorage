@@ -77,11 +77,7 @@ void testAllPartitions(std::vector<Partition> partitions) {
     }
 }
 
-String prettyPrintFileSystemType(FileSystems f){
-    if(f == 0) return "FAT";
-    else if(f == 1) return "LitlleFS";
-    else return "";
-}
+
 
 void listPartitions(){
     std::vector<Partition> partitions = InternalStorage::readPartitions();

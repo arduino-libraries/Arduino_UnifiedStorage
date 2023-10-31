@@ -88,7 +88,7 @@ public:
 
 
 private:
-    FileSystems fileSystem = FS_FAT;
+    FileSystems fileSystemType = FS_FAT;
     bool mounted = false;
     unsigned long previousMillis; 
     unsigned int interval = 500; // document what this does too, make it constexp (mountRetryInterval)
