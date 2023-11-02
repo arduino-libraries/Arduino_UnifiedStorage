@@ -76,225 +76,257 @@ uint32_t UFile::available() {
         return 0;
     }
 
-    int currentPosition = ftell(filePointer);
-    fseek(filePointer, 0, SEEK_END);
-    int fileSize = ftell(filePointer);
-    fseek(filePointer, currentPosition, SEEK_SET);
+        int currentPosition = ftell(filePointer);
+        fseek(filePointer, 0, SEEK_END);
+        int fileSize = ftell(filePointer);
+        fseek(filePointer, currentPosition, SEEK_SET);
 
-    return (fileSize - currentPosition);
-}
-
-int UFile::read() {
-    // Read a single byte from the file
-    if (filePointer == nullptr) {
-        // File pointer is not valid
-        return 0;
+        debugPrint("[File][available][INFO] Available bytes in file: " + String(fileSize - currentPosition));
+        return (fileSize - currentPosition);
     }
 
-    int value = fgetc(filePointer);
-    return value;
-}
-
-size_t UFile::read(uint8_t* buffer, size_t size) {
-    // Read data from the file into the buffer
-    if (filePointer == nullptr) {
-        // File pointer is not valid
-        return 0;
-    }
-
-    size_t bytesRead = fread(buffer, sizeof(uint8_t), size, filePointer);
-    return bytesRead;
-}
-
-String UFile::readAsString() {
-    if (filePointer == nullptr) {
-        Serial.println("file pointer not valid");
-        return String("");
-    }
-
-    this->seek(0);
-    size_t bytesAvailable = this->available();
-    uint8_t* buffer = new uint8_t[bytesAvailable + 1];
-    this->read(buffer, bytesAvailable);
-
-    String result = "";
-    for (size_t i = 0; i < bytesAvailable; i++) {
-        result += static_cast<char>(buffer[i]);
-    }
-
-    delete[] buffer;
-
-    return result;
-}
-
-size_t UFile::write(uint8_t value) {
-    // Write a single byte to the file
-    if (filePointer == nullptr) {
-        // File pointer is not valid
-        return 0;
-    }
-
-    int result = fputc(value, filePointer);
-    return (result != EOF) ? 1 : 0;
-}
-
-size_t UFile::write(String data) {
-    if (filePointer == nullptr) {
-        // File pointer is not valid
-                Serial.println("file pointer not valid");
-        return 0;
-    }
-
-    // Write data to the file
-    size_t bytesWritten = fwrite(data.c_str(), sizeof(char), data.length(), filePointer);
-    return bytesWritten;
-}
-
-size_t UFile::write(const uint8_t* buffer, size_t size) {
-    if (filePointer == nullptr) {
-        // File pointer is not valid
-        return 0;
-    }
-
-    size_t bytesWritten = fwrite(buffer, sizeof(uint8_t), size, filePointer);
-    return bytesWritten;
-}
-
-bool UFile::remove() {
-    if (!this->exists() || path.empty()) {
-        return false; // Handle the case when the path is not valid
-    }
-
-    return ::remove(path.c_str()) == 0;
-}
-
-bool UFile::rename(const char* newFilename) {
-    // Rename the file
-    int result = ::rename(path.c_str(), newFilename);
-    if (result == 0) {
-        // Update the internal filename
-        path = newFilename;
-        return true;
-    } else {
-        // Error occurred while renaming the file
-        return false;
-    }
-}
-
-bool UFile::rename(String newFilename) {
-    return rename(newFilename.c_str());
-}
-
-bool UFile::exists() {
-    // Check if the file exists
-    FILE* file = fopen(path.c_str(), "r");
-    if (file != nullptr) {
-        // File exists
-        fclose(file);
-        return true;
-    } else {
-        // File does not exist
-        return false;
-    }
-}
-
-bool UFile::copyTo(String destinationPath, bool overwrite) {
-    return copyTo(destinationPath.c_str(), overwrite);
-}
-
-bool UFile::copyTo(Folder destinationFolder, bool overwrite) {
-    const char* destinationPath = destinationFolder.getPath();
-    return copyTo(destinationPath, overwrite);
-}
-
-bool UFile::copyTo(const char* destinationPath, bool overwrite) {
-    std::string newPath = replaceFirstPathComponent(path, destinationPath);
-
-
-    // Open the source file for reading
-    FILE* sourceFile = fopen(path.c_str(), "r");
-
-    if (sourceFile == nullptr) {
-        return false;
-    }
-
-    FILE* destinationFile = fopen(newPath.c_str(), "r");
-
-    if(destinationFile != nullptr){
-
-        if(overwrite){
-            fclose(destinationFile);
-            ::remove(newPath.c_str());
-        } else {
-            errno = EEXIST;
-            return false;
+    int UFile::read() {
+        // Read a single byte from the file
+        if (filePointer == nullptr) {
+            // File pointer is not valid
+            debugPrint("[File][read][ERROR] File pointer is not valid");
+            return 0;
         }
-    } 
 
-    // Open the destination file for writing
-    destinationFile = fopen(newPath.c_str(), "w");
-
-    if (destinationFile == nullptr) {
-        fclose(sourceFile);
-        return false;
+        int value = fgetc(filePointer);
+        return value;
     }
 
-    // Copy data from the source file to the destination file
-    int c;
-    while ((c = fgetc(sourceFile)) != EOF) {
-        fputc(c, destinationFile);
+    size_t UFile::read(uint8_t* buffer, size_t size) {
+        // Read data from the file into the buffer
+        if (filePointer == nullptr) {
+            // File pointer is not valid
+            debugPrint("[File][read][ERROR] File pointer is not valid");
+            return 0;
+        }
+
+        size_t bytesRead = fread(buffer, sizeof(uint8_t), size, filePointer);
+        debugPrint("[File][read][INFO] Read " + String(bytesRead) + " bytes from file");
+        return bytesRead;
     }
 
-    // Close both files
-    fclose(sourceFile);
-    fclose(destinationFile);
+    String UFile::readAsString() {
+        if (filePointer == nullptr) {
+            debugPrint("[File][readAsString][ERROR] File pointer is not valid");
+            return String("");
+        }
 
-    return true;
-}
+        this->seek(0);
+        size_t bytesAvailable = this->available();
+        uint8_t* buffer = new uint8_t[bytesAvailable + 1];
+        this->read(buffer, bytesAvailable);
 
-bool UFile::moveTo(String destinationPath, bool overwrite) {
-    return moveTo(destinationPath.c_str());
-}
+        String result = "";
+        for (size_t i = 0; i < bytesAvailable; i++) {
+            result += static_cast<char>(buffer[i]);
+        }
 
-bool UFile::moveTo(Folder destinationFolder, bool overwrite) {
-    const char* destinationPath = destinationFolder.getPath();
-    return moveTo(destinationPath);
-}
+        delete[] buffer;
 
-bool UFile::moveTo(const char* destinationPath, bool overwrite){
-    std::string newPath = replaceFirstPathComponent(path, destinationPath);
-
-    fclose(filePointer);
-    if (!copyTo(destinationPath, overwrite)) {
-        return false; // Return false if the copy operation fails
+        debugPrint("[File][readAsString][INFO] Read string from file: " + result);
+        return result;
     }
 
-    // Delete the source file
-    if (::remove(path.c_str())) {
-        return false;
+    size_t UFile::write(uint8_t value) {
+        // Write a single byte to the file
+        if (filePointer == nullptr) {
+            // File pointer is not valid
+            debugPrint("[File][write][ERROR] File pointer is not valid");
+            return 0;
+        }
+
+        int result = fputc(value, filePointer);
+        if (result == EOF) {
+            debugPrint("[File][write][ERROR] Failed to write byte to file");
+            return 0;
+        }
+
+        debugPrint("[File][write][INFO] Wrote 1 byte to file");
+        return 1;
     }
 
-    //open(newPath.c_str(), fileMode); // sure about that ?
-    path = newPath;
+    size_t UFile::write(String data) {
+        if (filePointer == nullptr) {
+            // File pointer is not valid
+            debugPrint("[File][write][ERROR] File pointer is not valid");
+            return 0;
+        }
 
-    return true;
-}
+        // Write data to the file
+        size_t bytesWritten = fwrite(data.c_str(), sizeof(char), data.length(), filePointer);
+        debugPrint("[File][write][INFO] Wrote " + String(bytesWritten) + " bytes to file: " + String(path.c_str()));
+                return bytesWritten;
+            }
 
-Folder UFile::getParentFolder() {
-    // Get the parent folder path
-    size_t lastSlashPos = path.find_last_of('/');
-    if (lastSlashPos != std::string::npos) {
-        std::string parentPath = path.substr(0, lastSlashPos);
-        return Folder(parentPath.c_str());
-    } else {
-        return Folder();
-    }
-}
+            size_t UFile::write(const uint8_t* buffer, size_t size) {
+                if (filePointer == nullptr) {
+                    // File pointer is not valid
+                    debugPrint("[File][write][ERROR] File pointer is not valid: " + String(path.c_str()));
+                    return 0;
+                }
 
-const char* UFile::getPath() {
-    return path.c_str();
-}
+                size_t bytesWritten = fwrite(buffer, sizeof(uint8_t), size, filePointer);
+                debugPrint("[File][write][INFO] Wrote " + String(bytesWritten) + " bytes to file: " + String(path.c_str()));
+                return bytesWritten;
+            }
 
-String UFile::getPathAsString() {
-    return String(path.c_str());
-}
+            bool UFile::remove() {
+                if (!this->exists() || path.empty()) {
+                    return false; // Handle the case when the path is not valid
+                }
+
+                bool result = (::remove(path.c_str()) == 0);
+                if (result) {
+                    debugPrint("[File][remove][INFO] File removed successfully: " + String(path.c_str()));
+                } else {
+                    debugPrint("[File][remove][ERROR] Failed to remove file: " + String(path.c_str()));
+                }
+
+                return result;
+            }
+
+            bool UFile::rename(const char* newFilename) {
+                // Rename the file
+                int result = ::rename(path.c_str(), newFilename);
+                if (result == 0) {
+                    // Update the internal filename
+                    path = newFilename;
+                    debugPrint("[File][rename][INFO] File renamed successfully: " + String(path.c_str()));
+                    return true;
+                } else {
+                    // Error occurred while renaming the file
+                    debugPrint("[File][rename][ERROR] Failed to rename file: " + String(path.c_str()));
+                    return false;
+                }
+            }
+
+            bool UFile::rename(String newFilename) {
+                return rename(newFilename.c_str());
+            }
+
+            bool UFile::exists() {
+                // Check if the file exists
+                FILE* file = fopen(path.c_str(), "r");
+                if (file != nullptr) {
+                    // File exists
+                    fclose(file);
+                    debugPrint("[File][exists][INFO] File exists: " + String(path.c_str()));
+                    return true;
+                } else {
+                    // File does not exist
+                    debugPrint("[File][exists][INFO] File does not exist: " + String(path.c_str()));
+                    return false;
+                }
+            }
+
+            bool UFile::copyTo(String destinationPath, bool overwrite) {
+                return copyTo(destinationPath.c_str(), overwrite);
+            }
+
+            bool UFile::copyTo(Folder destinationFolder, bool overwrite) {
+                const char* destinationPath = destinationFolder.getPath();
+                return copyTo(destinationPath, overwrite);
+            }
+
+            bool UFile::copyTo(const char* destinationPath, bool overwrite) {
+                std::string newPath = replaceFirstPathComponent(path, destinationPath);
+
+                // Open the source file for reading
+                FILE* sourceFile = fopen(path.c_str(), "r");
+
+                if (sourceFile == nullptr) {
+                    debugPrint("[File][copyTo][ERROR] Failed to open source file: " + String(path.c_str()));
+                    return false;
+                }
+
+                FILE* destinationFile = fopen(newPath.c_str(), "r");
+
+                if(destinationFile != nullptr){
+
+                    if(overwrite){
+                        fclose(destinationFile);
+                        ::remove(newPath.c_str());
+                    } else {
+                        errno = EEXIST;
+                        debugPrint("[File][copyTo][ERROR] Destination file already exists: " + String(newPath.c_str()));
+                        return false;
+                    }
+                } 
+
+                // Open the destination file for writing
+                destinationFile = fopen(newPath.c_str(), "w");
+
+                if (destinationFile == nullptr) {
+                    fclose(sourceFile);
+                    debugPrint("[File][copyTo][ERROR] Failed to open destination file: " + String(newPath.c_str()));
+                    return false;
+                }
+
+                // Copy data from the source file to the destination file
+                int c;
+                while ((c = fgetc(sourceFile)) != EOF) {
+                    fputc(c, destinationFile);
+                }
+
+                // Close both files
+                fclose(sourceFile);
+                fclose(destinationFile);
+
+                debugPrint("[File][copyTo][INFO] File copied successfully from " + String(path.c_str()) + " to " + String(newPath.c_str()));
+                return true;
+            }
+
+            bool UFile::moveTo(String destinationPath, bool overwrite) {
+                return moveTo(destinationPath.c_str());
+            }
+
+            bool UFile::moveTo(Folder destinationFolder, bool overwrite) {
+                const char* destinationPath = destinationFolder.getPath();
+                return moveTo(destinationPath);
+            }
+
+            bool UFile::moveTo(const char* destinationPath, bool overwrite){
+                std::string newPath = replaceFirstPathComponent(path, destinationPath);
+
+                fclose(filePointer);
+                if (!copyTo(destinationPath, overwrite)) {
+                    debugPrint("[File][moveTo][ERROR] Failed to copy file to destination: " + String(path.c_str()) + " to " + String(newPath.c_str()));
+                    return false; // Return false if the copy operation fails
+                }
+
+                // Delete the source file
+                if (::remove(path.c_str())) {
+                    debugPrint("[File][moveTo][ERROR] Failed to remove source file: " + String(path.c_str()));
+                    return false;
+                }
+
+                //open(newPath.c_str(), fileMode); // sure about that ?
+                path = newPath;
+
+                debugPrint("[File][moveTo][INFO] File moved successfully from " + String(path.c_str()) + " to " + String(newPath.c_str()));
+                return true;
+            }
+
+            Folder UFile::getParentFolder() {
+                // Get the parent folder path
+                size_t lastSlashPos = path.find_last_of('/');
+                if (lastSlashPos != std::string::npos) {
+                    std::string parentPath = path.substr(0, lastSlashPos);
+                    return Folder(parentPath.c_str());
+                } else {
+                    return Folder();
+                }
+            }
+
+            const char* UFile::getPath() {
+                return path.c_str();
+            }
+
+            String UFile::getPathAsString() {
+                return String(path.c_str());
+            }

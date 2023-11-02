@@ -4,12 +4,12 @@ InternalStorage::InternalStorage(){
     std::vector<Partition> partitionsAvailable = Partitioning::readPartitions(QSPIFBlockDeviceType::get_default_instance());
     if(partitionsAvailable.size() == 0){
 
-        debugPrint("[InternalStorage][INFO] No partitions found, restoring default partitions");
+        //debugPrint("[InternalStorage][INFO] No partitions found, restoring default partitions");
         restoreDefaultPartitions();
     } else {
         int lastPartitionNumber = partitionsAvailable.size();
         FileSystems lastPartitionFileSystem = partitionsAvailable.back().fileSystemType;
-        debugPrint("[InternalStorage][INFO] Found " + String(lastPartitionNumber) + " partitions, using last partition as internal storage");
+        //debugPrint("[InternalStorage][INFO] Found " + String(lastPartitionNumber) + " partitions, using last partition as internal storage");
 
         this -> partitionNumber = lastPartitionNumber;
         this -> fileSystemType = lastPartitionFileSystem;

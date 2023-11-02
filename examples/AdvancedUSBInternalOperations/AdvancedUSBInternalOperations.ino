@@ -23,7 +23,7 @@
 
 */
 
-#define UNIFIED_STORAGE_DEBUG
+#define ARDUINO_UNIFIED_STORAGE_DEBUG
 #include "Arduino_UnifiedStorage.h"
 
 // Two instances are made for the USB and internal storage respectively

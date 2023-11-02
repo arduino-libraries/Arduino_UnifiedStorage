@@ -45,7 +45,9 @@
 [[gnu::unused]] static void debugPrint(String s){
   #if defined(ARDUINO_UNIFIED_STORAGE_DEBUG)
     #if defined(HAS_SERIAL)
-      Serial.println(s);
+      if(Serial){
+        Serial.println(s);       
+      }
     #elif defined(HAS_RS485) && !defined(HAS_SERIAL)    
       debugPrintRS485(s);        
     #endif

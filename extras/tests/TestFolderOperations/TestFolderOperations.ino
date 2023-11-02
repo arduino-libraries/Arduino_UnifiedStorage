@@ -1,8 +1,6 @@
 
-
-#include <Arduino_UnifiedStorage.h>
-
 #define ARDUINO_UNIFIED_STORAGE_DEBUG
+#include <Arduino_UnifiedStorage.h>
 
 #if defined(HAS_USB)
 USBStorage usb = USBStorage();

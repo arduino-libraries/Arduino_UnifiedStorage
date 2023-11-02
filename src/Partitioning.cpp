@@ -26,7 +26,7 @@ bool Partitioning::isPartitionSchemeValid(BlockDeviceType * blockDevice, std::ve
     for (size_t i = 1; i < partitions.size() + 1; ++i) {
         Partition thisPartition = partitions[i - 1];
 
-        if(thisPartition.size % 64 == 0){
+        if(thisPartition.size < 0 && (thisPartition.size & (thisPartition.size - 1)) != 0){
             return false;
         }
         totalSize += thisPartition.size;
@@ -96,17 +96,21 @@ bool Partitioning::partitionDrive(BlockDeviceType * blockDevice, std::vector<Par
     blockDevice -> init();
 
     if(!isPartitionSchemeValid(blockDevice, partitions)){
+        blockDevice -> deinit();
         return false;
     }
 
     if(!eraseMBRSector(blockDevice)){
+        blockDevice -> deinit();
         return false;
     }
 
     if(!createAndFormatPartitions(blockDevice, partitions)){
+        blockDevice -> deinit();
         return false;
     }
 
+    blockDevice -> deinit();
     return true;
 }
 

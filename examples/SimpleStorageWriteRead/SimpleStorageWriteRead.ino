@@ -27,7 +27,14 @@
 
 */
 
+
 #include "Arduino_UnifiedStorage.h"
+
+// Redirect Serial.print*() output to GDB instead of SerialUSB where it would conflict with ThreadDebug.
+// NOTE: Calls to Serial.print*() will block waiting for GDB to be connected so only useful to use this redefine
+//       when actively debugging the program.
+
+
 
 void printFolderContents(Folder dir, int indentation = 0) {
   std::vector<Folder> directories = dir.getFolders();
@@ -57,15 +64,23 @@ void printFolderContents(Folder dir, int indentation = 0) {
 // Uncomment one of the three lines below to select between SD card, USB or internal storage
 //SDStorage unifiedStorage = SDStorage();             // Create an instance for interacting with SD card storage
 //USBStorage unifiedStorage = USBStorage()            // Create an instance for interacting with USB storage
-InternalStorage internalStorage = InternalStorage();// Create an instance for interacting with internal Flash storage (default)
+InternalStorage internalStorage = InternalStorage();
 
 void setup() {
+
+
   Serial.begin(115200);
   while (!Serial);
+
+
+
+  internalStorage = InternalStorage();
 
   if(!internalStorage.begin()){
     Serial.println("Error mounting storage device.");
   }
+
+
   
   // Create a root directory in storage device
   Folder root = internalStorage.getRootFolder();
