@@ -51,18 +51,18 @@ void printFolderContents(Folder dir, int indentation = 0) {
 // Uncomment one of the three lines below to select between SD card, USB or internal storage
 //SDStorage unifiedStorage = SDStorage();             // Create an instance for interacting with SD card storage
 //USBStorage unifiedStorage = USBStorage()            // Create an instance for interacting with USB storage
-InternalStorage internalStorage = InternalStorage();  // Create an instance for interacting with internal Flash storage (default)
+InternalStorage unifiedStorage = InternalStorage();  // Create an instance for interacting with internal Flash storage (default)
 
 void setup() {
   Serial.begin(115200);
   while (!Serial);
 
-  if(!internalStorage.begin(FS_FAT)){
+  if(!unifiedStorage.begin(FS_FAT)){
     Serial.println("Error mounting storage device.");
   }
   
   // Create a root directory in storage device
-  Folder root = internalStorage.getRootFolder();
+  Folder root = unifiedStorage.getRootFolder();
 
   // Create subdirectories inside the root directory
   Folder subdir1 = root.createSubfolder("subdir1");
@@ -113,7 +113,7 @@ void setup() {
   }
   Serial.println();
 
-  printFolderContents(internalStorage.getRootFolder());
+  printFolderContents(unifiedStorage.getRootFolder());
 }
 
 void loop() {
