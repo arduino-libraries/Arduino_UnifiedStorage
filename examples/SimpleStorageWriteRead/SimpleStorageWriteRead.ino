@@ -64,16 +64,15 @@ void printFolderContents(Folder dir, int indentation = 0) {
 // Uncomment one of the three lines below to select between SD card, USB or internal storage
 //SDStorage unifiedStorage = SDStorage();             // Create an instance for interacting with SD card storage
 //USBStorage unifiedStorage = USBStorage()            // Create an instance for interacting with USB storage
-InternalStorage internalStorage = InternalStorage();
+InternalStorage internalStorage;
 
 
 void setup() {
-
-  Arduino_UnifiedStorage::loggingEnabled = true;
-
   Serial.begin(115200);
   while (!Serial);
 
+  // toggle this to to true to enable logging output
+  Arduino_UnifiedStorage::loggingEnabled = false;
 
 
   internalStorage = InternalStorage();

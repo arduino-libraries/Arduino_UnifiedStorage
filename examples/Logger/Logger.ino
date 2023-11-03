@@ -35,8 +35,9 @@
 #endif
 
 
-InternalStorage internalStorage = InternalStorage();
-USBStorage usbStorage = USBStorage();
+InternalStorage internalStorage;
+USBStorage usbStorage;
+
 Folder backupFolder = Folder();
 bool usbIntialized = false;
 std::vector<String> sensorDataBuffer;
@@ -171,7 +172,6 @@ void backupToUSB() {
 
 
 void setup() {
-  //beginRS485(baudrate);
   randomSeed(analogRead(A0));
 
   #if !defined(ARDUINO_OPTA)
@@ -180,6 +180,12 @@ void setup() {
   #else
     beginRS485(115200);
   #endif
+
+  // toggle this to to true to enable logging output
+  Arduino_UnifiedStorage::loggingEnabled = false;
+
+  usbStorage = USBStorage();
+  internalStorage = InternalStorage();
 
   usbStorage.onConnect(connectionCallback);
   usbStorage.onDisconnect(disconnectionCallback);

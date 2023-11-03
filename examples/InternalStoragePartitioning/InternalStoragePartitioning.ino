@@ -36,8 +36,11 @@
 #include <vector>
 
 // Create a vector of partitions with one partition of 16MB using LittleFS
-std::vector<Partition> partitioningScheme  = {{2048, FS_FAT}, {6144, FS_FAT}, {8192, FS_LITTLEFS}};
-
+std::vector<Partition> partitioningScheme  = {   
+        {1024, FS_FAT}, // 1 MB for certificates
+        {5120, FS_FAT}, // 5 MB for OTA firmware updates
+        {8192, FS_LITTLEFS} // 8 MB for user data
+    };
 
 // Function to test writing to a file in the specified storage partition
 void testWriting(Arduino_UnifiedStorage *storage) {
@@ -95,9 +98,17 @@ void setup() {
     Serial.begin(115200);
     while (!Serial);
 
-    // Partition the storage with the specified partitions
-    InternalStorage::partition(partitioningScheme);
+    Arduino_UnifiedStorage::loggingEnabled = true;
 
+    // Partition the storage with the specified partitions
+    bool partitioned = InternalStorage::partition(partitioningScheme);
+
+    if(partitioned){
+        Serial.println("Succesfully partitioned the storage");
+    } else {
+        Serial.println("Failed to partition the storage, partition scheme probably invalid");
+        Serial.println("Turn on logging to see more details");
+    }
     // Test all partitions
     testAllPartitions(partitioningScheme);
 

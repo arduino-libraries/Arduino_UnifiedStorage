@@ -36,7 +36,7 @@ constexpr boolean createFakeFiles = true;
 boolean done = false;
 volatile boolean connected = false;
 
-USBStorage thumbDrive = USBStorage();
+USBStorage thumbDrive;
 
 
 void addSomeFakeFiles(Folder * folder){
@@ -72,14 +72,6 @@ void move(Folder * source, Folder * dest){
 }
 
 
-void onConnected(){
-    connected = true;
-}
-
-void onDisconnected(){
-    connected = false;
-}
-
 
 
 
@@ -89,45 +81,49 @@ void setup(){
     Serial.begin(115200);
     while(!Serial);
 
-    Serial.println("USB Thumb Drive has been inserted");
-        bool thumbMounted = thumbDrive.begin(FS_FAT);
-        if(thumbMounted){
-            Serial.println("USB Thumb Drive has been mounted");
+    // toggle this to to true to enable logging output
+    Arduino_UnifiedStorage::loggingEnabled = false;
 
-            Folder thumbRoot = thumbDrive.getRootFolder();
-            String folderName = "InternalBackup_" + String(millis());
-            Serial.println(folderName);
-            Folder backupFolder = thumbRoot.createSubfolder(folderName);
+    thumbDrive = USBStorage();
 
-            int partitionIndex = 0;
+    bool thumbMounted = thumbDrive.begin(FS_FAT);
+    if(thumbMounted){
+        Serial.println("USB Thumb Drive has been mounted");
 
-            std::vector<Partition> partitions = InternalStorage::readPartitions();
-            Serial.println("Found " + String(partitions.size()) + " partitions on internalStorage \n");
+        Folder thumbRoot = thumbDrive.getRootFolder();
+        String folderName = "InternalBackup_" + String(millis());
+        Serial.println(folderName);
+        Folder backupFolder = thumbRoot.createSubfolder(folderName);
 
-            for (auto part: partitions){
-                partitionIndex++;
-                const char * partitionName = createPartitionName(partitionIndex);
-                Folder thisPartitionBackupFolder = backupFolder.createSubfolder(partitionName);
+        int partitionIndex = 0;
 
-                InternalStorage thisPartition = InternalStorage(partitionIndex, partitionName, part.fileSystemType);
-                thisPartition.begin();
+        std::vector<Partition> partitions = InternalStorage::readPartitions();
+        Serial.println("Found " + String(partitions.size()) + " partitions on internalStorage \n");
 
-                Folder partitionRootFolder = thisPartition.getRootFolder();
-                Serial.println(partitionRootFolder.getPathAsString());
+        for (auto part: partitions){
+            partitionIndex++;
+            const char * partitionName = createPartitionName(partitionIndex);
+            Folder thisPartitionBackupFolder = backupFolder.createSubfolder(partitionName);
 
-                if(createFakeFiles){
-                    addSomeFakeFiles(&partitionRootFolder);
-                }
+            InternalStorage thisPartition = InternalStorage(partitionIndex, partitionName, part.fileSystemType);
+            thisPartition.begin();
 
-                move(&partitionRootFolder, &thisPartitionBackupFolder);
-                thisPartition.unmount();
+            Folder partitionRootFolder = thisPartition.getRootFolder();
+            Serial.println(partitionRootFolder.getPathAsString());
+
+            if(createFakeFiles){
+                addSomeFakeFiles(&partitionRootFolder);
             }
 
-            thumbDrive.unmount();
-     
-
-            Serial.println("DONE, you can restart the board now");
+            move(&partitionRootFolder, &thisPartitionBackupFolder);
+            thisPartition.unmount();
         }
+
+        thumbDrive.unmount();
+    
+
+        Serial.println("DONE, you can restart the board now");
+    }
 
 
 }

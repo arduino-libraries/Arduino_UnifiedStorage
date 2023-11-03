@@ -84,7 +84,7 @@ bool Folder::rename(const char* newDirname) {
     if (result == 0) {
         // Update the internal directory path
         this->path = newPath;
-        Arduino_UnifiedStorage::debugPrint("[Folder][rename][INFO] Succesfully renamed folder: " + String(this->path.c_str()));
+        Arduino_UnifiedStorage::debugPrint("[Folder][rename][INFO] Successfully renamed folder: " + String(this->path.c_str()));
         return true;
     } else {
         // Error occurred while renaming the directory

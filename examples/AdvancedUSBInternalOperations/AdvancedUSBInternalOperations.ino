@@ -22,13 +22,11 @@
     https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/SimpleStorageWriteRead/SimpleStorageWriteRead.ino
 
 */
-
-#define ARDUINO_UNIFIED_STORAGE_DEBUG
 #include "Arduino_UnifiedStorage.h"
 
 // Two instances are made for the USB and internal storage respectively
-USBStorage usbStorage = USBStorage();
-InternalStorage internalStorage = InternalStorage();
+USBStorage usbStorage;
+InternalStorage internalStorage;
 
 
 // Helper function to prints the contents of a folder, including subdirectories (marked as "[D]") and files (marked as "[F]").
@@ -61,6 +59,12 @@ void printFolderContents(Folder dir, int indentation = 0) {
 void setup() {
   Serial.begin(115200);
   while (!Serial);
+
+  // toggle this to to true to enable logging output
+  Arduino_UnifiedStorage::loggingEnabled = false;
+
+  usbStorage = USBStorage();
+  internalStorage = InternalStorage();
 
   // Mount the USB storage
   if(usbStorage.begin()){

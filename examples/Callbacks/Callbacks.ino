@@ -14,7 +14,6 @@
 */
 
 
-
 #include "Arduino_UnifiedStorage.h"
 
 #if defined(ARDUINO_PORTENTA_H7_M7)
@@ -42,5 +41,4 @@ void setup(){
 }
 
 void loop(){
-
 }

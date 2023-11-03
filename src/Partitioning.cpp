@@ -8,9 +8,9 @@ bool Partitioning::eraseMBRSector(BlockDeviceType * blockDevice)
     memset(buffer, 0xFF, sizeof(buffer));
 
     if(blockDevice-> program(buffer, 0, sizeof(buffer)) == 0){
-        Arduino_UnifiedStorage::debugPrint("[Partitioning][INFO] MBR Sector Erased");
+        Arduino_UnifiedStorage::debugPrint("[Partitioning][eraseMBRSector][INFO] MBR Sector Erased");
         if(blockDevice -> erase(0, mbrBlockSize) == 0){
-            Arduino_UnifiedStorage::debugPrint("Partitioing][INFO] MBR Sector Erased");
+            Arduino_UnifiedStorage::debugPrint("[Partitioning][eraseMBRSector][INFO] MBR Sector Erased");
             return true;
         } else {
             return false;
@@ -34,10 +34,10 @@ bool Partitioning::isPartitionSchemeValid(BlockDeviceType * blockDevice, std::ve
     }
 
     if(totalSize <= driveSize && partitions.size() <= maximumMBRPartitions){
-        Arduino_UnifiedStorage::debugPrint("[Partitioning][INFO] Partitioning Scheme is Valid");
+        Arduino_UnifiedStorage::debugPrint("[Partitioning][isPartitioningSchemeValid][INFO] Partitioning Scheme is Valid");
         return true;
     } else {
-        Arduino_UnifiedStorage::debugPrint("[Partitioning][INFO] Partitioning Scheme is Invalid");
+        Arduino_UnifiedStorage::debugPrint("[Partitioning][isPartitioningSchemeValid][INFO] Partitioning Scheme is Invalid");
         return false;
     }
 }
