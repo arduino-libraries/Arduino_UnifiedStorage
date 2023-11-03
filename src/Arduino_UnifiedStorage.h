@@ -5,12 +5,14 @@
 #include "Arduino.h"
 #include "Arduino_POSIXStorage.h"
 #include "Boards.h"
+
 #include "Utils.h"
 #include "Types.h"
 #include "Partitioning.h"
 
 #include "Folder.h"
 #include "UFile.h"
+
 
 /**
  * Abstract class representing the common features of the supported storage methods 
@@ -48,6 +50,9 @@ class Arduino_UnifiedStorage {
          * @return true if successful, false if failed.
          */
         virtual bool format(FileSystems fs) = 0;
+
+
+        static bool loggingEnabled;
 
 };
 

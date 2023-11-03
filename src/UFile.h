@@ -2,6 +2,7 @@
 #define File_H
 
 #include <Arduino.h>
+#include "Arduino_UnifiedStorage.h"
 #include <string.h>
 #include <vector>
 #include "Utils.h"

@@ -4,7 +4,6 @@
 #define USBStorage_H
 
 #include "Arduino_UnifiedStorage.h"
-
 /**
  * USBStorage class provides an interface to access USB storage devices.
  * It inherits from the Arduino_UnifiedStorage class and implements its pure virtual functions.

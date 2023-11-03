@@ -5,7 +5,6 @@
 
 #include "Arduino_UnifiedStorage.h"
 
-
 /**
  * Represents an SD card storage using the Arduino Unified Storage library.
  */

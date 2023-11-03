@@ -3,6 +3,7 @@
 #define PATH_MAX_LENGTH 255
 
 #include "Arduino.h"
+#include "Arduino_UnifiedStorage.h"
 #include "Arduino_POSIXStorage.h"
 #include <iostream>
 
@@ -43,7 +44,8 @@
 #endif
 
 [[gnu::unused]] static void debugPrint(String s){
-  #if defined(ARDUINO_UNIFIED_STORAGE_DEBUG)
+
+  if (Arduino_UnifiedStorage::loggingEnabled == true){
     #if defined(HAS_SERIAL)
       if(Serial){
         Serial.println(s);       
@@ -51,7 +53,7 @@
     #elif defined(HAS_RS485) && !defined(HAS_SERIAL)    
       debugPrintRS485(s);        
     #endif
-  #endif
+  }
 }
 
 [[gnu::unused]] static const char* createPartitionName(int number) {

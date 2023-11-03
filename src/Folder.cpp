@@ -1,3 +1,4 @@
+#include "Arduino_UnifiedStorage.h"
 #include "Folder.h"
 #include <cstdio>
 #include <cstring>

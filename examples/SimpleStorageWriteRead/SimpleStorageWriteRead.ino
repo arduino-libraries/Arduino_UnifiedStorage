@@ -27,13 +27,13 @@
 
 */
 
-
 #include "Arduino_UnifiedStorage.h"
+
+
 
 // Redirect Serial.print*() output to GDB instead of SerialUSB where it would conflict with ThreadDebug.
 // NOTE: Calls to Serial.print*() will block waiting for GDB to be connected so only useful to use this redefine
 //       when actively debugging the program.
-
 
 
 void printFolderContents(Folder dir, int indentation = 0) {
@@ -66,8 +66,10 @@ void printFolderContents(Folder dir, int indentation = 0) {
 //USBStorage unifiedStorage = USBStorage()            // Create an instance for interacting with USB storage
 InternalStorage internalStorage = InternalStorage();
 
+
 void setup() {
 
+  Arduino_UnifiedStorage::loggingEnabled = true;
 
   Serial.begin(115200);
   while (!Serial);
