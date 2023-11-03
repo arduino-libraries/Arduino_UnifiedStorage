@@ -53,9 +53,11 @@ class Arduino_UnifiedStorage {
         virtual bool format(FileSystems fs) = 0;
 
 
-        static bool loggingEnabled;
+        static bool debuggingModeEnabled;
 
         static void debugPrint(String message);
+
+        static void testPrint(String message);
 
 };
 

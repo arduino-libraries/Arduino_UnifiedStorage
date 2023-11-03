@@ -181,8 +181,8 @@ void setup() {
     beginRS485(115200);
   #endif
 
-  // toggle this to to true to enable logging output
-  Arduino_UnifiedStorage::loggingEnabled = false;
+  // toggle this to enable debugging output
+  Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
   usbStorage = USBStorage();
   internalStorage = InternalStorage();

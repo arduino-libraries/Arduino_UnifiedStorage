@@ -19,12 +19,12 @@ InternalStorage internal = InternalStorage();
 bool testFolderCreation(Folder root) {
   Folder subfolder = root.createSubfolder("test_folder");
   if (subfolder.exists()) {
-    Arduino_UnifiedStorage::debugPrint("\n--- Test creating folder using root.createSubfolder ---");
-    Arduino_UnifiedStorage::debugPrint("Test creating folder using root.createSubfolder - Success");
+    Arduino_UnifiedStorage::testPrint("\n--- Test creating folder using root.createSubfolder ---");
+    Arduino_UnifiedStorage::testPrint("Test creating folder using root.createSubfolder - Success");
     subfolder.remove();
     return true;
   } else {
-    Arduino_UnifiedStorage::debugPrint("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::testPrint("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -32,18 +32,18 @@ bool testFolderCreation(Folder root) {
 bool testFolderRenaming(Folder root) {
   Folder sourceFolder = root.createSubfolder("source_folder");
   if (sourceFolder.exists()) {
-    Arduino_UnifiedStorage::debugPrint("\n--- Test renaming folder ---");
-    Arduino_UnifiedStorage::debugPrint("Source folder name: " + String(sourceFolder.getPathAsString()));
+    Arduino_UnifiedStorage::testPrint("\n--- Test renaming folder ---");
+    Arduino_UnifiedStorage::testPrint("Source folder name: " + String(sourceFolder.getPathAsString()));
     if (sourceFolder.rename("renamed_folder")) {
-      Arduino_UnifiedStorage::debugPrint("Folder renamed to: " + String(sourceFolder.getPathAsString()));
+      Arduino_UnifiedStorage::testPrint("Folder renamed to: " + String(sourceFolder.getPathAsString()));
       sourceFolder.remove();
       return true;
     } else {
-      Arduino_UnifiedStorage::debugPrint("Folder renaming failed. Error: " + String(getErrno()));
+      Arduino_UnifiedStorage::testPrint("Folder renaming failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    Arduino_UnifiedStorage::debugPrint("Test folder renaming - Failed. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::testPrint("Test folder renaming - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -53,24 +53,24 @@ bool testCopyingFolder(Folder root) {
   Folder copyDestination = root.createSubfolder("copy_destination");
 
   if (sourceFolder.exists()) {
-    Arduino_UnifiedStorage::debugPrint("\n--- Test copying a folder ---");
-    Arduino_UnifiedStorage::debugPrint("Source folder name: " + String(sourceFolder.getPathAsString()));
-    Arduino_UnifiedStorage::debugPrint("Destination folder name: " + String(copyDestination.getPathAsString()));
+    Arduino_UnifiedStorage::testPrint("\n--- Test copying a folder ---");
+    Arduino_UnifiedStorage::testPrint("Source folder name: " + String(sourceFolder.getPathAsString()));
+    Arduino_UnifiedStorage::testPrint("Destination folder name: " + String(copyDestination.getPathAsString()));
 
    
 
     if (sourceFolder.copyTo(copyDestination, true)) {
-      Arduino_UnifiedStorage::debugPrint("Folder copied successfully!");
+      Arduino_UnifiedStorage::testPrint("Folder copied successfully!");
       sourceFolder.remove();
       copyDestination.remove();
       return true;
     } else {
-      Arduino_UnifiedStorage::debugPrint("Folder copying failed. Error: " + String(getErrno()));
+      Arduino_UnifiedStorage::testPrint("Folder copying failed. Error: " + String(getErrno()));
       sourceFolder.remove();
       return false;
     }
   } else {
-    Arduino_UnifiedStorage::debugPrint("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::testPrint("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -82,20 +82,20 @@ bool testMovingFolder(Folder root) {
   Folder moveDestination = root.createSubfolder("move_destination");
 
   if (sourceFolderMove.exists()) {
-    Arduino_UnifiedStorage::debugPrint("\n--- Test moving a folder ---");
-    Arduino_UnifiedStorage::debugPrint("Source folder name: " + String(sourceFolderMove.getPathAsString()));
-    Arduino_UnifiedStorage::debugPrint("Destination folder name: " + String(moveDestination.getPathAsString()));
+    Arduino_UnifiedStorage::testPrint("\n--- Test moving a folder ---");
+    Arduino_UnifiedStorage::testPrint("Source folder name: " + String(sourceFolderMove.getPathAsString()));
+    Arduino_UnifiedStorage::testPrint("Destination folder name: " + String(moveDestination.getPathAsString()));
     if (sourceFolderMove.moveTo(moveDestination)) {
-      Arduino_UnifiedStorage::debugPrint("Folder moved successfully!");
+      Arduino_UnifiedStorage::testPrint("Folder moved successfully!");
       sourceFolderMove.remove();
       moveDestination.remove();
       return true;
     } else {
-      Arduino_UnifiedStorage::debugPrint("Folder moving failed. Error: " + String(getErrno()));
+      Arduino_UnifiedStorage::testPrint("Folder moving failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    Arduino_UnifiedStorage::debugPrint("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::testPrint("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 
@@ -107,9 +107,7 @@ bool testMovingFolder(Folder root) {
 void runTests(Arduino_UnifiedStorage * storage, String storageType) {
     if (storage->begin()) {
         Folder root = storage->getRootFolder();
-
-
-        Arduino_UnifiedStorage::debugPrint("========= Folder Tests =========");
+        Arduino_UnifiedStorage::testPrint("========= Folder Tests =========");
 
         testFolderCreation(root);
         testFolderRenaming(root);
@@ -117,7 +115,7 @@ void runTests(Arduino_UnifiedStorage * storage, String storageType) {
         testMovingFolder(root);
 
         storage->unmount();
-        Arduino_UnifiedStorage::debugPrint("");
+        Arduino_UnifiedStorage::testPrint("");
     }
 }
 
@@ -128,6 +126,9 @@ void setup(){
     #elif defined(ARDUINO_OPTA)
         beginRS485(115200);
     #endif 
+
+    // toggle this to enable debugging output
+    Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
     #if defined(HAS_QSPI)
         runTests(&internal, "QSPI");

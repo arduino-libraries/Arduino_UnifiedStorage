@@ -81,16 +81,16 @@ bool USBStorage::isMounted(){
 
 bool USBStorage::format(FileSystems fs){
     int err = 0;
-    Arduino_UnifiedStorage::debugPrint("[USBStorage][format][INFO] Mounting SD drive");
+    Arduino_UnifiedStorage::debugPrint("[USBStorage][format][INFO] Mounting USB drive");
     this->begin();
-    Arduino_UnifiedStorage::debugPrint("[USBStorage][format][INFO] Unmounting SD drive");
+    Arduino_UnifiedStorage::debugPrint("[USBStorage][format][INFO] Unmounting USB drive");
     this->unmount();
     this->fileSystemType = fs;
     err = mkfs(DEV_USB, fs);
     if(err != 0){
-        Arduino_UnifiedStorage::debugPrint("[USBStorage][format][ERROR] Error formatting SD card: " + String(errno));
+        Arduino_UnifiedStorage::debugPrint("[USBStorage][format][ERROR] Error formatting USB drive: " + String(errno));
     } else {
-        Arduino_UnifiedStorage::debugPrint("[USBStorage][format][INFO] SD card formatted successfully");
+        Arduino_UnifiedStorage::debugPrint("[USBStorage][format][INFO] USB card formatted successfully");
     }
     return err == 0;
 }

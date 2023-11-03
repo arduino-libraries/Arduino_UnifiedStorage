@@ -71,8 +71,8 @@ void setup() {
   Serial.begin(115200);
   while (!Serial);
 
-  // toggle this to to true to enable logging output
-  Arduino_UnifiedStorage::loggingEnabled = false;
+  // toggle this to enable debugging output
+  Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
 
   internalStorage = InternalStorage();

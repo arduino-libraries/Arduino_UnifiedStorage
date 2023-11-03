@@ -98,13 +98,13 @@ void setup() {
     Serial.begin(115200);
     while (!Serial);
 
-    Arduino_UnifiedStorage::loggingEnabled = true;
+    Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
     // Partition the storage with the specified partitions
     bool partitioned = InternalStorage::partition(partitioningScheme);
 
     if(partitioned){
-        Serial.println("Succesfully partitioned the storage");
+        Serial.println("Successfully partitioned the storage");
     } else {
         Serial.println("Failed to partition the storage, partition scheme probably invalid");
         Serial.println("Turn on logging to see more details");
