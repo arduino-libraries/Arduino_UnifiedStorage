@@ -6,12 +6,13 @@
 #include "Arduino_POSIXStorage.h"
 #include "Boards.h"
 
-#include "Utils.h"
+
 #include "Types.h"
 #include "Partitioning.h"
 
 #include "Folder.h"
 #include "UFile.h"
+
 
 
 /**
@@ -53,6 +54,8 @@ class Arduino_UnifiedStorage {
 
 
         static bool loggingEnabled;
+
+        static void debugPrint(String message);
 
 };
 

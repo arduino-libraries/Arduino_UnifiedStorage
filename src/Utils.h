@@ -7,6 +7,7 @@
 #include "Arduino_POSIXStorage.h"
 #include <iostream>
 
+
 [[gnu::unused]] static String prettyPrintFileSystemType(FileSystems f){
     if(f == 0) return "FAT";
     else if(f == 1) return "LitlleFS";
@@ -44,6 +45,7 @@
 #endif
 
 [[gnu::unused]] static void debugPrint(String s){
+  /*
 
   if (Arduino_UnifiedStorage::loggingEnabled == true){
     #if defined(HAS_SERIAL)
@@ -53,8 +55,12 @@
     #elif defined(HAS_RS485) && !defined(HAS_SERIAL)    
       debugPrintRS485(s);        
     #endif
+    
   }
+
+  */
 }
+
 
 [[gnu::unused]] static const char* createPartitionName(int number) {
     if (number < 1 || number > 26) {
@@ -224,6 +230,6 @@
     }
 }
 
-enum FileMode { READ, WRITE, APPEND };
+
 
 #endif 

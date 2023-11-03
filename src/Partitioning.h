@@ -1,7 +1,10 @@
 
+#ifndef PARTITIONING_H
+#define PARTITIONING_H
+
 #include "Arduino.h"
 #include "Types.h"
-#include "Arduino_UnifiedStorage.h"
+#include "Arduino_POSIXStorage.h"
 #include <vector>
 
 
@@ -103,3 +106,5 @@ class Partitioning{
         static bool createAndFormatPartitions(BlockDeviceType * blockDevice, std::vector<Partition> partitions);
        
 };
+
+#endif

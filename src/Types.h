@@ -1,5 +1,9 @@
+#ifndef TYPES_H
+#define TYPES_H
 
 #include "Boards.h"
+
+enum FileMode { READ, WRITE, APPEND };
 
 #if defined(USES_RENESAS_CORE)
     #include "BlockDevice.h"
@@ -27,3 +31,5 @@
     typedef mbed::LittleFileSystem LittleFileSystemType;
     typedef mbed::FileSystem FileSystemType;
 #endif 
+
+#endif  // TYPES_H

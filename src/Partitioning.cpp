@@ -1,5 +1,6 @@
 #include <Partitioning.h>
 #include "Utils.h"
+#include "Arduino_UnifiedStorage.h"
 
 bool Partitioning::eraseMBRSector(BlockDeviceType * blockDevice)
 {
@@ -7,9 +8,9 @@ bool Partitioning::eraseMBRSector(BlockDeviceType * blockDevice)
     memset(buffer, 0xFF, sizeof(buffer));
 
     if(blockDevice-> program(buffer, 0, sizeof(buffer)) == 0){
-        debugPrint("[Partitioning][INFO] MBR Sector Erased");
+        Arduino_UnifiedStorage::debugPrint("[Partitioning][INFO] MBR Sector Erased");
         if(blockDevice -> erase(0, mbrBlockSize) == 0){
-            debugPrint("Partitioing][INFO] MBR Sector Erased");
+            Arduino_UnifiedStorage::debugPrint("Partitioing][INFO] MBR Sector Erased");
             return true;
         } else {
             return false;
@@ -33,16 +34,16 @@ bool Partitioning::isPartitionSchemeValid(BlockDeviceType * blockDevice, std::ve
     }
 
     if(totalSize <= driveSize && partitions.size() <= maximumMBRPartitions){
-        debugPrint("[Partitioning][INFO] Partitioning Scheme is Valid");
+        Arduino_UnifiedStorage::debugPrint("[Partitioning][INFO] Partitioning Scheme is Valid");
         return true;
     } else {
-        debugPrint("[Partitioning][INFO] Partitioning Scheme is Invalid");
+        Arduino_UnifiedStorage::debugPrint("[Partitioning][INFO] Partitioning Scheme is Invalid");
         return false;
     }
 }
 
 bool Partitioning::formatPartition(BlockDeviceType * blockDevice, int partitionNumber, FileSystems fileSystemType){
-    debugPrint("[Partitioning][formatPartition][INFO] Formatting partition " + String(partitionNumber));
+    Arduino_UnifiedStorage::debugPrint("[Partitioning][formatPartition][INFO] Formatting partition " + String(partitionNumber));
     MBRBlockDeviceType * thisPartition;
     thisPartition = new MBRBlockDeviceType(blockDevice, partitionNumber);
     if(thisPartition != NULL){
@@ -56,16 +57,16 @@ bool Partitioning::formatPartition(BlockDeviceType * blockDevice, int partitionN
         }
 
         if(thisFileSystem->reformat(thisPartition) == 0){
-            debugPrint("[Partitioning][formatPartition][INFO] Partition " + String(partitionNumber) + " formatted successfully");
+            Arduino_UnifiedStorage::debugPrint("[Partitioning][formatPartition][INFO] Partition " + String(partitionNumber) + " formatted successfully");
             delete(thisFileSystem);
             delete(thisPartition);
             return true;
         } else {
-            debugPrint("[Partitioning][formatPartition][ERROR] Failed to format partition " + String(partitionNumber));
+            Arduino_UnifiedStorage::debugPrint("[Partitioning][formatPartition][ERROR] Failed to format partition " + String(partitionNumber));
             return false;
         }
     } else {
-         debugPrint("[Partitioning][formatPartition][ERROR] Failed to create MBRBlockDeviceType for partition " + String(partitionNumber));
+         Arduino_UnifiedStorage::debugPrint("[Partitioning][formatPartition][ERROR] Failed to create MBRBlockDeviceType for partition " + String(partitionNumber));
          return false;
     }
 }
@@ -80,7 +81,7 @@ bool Partitioning::createAndFormatPartitions(BlockDeviceType * blockDevice, std:
         int thisPartitionEnd = (currentPartition.size * 1024) + lastPartitionEnd;
 
         if(MBRBlockDeviceType::partition(blockDevice, i, mbrPartitionType, lastPartitionEnd, thisPartitionEnd) == 0){
-            debugPrint("[Partitioning][INFO] Partition " + String(i) + " created");
+            Arduino_UnifiedStorage::debugPrint("[Partitioning][INFO] Partition " + String(i) + " created");
             success &= formatPartition(blockDevice, i, currentPartition.fileSystemType); // use bitwise AND to check if all partitions are successful
         } else {
             success = false;
@@ -119,7 +120,7 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
     
     auto returnCode = blockDevice->init();
     if (returnCode) {
-        debugPrint("[Partitioning][readPartitions][ERROR] Unable to read the Block Device.");
+        Arduino_UnifiedStorage::debugPrint("[Partitioning][readPartitions][ERROR] Unable to read the Block Device.");
         return partitions;
     }
 
@@ -133,7 +134,7 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
 
     returnCode = blockDevice->read(buffer, 512 - buffer_size, buffer_size);
     if (returnCode) {
-        debugPrint("[Partitioning][readPartitions][ERROR] Unable to read the Master Boot Record");
+        Arduino_UnifiedStorage::debugPrint("[Partitioning][readPartitions][ERROR] Unable to read the Master Boot Record");
 
         delete[] buffer;
         return partitions;
@@ -144,7 +145,7 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
     
     if (table->signature[0] != mbrMagicNumbers[0] || table->signature[1] != mbrMagicNumbers[1]) {
  
-        debugPrint("[Partitioning][readPartitions][INFO] MBR Not Found - Flash Memory doesn't have partitions.");
+        Arduino_UnifiedStorage::debugPrint("[Partitioning][readPartitions][INFO] MBR Not Found - Flash Memory doesn't have partitions.");
         delete[] buffer;
         return partitions;
     }
@@ -171,18 +172,18 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
         LittleFileSystemType * littleFsProbeFilesystem =  new LittleFileSystemType("probing");
     
         if(fatProbeFileSystem -> mount(mbrBlocKDevice) == 0){
-            debugPrint("[Partitioning][readPartitions][INFO] Partition " + String(partitionIndex) + " is formatted with FAT file system");
+            Arduino_UnifiedStorage::debugPrint("[Partitioning][readPartitions][INFO] Partition " + String(partitionIndex) + " is formatted with FAT file system");
             fatProbeFileSystem -> unmount();
             partition.fileSystemType = FS_FAT;
             partitions.push_back(partition);
             
         } else if (littleFsProbeFilesystem -> mount(mbrBlocKDevice) == 0){
-            debugPrint("[Partitioning][readPartitions][INFO] Partition " + String(partitionIndex) + " is formatted with LittleFS file system");
+            Arduino_UnifiedStorage::debugPrint("[Partitioning][readPartitions][INFO] Partition " + String(partitionIndex) + " is formatted with LittleFS file system");
             littleFsProbeFilesystem -> unmount();
             partition.fileSystemType = FS_LITTLEFS;
             partitions.push_back(partition);
         } else {
-            debugPrint("[Partitioning][readPartitions][INFO] Partition " + String(partitionIndex) + " is not formatted with a recognized file system");
+            Arduino_UnifiedStorage::debugPrint("[Partitioning][readPartitions][INFO] Partition " + String(partitionIndex) + " is not formatted with a recognized file system");
         }
  
     }

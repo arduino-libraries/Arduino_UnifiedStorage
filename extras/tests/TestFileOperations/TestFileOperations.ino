@@ -21,28 +21,28 @@ bool testFileCreationWithOpen(Folder root) {
   String path = root.getPathAsString() + "/test_open.txt";
   debugPrint(path);
   if (file.open(path, FileMode::WRITE)) {
-    debugPrint("--- Test creating file using file.open ---");
-    debugPrint("Test creating file using file.open - Success");
+    Arduino_UnifiedStorage::debugPrint("--- Test creating file using file.open ---");
+    Arduino_UnifiedStorage::debugPrint("Test creating file using file.open - Success");
     file.close();
     file.remove();
     return true;
   } else {
-    debugPrint("Test creating file using file.open - Failed. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::debugPrint("Test creating file using file.open - Failed. Error: " + String(getErrno()));
     return false;
   }
 
 }
 
 bool testFileCreationWithCreate(Folder root) {
-  debugPrint("--- Test creating file using root.createFile ---");
+  Arduino_UnifiedStorage::debugPrint("--- Test creating file using root.createFile ---");
   UFile file = root.createFile("test_create.txt", FileMode::WRITE);
   if (file.exists()) {
-    debugPrint("Test creating file using root.createFile - Success");
+    Arduino_UnifiedStorage::debugPrint("Test creating file using root.createFile - Success");
     file.close();
     file.remove();
     return true;
   } else {
-    debugPrint("Test creating file using root.createFile - Failed. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::debugPrint("Test creating file using root.createFile - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -50,14 +50,14 @@ bool testFileCreationWithCreate(Folder root) {
 bool testWritingCharBuffer(Folder root) {
   UFile file = root.createFile("test_write.txt", FileMode::WRITE);
   if (file.exists()) {
-    debugPrint("--- Test writing char * buffer ---");
+    Arduino_UnifiedStorage::debugPrint("--- Test writing char * buffer ---");
     size_t bytesWritten = file.write(reinterpret_cast<const uint8_t*>("Hello, World!"), 13);
-    debugPrint("Bytes written to file: " + String(bytesWritten));
+    Arduino_UnifiedStorage::debugPrint("Bytes written to file: " + String(bytesWritten));
     file.close();
     file.remove();
     return bytesWritten == 13;
   } else {
-    debugPrint("Test writing char * buffer - Failed. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::debugPrint("Test writing char * buffer - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -65,16 +65,16 @@ bool testWritingCharBuffer(Folder root) {
 bool testWritingWithString(Folder root) {
   UFile file = root.createFile("test_write_string.txt", FileMode::WRITE);
   if (file.exists()) {
-    debugPrint("--- Test writing String ---");
+    Arduino_UnifiedStorage::debugPrint("--- Test writing String ---");
     String data = " This is a test with String data.";
     size_t bytesWritten = file.write(data);
-    debugPrint("Bytes written to file (with String): " + String(bytesWritten));
+    Arduino_UnifiedStorage::debugPrint("Bytes written to file (with String): " + String(bytesWritten));
     file.close();
     file.remove();
     return true;
 
   } else {
-    debugPrint("Test writing with String data type - Failed. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::debugPrint("Test writing with String data type - Failed. Error: " + String(getErrno()));
     return false;
   }
   
@@ -83,15 +83,15 @@ bool testWritingWithString(Folder root) {
 bool testAppending(Folder root) {
   UFile file = root.createFile("test_append.txt", FileMode::WRITE);
   if (file.exists()) {
-    debugPrint("--- Test appending ---");
+    Arduino_UnifiedStorage::debugPrint("--- Test appending ---");
     String data = " Appending some more data.";
     size_t bytesWritten = file.write(reinterpret_cast<const uint8_t*>(data.c_str()), data.length());
-    debugPrint("Bytes written to file (appending): " + String(bytesWritten));
+    Arduino_UnifiedStorage::debugPrint("Bytes written to file (appending): " + String(bytesWritten));
     file.close();
     file.remove();
     return true;
   } else {
-    debugPrint("Test appending to the file - Failed. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::debugPrint("Test appending to the file - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -106,19 +106,19 @@ bool testReadingAll(Folder root) {
       char buffer[file.available()];
       size_t bytesRead = file.read(reinterpret_cast<uint8_t*>(buffer), sizeof(buffer));
       buffer[bytesRead] = '\0'; // Null-terminate the string
-      debugPrint("--- Test reading everything from the file ---");
-      debugPrint("Read from file (test_read.txt): " + String(buffer));
+      Arduino_UnifiedStorage::debugPrint("--- Test reading everything from the file ---");
+      Arduino_UnifiedStorage::debugPrint("Read from file (test_read.txt): " + String(buffer));
       file.close();
 
       file.remove();
 
       return true;
     } else {
-      debugPrint("Test reading everything from the file - Failed. Error: " + String(getErrno()));
+      Arduino_UnifiedStorage::debugPrint("Test reading everything from the file - Failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    debugPrint("Test reading everything from the file - Failed to create file. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::debugPrint("Test reading everything from the file - Failed to create file. Error: " + String(getErrno()));
     return false;
   
   }
@@ -135,21 +135,21 @@ bool testSeeking(Folder root) {
  
 
     if (file.open(root.getPathAsString() + "/test_seek.txt", FileMode::READ)) {
-      debugPrint("--- Test seeking file ---");
+      Arduino_UnifiedStorage::debugPrint("--- Test seeking file ---");
       file.seek(7);
       char buffer[20];
       size_t bytesRead = file.read(reinterpret_cast<uint8_t*>(buffer), sizeof(buffer));
       buffer[bytesRead] = '\0'; // Null-terminate the string
-      debugPrint("Read after seeking: " + String(buffer));
+      Arduino_UnifiedStorage::debugPrint("Read after seeking: " + String(buffer));
       file.close();
       file.remove();
       return true;
     } else {
-      debugPrint("Test seeking in the file - Failed. Error: " + String(getErrno()));
+      Arduino_UnifiedStorage::debugPrint("Test seeking in the file - Failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    debugPrint("Test seeking in the file - Failed to create file. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::debugPrint("Test seeking in the file - Failed to create file. Error: " + String(getErrno()));
     return false;
   }
   
@@ -162,18 +162,18 @@ bool testAvailableData(Folder root) {
     file.close();
 
     if (file.open(root.getPathAsString() + "/test_available.txt", FileMode::READ)) {
-      debugPrint("--- Test available data ---");
+      Arduino_UnifiedStorage::debugPrint("--- Test available data ---");
       int availableBytes = file.available();
-      debugPrint("Available bytes in file (test_available.txt): " + String(availableBytes));
+      Arduino_UnifiedStorage::debugPrint("Available bytes in file (test_available.txt): " + String(availableBytes));
       file.close();
       file.remove();
       return true;
     } else {
-      debugPrint("Test checking available data in the file - Failed. Error: " + String(getErrno()));
+      Arduino_UnifiedStorage::debugPrint("Test checking available data in the file - Failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    debugPrint("Test checking available data in the file - Failed to create file. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::debugPrint("Test checking available data in the file - Failed to create file. Error: " + String(getErrno()));
     return false;
   }
 
@@ -190,26 +190,26 @@ bool testCopyingFile(Folder root) {
     Folder destinationFolder = root.createSubfolder("test_folder_copy");
 
     if (destinationFolder.exists()) {
-        debugPrint("--- Test copying a file ---");
-        debugPrint("Source file name: " + String(sourceFile.getPathAsString()));
+        Arduino_UnifiedStorage::debugPrint("--- Test copying a file ---");
+        Arduino_UnifiedStorage::debugPrint("Source file name: " + String(sourceFile.getPathAsString()));
         
         if (sourceFile.copyTo(destinationFolder)) {
-          debugPrint("File copied successfully!");
+          Arduino_UnifiedStorage::debugPrint("File copied successfully!");
           sourceFile.close();
           sourceFile.remove();
           destinationFolder.remove();
           return true;
         } else {
-          debugPrint("File copying failed. Error: " + String(getErrno()));
+          Arduino_UnifiedStorage::debugPrint("File copying failed. Error: " + String(getErrno()));
           return false;
         }
       } else {
-        debugPrint("Test copying a file - Failed. Error: " + String(getErrno()));
+        Arduino_UnifiedStorage::debugPrint("Test copying a file - Failed. Error: " + String(getErrno()));
         return false;
       }
 
     } else {
-      debugPrint("Test copying a file - Failed to create destination folder. Error: " + String(getErrno()));
+      Arduino_UnifiedStorage::debugPrint("Test copying a file - Failed to create destination folder. Error: " + String(getErrno()));
       return false;
     }
 }
@@ -224,11 +224,11 @@ bool testMovingFile(Folder root) {
     if (destinationFolder.exists()) {
       UFile movedFile = sourceFileMove;
       if (movedFile.exists()) {
-        debugPrint("--- Test moving a file ---");
-        debugPrint("Source file name: " + String(sourceFileMove.getPathAsString()));
-        debugPrint("Destination file name: " + String(destinationFolder.getPathAsString()) + "/test_source_move.txt");
+        Arduino_UnifiedStorage::debugPrint("--- Test moving a file ---");
+        Arduino_UnifiedStorage::debugPrint("Source file name: " + String(sourceFileMove.getPathAsString()));
+        Arduino_UnifiedStorage::debugPrint("Destination file name: " + String(destinationFolder.getPathAsString()) + "/test_source_move.txt");
         if (sourceFileMove.moveTo(destinationFolder)) {
-          debugPrint("File moved successfully!");
+          Arduino_UnifiedStorage::debugPrint("File moved successfully!");
           sourceFileMove.close();
           movedFile.close();
           movedFile.remove();
@@ -236,19 +236,19 @@ bool testMovingFile(Folder root) {
           sourceFileMove.remove();
           return true;
         } else {
-          debugPrint("File moving failed. Error: " + String(getErrno()));
+          Arduino_UnifiedStorage::debugPrint("File moving failed. Error: " + String(getErrno()));
           return false;
         }
       } else {
-        debugPrint("Test moving a file - Failed. Error: " + String(getErrno()));
+        Arduino_UnifiedStorage::debugPrint("Test moving a file - Failed. Error: " + String(getErrno()));
         return false;
       }
     } else {
-      debugPrint("Test moving a file - Failed to create destination folder. Error: " + String(getErrno()));
+      Arduino_UnifiedStorage::debugPrint("Test moving a file - Failed to create destination folder. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    debugPrint("Test moving a file - Failed. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::debugPrint("Test moving a file - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -260,9 +260,9 @@ void printFolderContents(Folder dir, int indentation = 0) {
   // Print directories
   for (Folder subdir : directories) {
     for (int i = 0; i < indentation; i++) {
-      debugPrint(" ");
+      Arduino_UnifiedStorage::debugPrint(" ");
     }
-    debugPrint("[D]");
+    Arduino_UnifiedStorage::debugPrint("[D]");
     debugPrint(subdir.getPath());
     printFolderContents(subdir, indentation + 1);
   }
@@ -270,9 +270,9 @@ void printFolderContents(Folder dir, int indentation = 0) {
   // Print files
   for (UFile file : files) {
     for (int i = 0; i < indentation; i++) {
-      debugPrint(" ");
+      Arduino_UnifiedStorage::debugPrint(" ");
     }
-    debugPrint("[F]");
+    Arduino_UnifiedStorage::debugPrint("[F]");
     debugPrint(file.getPath());
   }
 }
@@ -281,8 +281,8 @@ void runTests(Arduino_UnifiedStorage * storage, String storageType) {
     if (storage->begin()) {
         Folder root = storage->getRootFolder();
     
-        debugPrint("=== Testing " + storageType + " ===");
-        debugPrint("========= File Tests =========");
+        Arduino_UnifiedStorage::debugPrint("=== Testing " + storageType + " ===");
+        Arduino_UnifiedStorage::debugPrint("========= File Tests =========");
 
         testFileCreationWithOpen(root); 
         testFileCreationWithCreate(root);
@@ -295,11 +295,11 @@ void runTests(Arduino_UnifiedStorage * storage, String storageType) {
         testCopyingFile(root);
         testMovingFile(root);
 
-        debugPrint("========= FS Contents after File Tests =========");
-        debugPrint("Should be empty if deletion was successful");
+        Arduino_UnifiedStorage::debugPrint("========= FS Contents after File Tests =========");
+        Arduino_UnifiedStorage::debugPrint("Should be empty if deletion was successful");
 
         printFolderContents(root);
-        debugPrint("=============================");
+        Arduino_UnifiedStorage::debugPrint("=============================");
 
         storage -> unmount();
     }

@@ -26,29 +26,29 @@ void setup() {
 
 
     // Test copyTo
-    debugPrint("Testing copyTo...");
+    Arduino_UnifiedStorage::debugPrint("Testing copyTo...");
     Folder sourceFolder2 =  root.createSubfolder("source_folder");
-    debugPrint("Folder 1 created");
+    Arduino_UnifiedStorage::debugPrint("Folder 1 created");
 
-    debugPrint("Trying to create a folder on top of an existing one... without overwrite");
+    Arduino_UnifiedStorage::debugPrint("Trying to create a folder on top of an existing one... without overwrite");
     Folder sourceFolder3 =  root.createSubfolder("source_folder");
    
     
-    debugPrint("Trying to create a folder on top of an existing one... with overwrite");
+    Arduino_UnifiedStorage::debugPrint("Trying to create a folder on top of an existing one... with overwrite");
     Folder sourceFolder4 =  root.createSubfolder("source_folder", true);
 
 
 
     Folder destinationFolder2 = root.createSubfolder("destination_folder");
-    debugPrint("Folder 2 created");
+    Arduino_UnifiedStorage::debugPrint("Folder 2 created");
 
 
 
     bool copyResult = sourceFolder2.copyTo(destinationFolder2, true); // Overwrite if exists
     if (copyResult) {
-        debugPrint("Copy successful");
+        Arduino_UnifiedStorage::debugPrint("Copy successful");
     } else {
-        debugPrint("Copy failed");
+        Arduino_UnifiedStorage::debugPrint("Copy failed");
     }
 
 
@@ -56,12 +56,12 @@ void setup() {
     Folder sourceFolder =  root.createSubfolder("source");
     Folder destinationFolder = root.createSubfolder("destination");
 
-    debugPrint("Testing moveTo... ");
+    Arduino_UnifiedStorage::debugPrint("Testing moveTo... ");
     bool moveResult = sourceFolder.moveTo(destinationFolder, true); // Overwrite if exists
     if (moveResult) {
-        debugPrint("Move successful");
+        Arduino_UnifiedStorage::debugPrint("Move successful");
     } else {
-        debugPrint("Move failed");
+        Arduino_UnifiedStorage::debugPrint("Move failed");
     }
 
 
@@ -75,10 +75,10 @@ void setup() {
 
 
     bool success = someFile.copyTo(someOtherFolder);
-    debugPrint("trying to copy file without overwrite: " + String(success));
+    Arduino_UnifiedStorage::debugPrint("trying to copy file without overwrite: " + String(success));
 
     success = someFile.copyTo(someOtherFolder,true);
-    debugPrint("trying to copy file with overwrite: " + String(success));
+    Arduino_UnifiedStorage::debugPrint("trying to copy file with overwrite: " + String(success));
 
 }
 
