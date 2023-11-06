@@ -162,7 +162,7 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
         */
        partition.size = (entry.lbaSize * 4096) >> 10;
 
-        if (entry.type == emptyPartitionType) {
+        if (entry.type == emptyPartitionType && partition.size != 0) {
             // Skip empty partitions
             continue;
         }
