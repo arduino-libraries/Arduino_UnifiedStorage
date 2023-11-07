@@ -40,7 +40,7 @@ std::vector<Partition> partitioningScheme  = {
         {1024, FS_FAT}, // 1 MB for certificates
         {5120, FS_FAT}, // 5 MB for OTA firmware updates
         {8192, FS_LITTLEFS} // 8 MB for user data
-    };
+};
 
 // Function to test writing to a file in the specified storage partition
 void testWriting(Arduino_UnifiedStorage *storage) {
@@ -79,7 +79,6 @@ void testAllPartitions(std::vector<Partition> partitions) {
         Serial.println();
     }
 }
-
 
 
 void listPartitions(){

@@ -30,12 +30,6 @@
 #include "Arduino_UnifiedStorage.h"
 
 
-
-// Redirect Serial.print*() output to GDB instead of SerialUSB where it would conflict with ThreadDebug.
-// NOTE: Calls to Serial.print*() will block waiting for GDB to be connected so only useful to use this redefine
-//       when actively debugging the program.
-
-
 void printFolderContents(Folder dir, int indentation = 0) {
   std::vector<Folder> directories = dir.getFolders();
   std::vector<UFile> files = dir.getFiles();
@@ -80,8 +74,6 @@ void setup() {
   if(!internalStorage.begin()){
     Serial.println("Error mounting storage device.");
   }
-
-
   
   // Create a root directory in storage device
   Folder root = internalStorage.getRootFolder();

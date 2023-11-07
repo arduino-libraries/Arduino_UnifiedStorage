@@ -45,12 +45,13 @@ void runRepeatedMountTest(Arduino_UnifiedStorage * storage, String storageType, 
 
 
 void setup(){
-    #if defined(ARDUINO_PORTENTA_C33) || defined(ARDUINO_PORTENTA_H7_M7)
+    #if defined(HAS_SERIAL)
         Serial.begin(115200);
         while(!Serial);
-    #elif defined(ARDUINO_OPTA)
+    #elif defined(HAS_RS485)
         beginRS485(115200);
     #endif 
+
     
     // toggle this to enable debugging output
     Arduino_UnifiedStorage::debuggingModeEnabled = false;

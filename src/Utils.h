@@ -45,6 +45,7 @@
 
 
 [[gnu::unused]] static const char* createPartitionName(int number) {
+    // check if the number can be represented by a letter of the alphabet
     if (number < 1 || number > 26) {
         // Handle out-of-range numbers or errors as needed
         return nullptr;
