@@ -56,9 +56,9 @@ void printFolderContents(Folder dir, int indentation = 0) {
 
 
 // Uncomment one of the three lines below to select between SD card, USB or internal storage
-//SDStorage sdStorage = SDStorage();             // Create an instance for interacting with SD card storage
-//USBStorage usbStorage = USBStorage()            // Create an instance for interacting with USB storage
-InternalStorage internalStorage;
+//SDStorage storage;             // Create an instance for interacting with SD card storage
+//USBStorage storage;            // Create an instance for interacting with USB storage
+InternalStorage storage;
 
 
 void setup() {
@@ -69,14 +69,16 @@ void setup() {
   Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
 
-  internalStorage = InternalStorage();
+  storage = InternalStorage();
+  // storage = SDStorage(); // Uncomment this line to use SD card storage
+  // storage = USBStorage(); // Uncomment this line to use USB storage
 
-  if(!internalStorage.begin()){
+  if(!storage.begin()){
     Serial.println("Error mounting storage device.");
   }
   
   // Create a root directory in storage device
-  Folder root = internalStorage.getRootFolder();
+  Folder root = storage.getRootFolder();
 
   // Create subdirectories inside the root directory
   Folder subdir1 = root.createSubfolder("subdir1");
@@ -126,7 +128,7 @@ void setup() {
   }
   Serial.println();
 
-  printFolderContents(internalStorage.getRootFolder());
+  printFolderContents(storage.getRootFolder());
 }
 
 void loop() {
