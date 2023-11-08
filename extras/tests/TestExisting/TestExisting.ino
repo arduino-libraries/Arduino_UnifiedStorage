@@ -1,92 +1,75 @@
+
+#define ARDUINO_UNIFIED_STORAGE_DEBUG
+
 #include <Arduino_UnifiedStorage.h>
 
-InternalStorage internalStorage = InternalStorage();
 
+InternalStorage internalStorage;
 
 void setup() {
     /* UNCOMMENT THIS PART IF YOU WANT TO ENABLE FORMATTING*/
 
 
+    #if defined(HAS_SERIAL)
+        Serial.begin(115200);
+        while(!Serial);
+    #elif defined(HAS_RS485)
+        beginRS485(115200);
+    #endif 
 
-    Serial.begin(9600);
-    delay(1000); // Give time to open the Serial Monitor
-    while(!Serial);
+    // toggle this to enable debugging output
+    Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
-
-
-    internalStorage.format(FS_LITTLEFS);
     internalStorage.begin();
-   
 
     Folder root = internalStorage.getRootFolder();
-    Serial.println(root.getPathAsString());
 
     // Test copyTo
-    Serial.println("Testing copyTo...");
+    Arduino_UnifiedStorage::testPrint("Testing copyTo...");
     Folder sourceFolder2 =  root.createSubfolder("source_folder");
-    Serial.println("Folder 1 created");
+    Arduino_UnifiedStorage::testPrint("Folder 1 created");
 
-    Serial.println("Trying to create a folder on top of an existing one... without overwrite");
+    Arduino_UnifiedStorage::testPrint("Trying to create a folder on top of an existing one... without overwrite");
     Folder sourceFolder3 =  root.createSubfolder("source_folder");
+   
     
-    Serial.println("Trying to create a folder on top of an existing one... with overwrite");
+    Arduino_UnifiedStorage::testPrint("Trying to create a folder on top of an existing one... with overwrite");
     Folder sourceFolder4 =  root.createSubfolder("source_folder", true);
 
     Folder destinationFolder2 = root.createSubfolder("destination_folder");
-    Serial.println("Folder 2 created");
-
-    Serial.println(sourceFolder2.getPathAsString());
-    Serial.println(destinationFolder2.getPathAsString());
-
-        Serial.println();
-            Serial.println();
+    Arduino_UnifiedStorage::testPrint("Folder 2 created");
 
 
     bool copyResult = sourceFolder2.copyTo(destinationFolder2, true); // Overwrite if exists
     if (copyResult) {
-        Serial.println("Copy successful");
+        Arduino_UnifiedStorage::testPrint("Copy successful");
     } else {
-        Serial.println("Copy failed");
+        Arduino_UnifiedStorage::testPrint("Copy failed");
     }
-    Serial.println();
-
-
-
 
     // Test moveTo
     Folder sourceFolder =  root.createSubfolder("source");
     Folder destinationFolder = root.createSubfolder("destination");
 
-
-    Serial.println();
-        Serial.println();
-    Serial.println("Testing moveTo...");
+    Arduino_UnifiedStorage::testPrint("Testing moveTo... ");
     bool moveResult = sourceFolder.moveTo(destinationFolder, true); // Overwrite if exists
     if (moveResult) {
-        Serial.println("Move successful");
+        Arduino_UnifiedStorage::testPrint("Move successful");
     } else {
-        Serial.println("Move failed");
+        Arduino_UnifiedStorage::testPrint("Move failed");
     }
-
 
     Folder someFolder = root.createSubfolder("lets_put_files_here");
     UFile someFile = someFolder.createFile("somefile.txt", FileMode::WRITE);
 
-
-
     Folder someOtherFolder = root.createSubfolder("lets_put_files_here");
     UFile someOtherFile = someFolder.createFile("somefile.txt",  FileMode::WRITE);
 
-
     bool success = someFile.copyTo(someOtherFolder);
-    Serial.println("trying to copy file without overwrite");
-    Serial.println(success);
+    Arduino_UnifiedStorage::testPrint("trying to copy file without overwrite: " + String(success));
 
     success = someFile.copyTo(someOtherFolder,true);
-    Serial.println("trying to copy file with overwrite");
-    Serial.println(success);
-
-
+    Arduino_UnifiedStorage::testPrint("trying to copy file with overwrite: " + String(success));
 
 }
 

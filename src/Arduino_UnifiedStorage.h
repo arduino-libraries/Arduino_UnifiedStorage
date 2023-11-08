@@ -2,28 +2,17 @@
 #define UnifiedStorage_H
 
 
+#include "Arduino.h"
+#include "Arduino_POSIXStorage.h"
+#include "Boards.h"
+
+
+#include "Types.h"
+#include "Partitioning.h"
+
 #include "Folder.h"
 #include "UFile.h"
 
-
-#if defined(ARDUINO_PORTENTA_C33)
-#include "Types.h"
-#include "Arduino.h"
-#include "Arduino_POSIXStorage.h"
-#endif
-
-
-
-    #if defined(ARDUINO_PORTENTA_C33)
-        #include "QSPIFlashBlockDevice.h"
-        #include <BlockDevice.h>
-        #include <MBRBlockDevice.h>
-        #include "FATFileSystem.h"
-    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_OPTA)
-        #include "QSPIFBlockDevice.h"
-        #include "MBRBlockDevice.h"
-        #include "FATFileSystem.h"
-    #endif 
 
 
 /**
@@ -63,18 +52,25 @@ class Arduino_UnifiedStorage {
          */
         virtual bool format(FileSystems fs) = 0;
 
+
+        static bool debuggingModeEnabled;
+
+        static void debugPrint(String message);
+
+        static void testPrint(String message);
+
 };
 
+    #if defined(HAS_USB)
+        #include "USBStorage.h"
+    #endif
 
-#if defined(ARDUINO_PORTENTA_C33) || defined(ARDUINO_PORTENTA_H7_M7)
-    #include "USBStorage.h"
-    #include "SDStorage.h"
-    #include "InternalStorage.h"
-#elif defined(ARDUINO_OPTA)
-    #include "USBStorage.h"
-    #include "InternalStorage.h"
+    #if defined(HAS_SD)
+        #include "SDStorage.h"
+    #endif
+
+    #if defined(HAS_QSPI)
+        #include "InternalStorage.h"
+    #endif
+
 #endif
-
-
-#endif
-

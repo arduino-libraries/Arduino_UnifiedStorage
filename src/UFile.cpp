@@ -76,230 +76,257 @@ uint32_t UFile::available() {
         return 0;
     }
 
-    int currentPosition = ftell(filePointer);
-    fseek(filePointer, 0, SEEK_END);
-    int fileSize = ftell(filePointer);
-    fseek(filePointer, currentPosition, SEEK_SET);
+        int currentPosition = ftell(filePointer);
+        fseek(filePointer, 0, SEEK_END);
+        int fileSize = ftell(filePointer);
+        fseek(filePointer, currentPosition, SEEK_SET);
 
-    return (fileSize - currentPosition);
-}
-
-int UFile::read() {
-    // Read a single byte from the file
-    if (filePointer == nullptr) {
-        // File pointer is not valid
-        return 0;
+        Arduino_UnifiedStorage::debugPrint("[File][available][INFO] Available bytes in file: " + String(fileSize - currentPosition));
+        return (fileSize - currentPosition);
     }
 
-    int value = fgetc(filePointer);
-    return value;
-}
+    int UFile::read() {
+        // Read a single byte from the file
+        if (filePointer == nullptr) {
+            // File pointer is not valid
+            Arduino_UnifiedStorage::debugPrint("[File][read][ERROR] File pointer is not valid");
+            return 0;
+        }
 
-size_t UFile::read(uint8_t* buffer, size_t size) {
-    // Read data from the file into the buffer
-    if (filePointer == nullptr) {
-        // File pointer is not valid
-        return 0;
+        int value = fgetc(filePointer);
+        return value;
     }
 
-    size_t bytesRead = fread(buffer, sizeof(uint8_t), size, filePointer);
-    return bytesRead;
-}
+    size_t UFile::read(uint8_t* buffer, size_t size) {
+        // Read data from the file into the buffer
+        if (filePointer == nullptr) {
+            // File pointer is not valid
+            Arduino_UnifiedStorage::debugPrint("[File][read][ERROR] File pointer is not valid");
+            return 0;
+        }
 
-String UFile::readAsString() {
-    if (filePointer == nullptr) {
-        return String("");
+        size_t bytesRead = fread(buffer, sizeof(uint8_t), size, filePointer);
+        Arduino_UnifiedStorage::debugPrint("[File][read][INFO] Read " + String(bytesRead) + " bytes from file");
+        return bytesRead;
     }
 
-    this->seek(0);
-    size_t bytesAvailable = this->available();
-    uint8_t* buffer = new uint8_t[bytesAvailable + 1];
-    this->read(buffer, bytesAvailable);
+    String UFile::readAsString() {
+        if (filePointer == nullptr) {
+            Arduino_UnifiedStorage::debugPrint("[File][readAsString][ERROR] File pointer is not valid");
+            return String("");
+        }
 
-    String result = "";
-    for (size_t i = 0; i < bytesAvailable; i++) {
-        result += static_cast<char>(buffer[i]);
+        this->seek(0);
+        size_t bytesAvailable = this->available();
+        uint8_t* buffer = new uint8_t[bytesAvailable + 1];
+        this->read(buffer, bytesAvailable);
+
+        String result = "";
+        for (size_t i = 0; i < bytesAvailable; i++) {
+            result += static_cast<char>(buffer[i]);
+        }
+
+        delete[] buffer;
+
+        Arduino_UnifiedStorage::debugPrint("[File][readAsString][INFO] Read string from file: " + result);
+        return result;
     }
 
-    delete[] buffer;
+    size_t UFile::write(uint8_t value) {
+        // Write a single byte to the file
+        if (filePointer == nullptr) {
+            // File pointer is not valid
+            Arduino_UnifiedStorage::debugPrint("[File][write][ERROR] File pointer is not valid");
+            return 0;
+        }
 
-    return result;
-}
+        int result = fputc(value, filePointer);
+        if (result == EOF) {
+            Arduino_UnifiedStorage::debugPrint("[File][write][ERROR] Failed to write byte to file");
+            return 0;
+        }
 
-size_t UFile::write(uint8_t value) {
-    // Write a single byte to the file
-    if (filePointer == nullptr) {
-        // File pointer is not valid
-        return 0;
+        Arduino_UnifiedStorage::debugPrint("[File][write][INFO] Wrote 1 byte to file");
+        return 1;
     }
 
-    int result = fputc(value, filePointer);
-    return (result != EOF) ? 1 : 0;
-}
+    size_t UFile::write(String data) {
+        if (filePointer == nullptr) {
+            // File pointer is not valid
+            Arduino_UnifiedStorage::debugPrint("[File][write][ERROR] File pointer is not valid");
+            return 0;
+        }
 
-size_t UFile::write(String data) {
-    if (filePointer == nullptr) {
-        // File pointer is not valid
-        return 0;
-    }
-
-    // Write data to the file
-    size_t bytesWritten = fwrite(data.c_str(), sizeof(char), data.length(), filePointer);
-    return bytesWritten;
-}
-
-size_t UFile::write(const uint8_t* buffer, size_t size) {
-    if (filePointer == nullptr) {
-        // File pointer is not valid
-        return 0;
-    }
-
-    size_t bytesWritten = fwrite(buffer, sizeof(uint8_t), size, filePointer);
-    return bytesWritten;
-}
-
-bool UFile::remove() {
-    // Remove the file;
-    if(this->exists() && !path.empty()){
-            int result = ::remove(path.c_str());
-            if (result == 0) {
-                return true;
-            } else {
-                // Error occurred while removing the file
-                return false;
+        // Write data to the file
+        size_t bytesWritten = fwrite(data.c_str(), sizeof(char), data.length(), filePointer);
+        Arduino_UnifiedStorage::debugPrint("[File][write][INFO] Wrote " + String(bytesWritten) + " bytes to file: " + String(path.c_str()));
+                return bytesWritten;
             }
-        } else {
-            return false; // Handle the case when the path is not valid
-        }
-}
 
-bool UFile::rename(const char* newFilename) {
-    // Rename the file
-    int result = ::rename(path.c_str(), newFilename);
-    if (result == 0) {
-        // Update the internal filename
-        path = newFilename;
-        return true;
-    } else {
-        // Error occurred while renaming the file
-        return false;
-    }
-}
+            size_t UFile::write(const uint8_t* buffer, size_t size) {
+                if (filePointer == nullptr) {
+                    // File pointer is not valid
+                    Arduino_UnifiedStorage::debugPrint("[File][write][ERROR] File pointer is not valid: " + String(path.c_str()));
+                    return 0;
+                }
 
-bool UFile::rename(String newFilename) {
-    return rename(newFilename.c_str());
-}
+                size_t bytesWritten = fwrite(buffer, sizeof(uint8_t), size, filePointer);
+                Arduino_UnifiedStorage::debugPrint("[File][write][INFO] Wrote " + String(bytesWritten) + " bytes to file: " + String(path.c_str()));
+                return bytesWritten;
+            }
 
-bool UFile::exists() {
-    // Check if the file exists
-    FILE* file = fopen(path.c_str(), "r");
-    if (file != nullptr) {
-        // File exists
-        fclose(file);
-        return true;
-    } else {
-        // File does not exist
-        return false;
-    }
-}
+            bool UFile::remove() {
+                if (!this->exists() || path.empty()) {
+                    return false; // Handle the case when the path is not valid
+                }
 
-bool UFile::copyTo(String destinationPath, bool overwrite) {
-    return copyTo(destinationPath.c_str(), overwrite);
-}
+                bool result = (::remove(path.c_str()) == 0);
+                if (result) {
+                    Arduino_UnifiedStorage::debugPrint("[File][remove][INFO] File removed successfully: " + String(path.c_str()));
+                } else {
+                    Arduino_UnifiedStorage::debugPrint("[File][remove][ERROR] Failed to remove file: " + String(path.c_str()));
+                }
 
-bool UFile::copyTo(Folder destinationFolder, bool overwrite) {
-    const char* destinationPath = destinationFolder.getPath();
-    return copyTo(destinationPath, overwrite);
-}
+                return result;
+            }
 
-bool UFile::copyTo(const char* destinationPath, bool overwrite) {
-    std::string newPath = replaceFirstPathComponent(path, destinationPath);
+            bool UFile::rename(const char* newFilename) {
+                // Rename the file
+                int result = ::rename(path.c_str(), newFilename);
+                if (result == 0) {
+                    // Update the internal filename
+                    path = newFilename;
+                    Arduino_UnifiedStorage::debugPrint("[File][rename][INFO] File renamed successfully: " + String(path.c_str()));
+                    return true;
+                } else {
+                    // Error occurred while renaming the file
+                    Arduino_UnifiedStorage::debugPrint("[File][rename][ERROR] Failed to rename file: " + String(path.c_str()));
+                    return false;
+                }
+            }
 
+            bool UFile::rename(String newFilename) {
+                return rename(newFilename.c_str());
+            }
 
-    // Open the source file for reading
-    FILE* sourceFile = fopen(path.c_str(), "r");
+            bool UFile::exists() {
+                // Check if the file exists
+                FILE* file = fopen(path.c_str(), "r");
+                if (file != nullptr) {
+                    // File exists
+                    fclose(file);
+                    Arduino_UnifiedStorage::debugPrint("[File][exists][INFO] File exists: " + String(path.c_str()));
+                    return true;
+                } else {
+                    // File does not exist
+                    Arduino_UnifiedStorage::debugPrint("[File][exists][INFO] File does not exist: " + String(path.c_str()));
+                    return false;
+                }
+            }
 
-    if (sourceFile == nullptr) {
-        return false;
-    }
+            bool UFile::copyTo(String destinationPath, bool overwrite) {
+                return copyTo(destinationPath.c_str(), overwrite);
+            }
 
-    FILE* destinationFile = fopen(newPath.c_str(), "r");
+            bool UFile::copyTo(Folder destinationFolder, bool overwrite) {
+                const char* destinationPath = destinationFolder.getPath();
+                return copyTo(destinationPath, overwrite);
+            }
 
-    if(destinationFile != nullptr){
+            bool UFile::copyTo(const char* destinationPath, bool overwrite) {
+                std::string newPath = replaceFirstPathComponent(path, destinationPath);
 
-        if(overwrite){
-            fclose(destinationFile);
-            ::remove(newPath.c_str());
-        } else {
-            errno = EEXIST;
-            return false;
-        }
-    } 
+                // Open the source file for reading
+                FILE* sourceFile = fopen(path.c_str(), "r");
 
-    // Open the destination file for writing
-    destinationFile = fopen(newPath.c_str(), "w");
+                if (sourceFile == nullptr) {
+                    Arduino_UnifiedStorage::debugPrint("[File][copyTo][ERROR] Failed to open source file: " + String(path.c_str()));
+                    return false;
+                }
 
-    if (destinationFile == nullptr) {
-        fclose(sourceFile);
-        return false;
-    }
+                FILE* destinationFile = fopen(newPath.c_str(), "r");
 
-    // Copy data from the source file to the destination file
-    int c;
-    while ((c = fgetc(sourceFile)) != EOF) {
-        fputc(c, destinationFile);
-    }
+                if(destinationFile != nullptr){
 
-    // Close both files
-    fclose(sourceFile);
-    fclose(destinationFile);
+                    if(overwrite){
+                        fclose(destinationFile);
+                        ::remove(newPath.c_str());
+                    } else {
+                        errno = EEXIST;
+                        Arduino_UnifiedStorage::debugPrint("[File][copyTo][ERROR] Destination file already exists: " + String(newPath.c_str()));
+                        return false;
+                    }
+                } 
 
-    return true;
-}
+                // Open the destination file for writing
+                destinationFile = fopen(newPath.c_str(), "w");
 
-bool UFile::moveTo(String destinationPath, bool overwrite) {
-    return moveTo(destinationPath.c_str());
-}
+                if (destinationFile == nullptr) {
+                    fclose(sourceFile);
+                    Arduino_UnifiedStorage::debugPrint("[File][copyTo][ERROR] Failed to open destination file: " + String(newPath.c_str()));
+                    return false;
+                }
 
-bool UFile::moveTo(Folder destinationFolder, bool overwrite) {
-    const char* destinationPath = destinationFolder.getPath();
-    return moveTo(destinationPath);
-}
+                // Copy data from the source file to the destination file
+                int c;
+                while ((c = fgetc(sourceFile)) != EOF) {
+                    fputc(c, destinationFile);
+                }
 
-bool UFile::moveTo(const char* destinationPath, bool overwrite){
-    std::string newPath = replaceFirstPathComponent(path, destinationPath);
+                // Close both files
+                fclose(sourceFile);
+                fclose(destinationFile);
 
-    fclose(filePointer);
-    if (!copyTo(destinationPath, overwrite)) {
-        return false; // Return false if the copy operation fails
-    }
+                Arduino_UnifiedStorage::debugPrint("[File][copyTo][INFO] File copied successfully from " + String(path.c_str()) + " to " + String(newPath.c_str()));
+                return true;
+            }
 
-    // Delete the source file
-    if (::remove(path.c_str())) {
-        return false;
-    }
+            bool UFile::moveTo(String destinationPath, bool overwrite) {
+                return moveTo(destinationPath.c_str());
+            }
 
-    //open(newPath.c_str(), fileMode); // sure about that ?
-    path = newPath;
+            bool UFile::moveTo(Folder destinationFolder, bool overwrite) {
+                const char* destinationPath = destinationFolder.getPath();
+                return moveTo(destinationPath);
+            }
 
-    return true;
-}
+            bool UFile::moveTo(const char* destinationPath, bool overwrite){
+                std::string newPath = replaceFirstPathComponent(path, destinationPath);
 
-Folder UFile::getParentFolder() {
-    // Get the parent folder path
-    size_t lastSlashPos = path.find_last_of('/');
-    if (lastSlashPos != std::string::npos) {
-        std::string parentPath = path.substr(0, lastSlashPos);
-        return Folder(parentPath.c_str());
-    } else {
-        return Folder();
-    }
-}
+                fclose(filePointer);
+                if (!copyTo(destinationPath, overwrite)) {
+                    Arduino_UnifiedStorage::debugPrint("[File][moveTo][ERROR] Failed to copy file to destination: " + String(path.c_str()) + " to " + String(newPath.c_str()));
+                    return false; // Return false if the copy operation fails
+                }
 
-const char* UFile::getPath() {
-    return path.c_str();
-}
+                // Delete the source file
+                if (::remove(path.c_str())) {
+                    Arduino_UnifiedStorage::debugPrint("[File][moveTo][ERROR] Failed to remove source file: " + String(path.c_str()));
+                    return false;
+                }
 
-String UFile::getPathAsString() {
-    return String(path.c_str());
-}
+                //open(newPath.c_str(), fileMode); // sure about that ?
+                path = newPath;
+
+                Arduino_UnifiedStorage::debugPrint("[File][moveTo][INFO] File moved successfully from " + String(path.c_str()) + " to " + String(newPath.c_str()));
+                return true;
+            }
+
+            Folder UFile::getParentFolder() {
+                // Get the parent folder path
+                size_t lastSlashPos = path.find_last_of('/');
+                if (lastSlashPos != std::string::npos) {
+                    std::string parentPath = path.substr(0, lastSlashPos);
+                    return Folder(parentPath.c_str());
+                } else {
+                    return Folder();
+                }
+            }
+
+            const char* UFile::getPath() {
+                return path.c_str();
+            }
+
+            String UFile::getPathAsString() {
+                return String(path.c_str());
+            }

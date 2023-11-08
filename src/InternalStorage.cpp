@@ -1,64 +1,75 @@
 #include "Arduino_UnifiedStorage.h"
 
 InternalStorage::InternalStorage(){
+    std::vector<Partition> partitionsAvailable = Partitioning::readPartitions(QSPIFBlockDeviceType::get_default_instance());
+    if(partitionsAvailable.size() == 0){
 
-    #if defined(ARDUINO_PORTENTA_C33)
-        this -> setQSPIPartition(2);
-    #elif defined(ARDUINO_PORTENTA_H7_M7)
-        this -> setQSPIPartition(3);
-    #endif
+        //Arduino_UnifiedStorage::debugPrint("[InternalStorage][INFO] No partitions found, restoring default partitions");
+        restoreDefaultPartitions();
+    } else {
+        int lastPartitionNumber = partitionsAvailable.size();
+        FileSystems lastPartitionFileSystem = partitionsAvailable.back().fileSystemType;
+        //Arduino_UnifiedStorage::debugPrint("[InternalStorage][INFO] Found " + String(lastPartitionNumber) + " partitions, using last partition as internal storage");
 
-    this -> setQSPIPartitionName("user");
+        this -> partitionNumber = lastPartitionNumber;
+        this -> fileSystemType = lastPartitionFileSystem;
+        this -> partitionName = (char *)"internal"; 
+    }
 }
 
-InternalStorage::InternalStorage(int partition, const char * name, FileSystems fs){
-    this -> setQSPIPartition(partition);
-    this -> setQSPIPartitionName(name);
-    this -> fileSystem = fs;
+InternalStorage::InternalStorage(int partition, const char * name, FileSystems fileSystemType){
+    this -> partitionNumber = partition;
+    this -> partitionName = (char *)name;
+    this -> fileSystemType = fileSystemType;
 }
 
-bool InternalStorage::begin(FileSystems fs){
-  this -> fileSystem = fs;
+bool InternalStorage::begin(FileSystems fileSystemType){
+  this -> fileSystemType = fileSystemType;
   return this -> begin();
 }
 
+bool InternalStorage::partition(std::vector<Partition> partitions){
+    return Partitioning::partitionDrive(QSPIFBlockDeviceType::get_default_instance(), partitions);
+}
+
+bool InternalStorage::partition(){
+    return Partitioning::partitionDrive(QSPIFBlockDeviceType::get_default_instance(), {{QSPI_STORAGE_SIZE, FS_LITTLEFS}});
+}
+
+bool InternalStorage::restoreDefaultPartitions(){
+    return Partitioning::partitionDrive(QSPIFBlockDeviceType::get_default_instance(), {
+        {1024, FS_FAT}, // 1 MB for certificates
+        {5120, FS_FAT}, // 5 MB for OTA firmware updates
+        {8192, FS_LITTLEFS} // 8 MB for user data
+    });
+}
+
+std::vector<Partition> InternalStorage::readPartitions(){
+    return Partitioning::readPartitions(QSPIFBlockDeviceType::get_default_instance());
+}
+
 bool InternalStorage::begin(){
-    #if defined(ARDUINO_PORTENTA_C33)
-        this -> blockDevice = BlockDevice::get_default_instance();
-        this -> userData = new MBRBlockDevice(this->blockDevice, this->partitionNumber);
-        if(this -> fileSystem == FS_FAT){
-            this -> userDataFileSystem = new FATFileSystem(this->partitionName);
-        } else {
-            this -> userDataFileSystem = new LittleFileSystem(this->partitionName);
-        }
-        int err = this -> userDataFileSystem -> mount(userData);
-        return err == 0;
-    #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
-        this -> blockDevice = QSPIFBlockDevice::get_default_instance();
-        this -> userData = new mbed::MBRBlockDevice(this->blockDevice, this->partitionNumber);
-        if(this -> fileSystem == FS_FAT){
-            
-            if(this -> userDataFileSystem != nullptr){
-                delete(this -> userDataFileSystem);
-            } 
-            this -> userDataFileSystem = new mbed::FATFileSystem(this->partitionName);
-        } else {
+ 
+        this -> blockDevice = BlockDeviceType::get_default_instance();
+        this -> mbrBlockDevice = new MBRBlockDeviceType(this->blockDevice, this->partitionNumber);
 
-            if(this -> userDataFileSystem != nullptr){
-                delete(this -> userDataFileSystem);
-            } 
-
-            this -> userDataFileSystem = new mbed::LittleFileSystem(this->partitionName);
+        if(this -> fileSystemType == FS_FAT){
+            this -> fileSystem = new FATFileSystemType(this->partitionName);
+            Arduino_UnifiedStorage::debugPrint("[InternalStorage][begin][INFO] Mounting partition " + String(this->partitionNumber) + " as FAT");
+        } else {
+            this -> fileSystem = new LittleFileSystemType(this->partitionName);
+            Arduino_UnifiedStorage::debugPrint("[InternalStorage][begin][INFO] Mounting partition " + String(this->partitionNumber) + " as LittleFS");
         }
-        int err = this -> userDataFileSystem -> mount(this -> userData);
+
+        int err = this -> fileSystem -> mount(mbrBlockDevice);
+        if(err!=0){
+            Arduino_UnifiedStorage::debugPrint("[InternalStorage][ERROR] Could not mount partition " + String(this->partitionNumber) + " as " + prettyPrintFileSystemType(this->fileSystemType) + ", error code: " + String(errno));
+        }
         return err == 0;
-    #else
-        return false; // Unsupported board
-    #endif
 }
 
 bool InternalStorage::unmount(){
-    int err = this -> userDataFileSystem -> unmount();
+    int err = this -> fileSystem -> unmount();
     return err == 0;
 }
 
@@ -66,51 +77,30 @@ Folder InternalStorage::getRootFolder(){
     return Folder(String("/" + String(this->partitionName)).c_str());
 }
 
-void InternalStorage::setQSPIPartition(int partition){
-    this -> partitionNumber = partition;
-}
-
-void InternalStorage::setQSPIPartitionName(const char * name){
-    this -> partitionName = (char *)name;
-}
-
 bool InternalStorage::format(FileSystems fs){
     this -> begin();
     this -> unmount();
-    this -> fileSystem = fs;
-
+    this -> fileSystemType = fs;
 
     if(fs == FS_FAT){
-        #if defined(ARDUINO_PORTENTA_C33)
-            this -> userDataFileSystem = new FATFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData)  == 0;
-        #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
-            this -> userDataFileSystem =  new mbed::FATFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData)  == 0;
-        #endif
+            this -> fileSystem = new FATFileSystemType(this->partitionName);
+            int err = this -> fileSystem -> reformat(this-> mbrBlockDevice);
+            if(err != 0){
+                Arduino_UnifiedStorage::debugPrint("[InternalStorage][format][ERROR] Error formatting partition " + String(this->partitionNumber) + " as FAT: " + String(errno));
+            } 
+            return err == 0;
     } if (fs == FS_LITTLEFS) {
-        #if defined(ARDUINO_PORTENTA_C33)
-            this -> userDataFileSystem = new LittleFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData)  == 0;
-        #elif defined(ARDUINO_PORTENTA_H7_M7) ||  defined(ARDUINO_OPTA) 
-            this -> userDataFileSystem =  new mbed::LittleFileSystem(this->partitionName);
-            return this -> userDataFileSystem -> reformat(this-> userData)  == 0;
-        #endif
+            this -> fileSystem =  new LittleFileSystemType(this->partitionName);
+            int err = this -> fileSystem -> reformat(this-> mbrBlockDevice);
+            if(err != 0){
+                Arduino_UnifiedStorage::debugPrint("[InternalStorage][format][ERROR] Error formatting partition " + String(this->partitionNumber) + " as LittleFS: " + String(errno));
+            }
+            return err  == 0;
     }
 
     return false;
 }
 
-#if defined(ARDUINO_PORTENTA_C33)
-BlockDevice * InternalStorage::getBlockDevice(){
+BlockDeviceType * InternalStorage::getBlockDevice(){
     return this -> blockDevice;
 }
-#endif
-
-
-#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_OPTA) 
-mbed::BlockDevice *  InternalStorage::getBlockDevice(){
-    return this -> blockDevice;
-}
- 
-#endif
