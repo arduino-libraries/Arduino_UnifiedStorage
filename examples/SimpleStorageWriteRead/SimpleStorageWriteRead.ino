@@ -56,8 +56,8 @@ void printFolderContents(Folder dir, int indentation = 0) {
 
 
 // Uncomment one of the three lines below to select between SD card, USB or internal storage
-//SDStorage unifiedStorage = SDStorage();             // Create an instance for interacting with SD card storage
-//USBStorage unifiedStorage = USBStorage()            // Create an instance for interacting with USB storage
+//SDStorage sdStorage = SDStorage();             // Create an instance for interacting with SD card storage
+//USBStorage usbStorage = USBStorage()            // Create an instance for interacting with USB storage
 InternalStorage internalStorage;
 
 
