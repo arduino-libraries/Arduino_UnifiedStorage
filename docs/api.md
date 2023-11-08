@@ -5,9 +5,11 @@
 `class ` [`Arduino_UnifiedStorage`](#class_arduino___unified_storage) | Abstract class representing the common features of the supported storage methods
 `class ` [`Folder`](#class_folder) | Class representing a directory.
 `class ` [`InternalStorage`](#class_internal_storage) | Represents internal storage using the Arduino Unified Storage library.
+`class ` [`Partitioning`](#class_partitioning) | 
 `class ` [`SDStorage`](#class_s_d_storage) | Represents an SD card storage using the Arduino Unified Storage library.
 `class ` [`UFile`](#class_u_file) | Class representing a File
-`class ` [`USBStorage`](#class_u_s_b_storage) | Represents a USB storage using the Arduino Unified Storage library.
+`class ` [`USBStorage`](#class_u_s_b_storage) | [USBStorage](#class_u_s_b_storage) class provides an interface to access USB storage devices. It inherits from the [Arduino_UnifiedStorage](#class_arduino___unified_storage) class and implements its pure virtual functions.
+`struct ` [`Partition`](#struct_partition) | 
 
 # class `Arduino_UnifiedStorage` <a id="class_arduino___unified_storage" class="anchor"></a>
 
@@ -22,6 +24,8 @@ Abstract class representing the common features of the supported storage methods
 `public bool ` [`unmount`](#class_arduino___unified_storage_1a4281bc190ee4f2ad35265eab64ef6f7f)`()` | Unmounts the storage. 
 `public ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_arduino___unified_storage_1a7166075ba695d54bf74c6c71b8c4c1bf)`()` | Retrieves the root folder of the storage. 
 `public bool ` [`format`](#class_arduino___unified_storage_1ad6d045b4bdafd4dcb75daed305888e25)`(FileSystems fs)` | Formats the storage with the selected file system. 
+`public static void ` [`debugPrint`](#class_arduino___unified_storage_1ab0b726c7f98ea3623679097224290a07)`(String message)` | 
+`public static void ` [`testPrint`](#class_arduino___unified_storage_1a1fafe7a15fbd21c8705a9f86a92f6dd9)`(String message)` | 
 
 ## Members
 
@@ -64,6 +68,14 @@ Formats the storage with the selected file system.
 true if successful, false if failed.
 <hr />
 
+### `public static void ` [`debugPrint`](#class_arduino___unified_storage_1ab0b726c7f98ea3623679097224290a07)`(String message)` <a id="class_arduino___unified_storage_1ab0b726c7f98ea3623679097224290a07" class="anchor"></a>
+
+<hr />
+
+### `public static void ` [`testPrint`](#class_arduino___unified_storage_1a1fafe7a15fbd21c8705a9f86a92f6dd9)`(String message)` <a id="class_arduino___unified_storage_1a1fafe7a15fbd21c8705a9f86a92f6dd9" class="anchor"></a>
+
+<hr />
+
 # class `Folder` <a id="class_folder" class="anchor"></a>
 
 Class representing a directory.
@@ -72,9 +84,9 @@ Class representing a directory.
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public  ` [`Folder`](#class_folder_1a8af69fd19ba86816c60b4c2291311eb1)`()` | Blank Constructor.
-`public  ` [`Folder`](#class_folder_1aa2a4dc98e8c383c7b4fa503b45813fe3)`(const char * dirname)` | Constructor.
-`public  ` [`Folder`](#class_folder_1a6f445bfe0214a03ba00a1408e41726dd)`(String dirname)` | Constructor.
+`public  ` [`Folder`](#class_folder_1a8af69fd19ba86816c60b4c2291311eb1)`()` | Creates an empty [Folder](#class_folder) object. Please note that any operation on this object will fail until a valid directory is assigned to it.
+`public  ` [`Folder`](#class_folder_1aa2a4dc98e8c383c7b4fa503b45813fe3)`(const char * dirname)` | Creates a directory with the specified name. If the directory already exists, it returns a [Folder](#class_folder) object representing the existing directory. Otherwise, it tries to create a new directory with the specified name. If it fails the `path` property of the [Folder](#class_folder) object will be null.
+`public  ` [`Folder`](#class_folder_1a6f445bfe0214a03ba00a1408e41726dd)`(String dirname)` | Creates a directory with the specified name. If the directory already exists, it returns a [Folder](#class_folder) object representing the existing directory. Otherwise, it tries to create a new directory with the specified name. If it fails the `path` property of the [Folder](#class_folder) object will be empty.
 `public ` [`UFile`](#class_u_file)` ` [`createFile`](#class_folder_1a04eceb0406b02e2d8a628d3c359dba5d)`(const char * fileName, FileMode fmode)` | Creates a file inside the directory.
 `public ` [`UFile`](#class_u_file)` ` [`createFile`](#class_folder_1a44255e2c0c4ffa37d7637a601bc590f6)`(String fileName, FileMode fmode)` | Creates a file inside the directory.
 `public bool ` [`remove`](#class_folder_1aca893daac6c6747895d50987cf9cf34c)`()` | Removes a directory.
@@ -98,13 +110,13 @@ Class representing a directory.
 
 ### `public  ` [`Folder`](#class_folder_1a8af69fd19ba86816c60b4c2291311eb1)`()` <a id="class_folder_1a8af69fd19ba86816c60b4c2291311eb1" class="anchor"></a>
 
-Blank Constructor.
+Creates an empty [Folder](#class_folder) object. Please note that any operation on this object will fail until a valid directory is assigned to it.
 
 <hr />
 
 ### `public  ` [`Folder`](#class_folder_1aa2a4dc98e8c383c7b4fa503b45813fe3)`(const char * dirname)` <a id="class_folder_1aa2a4dc98e8c383c7b4fa503b45813fe3" class="anchor"></a>
 
-Constructor.
+Creates a directory with the specified name. If the directory already exists, it returns a [Folder](#class_folder) object representing the existing directory. Otherwise, it tries to create a new directory with the specified name. If it fails the `path` property of the [Folder](#class_folder) object will be null.
 
 #### Parameters
 * `const` char * dirname - The name of the directory.
@@ -112,7 +124,7 @@ Constructor.
 
 ### `public  ` [`Folder`](#class_folder_1a6f445bfe0214a03ba00a1408e41726dd)`(String dirname)` <a id="class_folder_1a6f445bfe0214a03ba00a1408e41726dd" class="anchor"></a>
 
-Constructor.
+Creates a directory with the specified name. If the directory already exists, it returns a [Folder](#class_folder) object representing the existing directory. Otherwise, it tries to create a new directory with the specified name. If it fails the `path` property of the [Folder](#class_folder) object will be empty.
 
 #### Parameters
 * `String` dirname - The name of the directory.
@@ -317,7 +329,7 @@ True upon success, false otherwise.
 
 # class `InternalStorage` <a id="class_internal_storage" class="anchor"></a>
 
-```
+```cpp
 class InternalStorage
   : public Arduino_UnifiedStorage
 ```
@@ -328,21 +340,24 @@ Represents internal storage using the Arduino Unified Storage library.
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public  ` [`InternalStorage`](#class_internal_storage_1ac45948ef554bc659efed81240140192e)`()` | Default constructor for the [InternalStorage](#class_internal_storage) class.
+`public  ` [`InternalStorage`](#class_internal_storage_1ac45948ef554bc659efed81240140192e)`()` | Constructs an [InternalStorage](#class_internal_storage) object with default settings. If no partitions are available, it restores the default partitioning scheme (See [restoreDefaultPartitions()](#class_internal_storage_1ace77d2372832c2f9ef39d382cc443259) for more info). If partitions are available, it sets the partition number, file system type, and partition name based on the last partition available. When using the default partitioning scheme the last partition would be the user partition.
 `public  ` [`InternalStorage`](#class_internal_storage_1ac13cad019a2ae66647d1c3604690eca7)`(int partition, const char * name, FileSystems fs)` | Constructs an [InternalStorage](#class_internal_storage) object with the specified partition, name, and file system.
 `public virtual bool ` [`begin`](#class_internal_storage_1a984731348dfbdade84e24250133a033e)`()` | Initializes the internal storage.
 `public virtual bool ` [`begin`](#class_internal_storage_1a90cd409874d9c578ce3add4df88875e5)`(FileSystems fs)` | Initializes the internal storage with the specified file system.
 `public virtual bool ` [`unmount`](#class_internal_storage_1a663446e2135a4e91d7fdb8ca638cc027)`()` | Unmounts the internal storage.
 `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_internal_storage_1a87142ddbdad62217e33851b32572082d)`()` | Retrieves the root folder of the internal storage.
-`public void ` [`setQSPIPartition`](#class_internal_storage_1a2ca8680537077ca3e189be2ca6dcc634)`(int partition)` | Sets the QSPI partition number.
-`public void ` [`setQSPIPartitionName`](#class_internal_storage_1ae0fbe264a758a4026548df66ec05f8c8)`(const char * name)` | Sets the QSPI partition name.
 `public virtual bool ` [`format`](#class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601)`(FileSystems fs)` | Formats the internal storage with the selected file system.
+`public BlockDeviceType * ` [`getBlockDevice`](#class_internal_storage_1a499c1975764c56ad3770ef9c582d7dda)`()` | Retrieves the block device associated with the internal storage.
+`public static bool ` [`partition`](#class_internal_storage_1acd4f9617061b962f38b20a4c6ddb8d48)`(std::vector< ` [`Partition`](#struct_partition)` > partitions)` | Partitions the internal storage according to the partitioning scheme given in the `partitions` parameter erasing the existing partitions 
+`public static bool ` [`partition`](#class_internal_storage_1aefb31c03b94006e75b18111f07c99331)`()` | Creates one partition spanning over the whole size of the internal storage drive erasing the existing partitions. 
+`public static bool ` [`restoreDefaultPartitions`](#class_internal_storage_1ace77d2372832c2f9ef39d382cc443259)`()` | Restores the default partitioning scheme (1MB FAT32 for Certificates, 5MB FAT32 for OTA, 8MB user storage) to the internal storage drive erasing the existing partitions. 
+`public static std::vector< ` [`Partition`](#struct_partition)` > ` [`readPartitions`](#class_internal_storage_1a7191c21a719e9fe8132dc3cfaed3f0ec)`()` | Reads the partitioning scheme from the MBR sector of the internal storage drive and returns a vector of structs of type [Partition](#struct_partition) that represents the partitioning scheme 
 
 ## Members
 
 ### `public  ` [`InternalStorage`](#class_internal_storage_1ac45948ef554bc659efed81240140192e)`()` <a id="class_internal_storage_1ac45948ef554bc659efed81240140192e" class="anchor"></a>
 
-Default constructor for the [InternalStorage](#class_internal_storage) class.
+Constructs an [InternalStorage](#class_internal_storage) object with default settings. If no partitions are available, it restores the default partitioning scheme (See [restoreDefaultPartitions()](#class_internal_storage_1ace77d2372832c2f9ef39d382cc443259) for more info). If partitions are available, it sets the partition number, file system type, and partition name based on the last partition available. When using the default partitioning scheme the last partition would be the user partition.
 <hr />
 
 ### `public  ` [`InternalStorage`](#class_internal_storage_1ac13cad019a2ae66647d1c3604690eca7)`(int partition, const char * name, FileSystems fs)` <a id="class_internal_storage_1ac13cad019a2ae66647d1c3604690eca7" class="anchor"></a>
@@ -392,22 +407,6 @@ Retrieves the root folder of the internal storage.
 The root folder as a [Folder](#class_folder) object.
 <hr />
 
-### `public void ` [`setQSPIPartition`](#class_internal_storage_1a2ca8680537077ca3e189be2ca6dcc634)`(int partition)` <a id="class_internal_storage_1a2ca8680537077ca3e189be2ca6dcc634" class="anchor"></a>
-
-Sets the QSPI partition number.
-
-#### Parameters
-* `partition` The partition number.
-<hr />
-
-### `public void ` [`setQSPIPartitionName`](#class_internal_storage_1ae0fbe264a758a4026548df66ec05f8c8)`(const char * name)` <a id="class_internal_storage_1ae0fbe264a758a4026548df66ec05f8c8" class="anchor"></a>
-
-Sets the QSPI partition name.
-
-#### Parameters
-* `name` The name of the partition.
-<hr />
-
 ### `public virtual bool ` [`format`](#class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601)`(FileSystems fs)` <a id="class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601" class="anchor"></a>
 
 Formats the internal storage with the selected file system.
@@ -416,6 +415,7 @@ Formats the internal storage with the selected file system.
 true if successful, false if failed.
 <hr />
 
+### `public BlockDeviceType * ` [`getBlockDevice`](#class_internal_storage_1a499c1975764c56ad3770ef9c582d7dda)`()` <a id="class_internal_storage_1a499c1975764c56ad3770ef9c582d7dda" class="anchor"></a>
 
 Retrieves the block device associated with the internal storage.
 
@@ -423,10 +423,84 @@ Retrieves the block device associated with the internal storage.
 The block device as a BlockDevice object.
 <hr />
 
+### `public static bool ` [`partition`](#class_internal_storage_1acd4f9617061b962f38b20a4c6ddb8d48)`(std::vector< ` [`Partition`](#struct_partition)` > partitions)` <a id="class_internal_storage_1acd4f9617061b962f38b20a4c6ddb8d48" class="anchor"></a>
+
+Partitions the internal storage according to the partitioning scheme given in the `partitions` parameter erasing the existing partitions 
+#### Parameters
+* `partitions` - vector of structs of type [Partition](#struct_partition) that represents the partitioning scheme 
+
+#### Returns
+true if successful, false if failed.
+<hr />
+
+### `public static bool ` [`partition`](#class_internal_storage_1aefb31c03b94006e75b18111f07c99331)`()` <a id="class_internal_storage_1aefb31c03b94006e75b18111f07c99331" class="anchor"></a>
+
+Creates one partition spanning over the whole size of the internal storage drive erasing the existing partitions. 
+#### Returns
+true if successful, false if failed.
+<hr />
+
+### `public static bool ` [`restoreDefaultPartitions`](#class_internal_storage_1ace77d2372832c2f9ef39d382cc443259)`()` <a id="class_internal_storage_1ace77d2372832c2f9ef39d382cc443259" class="anchor"></a>
+
+Restores the default partitioning scheme (1MB FAT32 for Certificates, 5MB FAT32 for OTA, 8MB user storage) to the internal storage drive erasing the existing partitions. 
+#### Returns
+true if successful, false if failed.
+<hr />
+
+### `public static std::vector< ` [`Partition`](#struct_partition)` > ` [`readPartitions`](#class_internal_storage_1a7191c21a719e9fe8132dc3cfaed3f0ec)`()` <a id="class_internal_storage_1a7191c21a719e9fe8132dc3cfaed3f0ec" class="anchor"></a>
+
+Reads the partitioning scheme from the MBR sector of the internal storage drive and returns a vector of structs of type [Partition](#struct_partition) that represents the partitioning scheme 
+#### Returns
+vector of structs of type [Partition](#struct_partition)
+<hr />
+
+# class `Partitioning` <a id="class_partitioning" class="anchor"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public static bool ` [`eraseMBRSector`](#class_partitioning_1a662f276b27785e76cdf9f89c5356e784)`(BlockDeviceType * blockDevice)` | Erases the first block (4096 bytes) of the BlockDevice to delete any already existing MBR partition table 
+`public static bool ` [`partitionDrive`](#class_partitioning_1a803b6e9a67304c6551d2a90ed5473985)`(BlockDeviceType * blockDevice, std::vector< ` [`Partition`](#struct_partition)` > partitions)` | Partitions the BlockDevice according to the partitioning schemme given by the vector of [Partition](#struct_partition) structs 
+`public static std::vector< ` [`Partition`](#struct_partition)` > ` [`readPartitions`](#class_partitioning_1a44886fc5c7320a07cc42171ce9581fec)`(BlockDeviceType * blockDevice)` | Reads and unpacks the MBR partition information and returns a list of partitions it can find on the drive 
+
+## Members
+
+### `public static bool ` [`eraseMBRSector`](#class_partitioning_1a662f276b27785e76cdf9f89c5356e784)`(BlockDeviceType * blockDevice)` <a id="class_partitioning_1a662f276b27785e76cdf9f89c5356e784" class="anchor"></a>
+
+Erases the first block (4096 bytes) of the BlockDevice to delete any already existing MBR partition table 
+#### Parameters
+* `The` BlockDevice on which the MBR sector is situated. 
+
+#### Returns
+True upon success, False on failure
+<hr />
+
+### `public static bool ` [`partitionDrive`](#class_partitioning_1a803b6e9a67304c6551d2a90ed5473985)`(BlockDeviceType * blockDevice, std::vector< ` [`Partition`](#struct_partition)` > partitions)` <a id="class_partitioning_1a803b6e9a67304c6551d2a90ed5473985" class="anchor"></a>
+
+Partitions the BlockDevice according to the partitioning schemme given by the vector of [Partition](#struct_partition) structs 
+#### Parameters
+* `blockDevice` - the BlockDevice which we would like to partition. 
+
+* `partitions` - a vector of [Partition](#struct_partition) structs that represents the partitioning scheme 
+
+#### Returns
+True upon success, False on failure
+<hr />
+
+### `public static std::vector< ` [`Partition`](#struct_partition)` > ` [`readPartitions`](#class_partitioning_1a44886fc5c7320a07cc42171ce9581fec)`(BlockDeviceType * blockDevice)` <a id="class_partitioning_1a44886fc5c7320a07cc42171ce9581fec" class="anchor"></a>
+
+Reads and unpacks the MBR partition information and returns a list of partitions it can find on the drive 
+#### Parameters
+* `blockDevice` on which the MBR sector is situated. 
+
+#### Returns
+std::vector of [Partition](#struct_partition) containing size and filesystem information about each partition
+<hr />
 
 # class `SDStorage` <a id="class_s_d_storage" class="anchor"></a>
 
-```
+```cpp
 class SDStorage
   : public Arduino_UnifiedStorage
 ```
@@ -492,9 +566,6 @@ Formats the SD card storage with the selected file system.
 
 #### Returns
 true if successful, false if failed.
-<hr />
-
-
 <hr />
 
 # class `UFile` <a id="class_u_file" class="anchor"></a>
@@ -807,12 +878,12 @@ Writes one byte to the file.
 
 # class `USBStorage` <a id="class_u_s_b_storage" class="anchor"></a>
 
-```
+```cpp
 class USBStorage
   : public Arduino_UnifiedStorage
 ```
 
-Represents a USB storage using the Arduino Unified Storage library.
+[USBStorage](#class_u_s_b_storage) class provides an interface to access USB storage devices. It inherits from the [Arduino_UnifiedStorage](#class_arduino___unified_storage) class and implements its pure virtual functions.
 
 ## Summary
 
@@ -824,7 +895,11 @@ Represents a USB storage using the Arduino Unified Storage library.
 `public virtual bool ` [`unmount`](#class_u_s_b_storage_1acb602dc07465880ebaec64dca1b36506)`()` | Unmounts the USB storage.
 `public virtual ` [`Folder`](#class_folder)` ` [`getRootFolder`](#class_u_s_b_storage_1a1d39336ddd7ec401dc2ed99c3117af59)`()` | Retrieves the root folder of the USB storage.
 `public virtual bool ` [`format`](#class_u_s_b_storage_1a8aec32e4e48d081183ad880a61836bc5)`(FileSystems fs)` | Formats the USB storage with the selected file system.
-`public bool ` [`isConnected`](#class_u_s_b_storage_1a228919e4b7f6fe0619fbcb33da9a9534)`()` | Checks if the USB storage is connected.
+`public bool ` [`isMounted`](#class_u_s_b_storage_1a2d3e3a732f2a43ab67e2fcd05e4ac058)`()` | Checks if the USB storage is mounted.
+`public void ` [`onConnect`](#class_u_s_b_storage_1a1dfb2b9dde7fbdc26c0bf73be9babe25)`(void(*)() callbackFunction)` | Sets the callback function to be called when a USB connection is established.
+`public void ` [`removeOnConnectCallback`](#class_u_s_b_storage_1afc58782a3f5207356d29392cb31730a0)`()` | Removes the callback function that is executed when the USB storage device is connected.
+`public void ` [`onDisconnect`](#class_u_s_b_storage_1a10ac0c8965eee6041b384a4823bb9720)`(void(*)() callbackFunction)` | Sets a callback function to be called when the USB storage device is disconnected.
+`public void ` [`removeOnDisconnectCallback`](#class_u_s_b_storage_1a2333fb1697b7ca72e5127cf60fc6680f)`()` | Removes the callback function that is called when the USB storage device is disconnected.
 
 ## Members
 
@@ -876,11 +951,57 @@ Formats the USB storage with the selected file system.
 true if successful, false if failed.
 <hr />
 
-### `public bool ` [`isConnected`](#class_u_s_b_storage_1a228919e4b7f6fe0619fbcb33da9a9534)`()` <a id="class_u_s_b_storage_1a228919e4b7f6fe0619fbcb33da9a9534" class="anchor"></a>
+### `public bool ` [`isMounted`](#class_u_s_b_storage_1a2d3e3a732f2a43ab67e2fcd05e4ac058)`()` <a id="class_u_s_b_storage_1a2d3e3a732f2a43ab67e2fcd05e4ac058" class="anchor"></a>
 
-Checks if the USB storage is connected.
+Checks if the USB storage is mounted.
 
 #### Returns
-true if connected, false otherwise.
+true if mounted, false otherwise.
 <hr />
 
+### `public void ` [`onConnect`](#class_u_s_b_storage_1a1dfb2b9dde7fbdc26c0bf73be9babe25)`(void(*)() callbackFunction)` <a id="class_u_s_b_storage_1a1dfb2b9dde7fbdc26c0bf73be9babe25" class="anchor"></a>
+
+Sets the callback function to be called when a USB connection is established.
+
+#### Parameters
+* `callbackFunction` A pointer to the function to be called when a USB connection is established.
+<hr />
+
+### `public void ` [`removeOnConnectCallback`](#class_u_s_b_storage_1afc58782a3f5207356d29392cb31730a0)`()` <a id="class_u_s_b_storage_1afc58782a3f5207356d29392cb31730a0" class="anchor"></a>
+
+Removes the callback function that is executed when the USB storage device is connected.
+
+<hr />
+
+### `public void ` [`onDisconnect`](#class_u_s_b_storage_1a10ac0c8965eee6041b384a4823bb9720)`(void(*)() callbackFunction)` <a id="class_u_s_b_storage_1a10ac0c8965eee6041b384a4823bb9720" class="anchor"></a>
+
+Sets a callback function to be called when the USB storage device is disconnected.
+
+#### Parameters
+* `callbackFunction` A pointer to the function to be called when the USB storage device is disconnected.
+<hr />
+
+### `public void ` [`removeOnDisconnectCallback`](#class_u_s_b_storage_1a2333fb1697b7ca72e5127cf60fc6680f)`()` <a id="class_u_s_b_storage_1a2333fb1697b7ca72e5127cf60fc6680f" class="anchor"></a>
+
+Removes the callback function that is called when the USB storage device is disconnected.
+
+<hr />
+
+# struct `Partition` <a id="struct_partition" class="anchor"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public int ` [`size`](#struct_partition_1a718bdba639f222d90d23480b58caa1f9) | 
+`public FileSystems ` [`fileSystemType`](#struct_partition_1af5c05bc6faa14fb253c3a39e5e883529) | 
+
+## Members
+
+### `public int ` [`size`](#struct_partition_1a718bdba639f222d90d23480b58caa1f9) <a id="struct_partition_1a718bdba639f222d90d23480b58caa1f9" class="anchor"></a>
+
+<hr />
+
+### `public FileSystems ` [`fileSystemType`](#struct_partition_1af5c05bc6faa14fb253c3a39e5e883529) <a id="struct_partition_1af5c05bc6faa14fb253c3a39e5e883529" class="anchor"></a>
+
+<hr />
