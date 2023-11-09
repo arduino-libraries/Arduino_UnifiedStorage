@@ -1,0 +1,61 @@
+# Workflow to check if the version in library.properties matches the latest release
+# If it does not, deletes the release and the corresponding tag
+name: Get Latest Release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  get_release:
+    runs-on: ubuntu-latest
+
+    steps:
+        # Step 1: Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+        # Step 2: Retrieve the latest release from the GitHub API
+      - name: Get latest release
+        id: get_latest_release
+        run: |
+          set -e
+          response=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/latest")
+          echo "Response: $response"
+          latest_release=$(echo "$response" | jq -r .tag_name)
+          echo "Latest release: $latest_release"
+          echo "::set-output name=release::$latest_release"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+        # Step 3: Check the version in the library.properties file and compare it with the latest release
+      - name: Check version in library.properties
+        id: compare_version
+        run: |
+          version=$(cat library.properties | grep "version" | cut -d'=' -f2)
+          echo "Version in library.properties: $version"
+          echo "Version in release: ${{ steps.get_latest_release.outputs.release }}"
+          if [ "$version" == "${{ steps.get_latest_release.outputs.release }}" ]; then
+            echo "Versions match!"
+          else
+            echo "Versions don't match."
+          fi
+          echo "::set-output name=version::$version"
+
+        # Step 4: Delete the release if the versions don't match
+      - name: Delete release if failed
+        if: ${{ steps.compare_version.outputs.version != steps.get_latest_release.outputs.release }}
+        uses: dev-drprasad/delete-tag-and-release@v0.2.1
+        with:
+          tag_name: ${{ steps.get_latest_release.outputs.release }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        # Step 5: Fail the workflow if the versions don't match
+      - name: Fail workflow if failed
+        if: ${{ steps.compare_version.outputs.version != steps.get_latest_release.outputs.release }}
+        run: |
+          echo "Versions don't match. Failing the workflow."
+          exit 1
