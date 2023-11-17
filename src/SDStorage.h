@@ -5,8 +5,6 @@
 
 #include "Arduino_UnifiedStorage.h"
 
-#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_C33) || !defined(ARDUINO_OPTA)
-
 /**
  * Represents an SD card storage using the Arduino Unified Storage library.
  */
@@ -54,10 +52,7 @@ class SDStorage: public Arduino_UnifiedStorage  {
         bool format(FileSystems fs) override;
         
     private:
-        FileSystems fileSystem = FS_FAT;
-        
+        FileSystems fileSystemType = FS_FAT;
 };
-
-#endif
 
 #endif

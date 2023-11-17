@@ -1,44 +1,46 @@
    /*
-   BackupInternalPartitions
+    BackupInternalPartitions
 
-   This code demonstrates how the "Arduino_UnifiedStorage" can be used to access multiple partitions on the internal storage,
-   and transfer information to a USB Mass storage device.
+    This code demonstrates how the "Arduino_UnifiedStorage" can be used to access multiple partitions on the internal storage,
+    and transfer information to a USB Mass storage device.
 
-   In the setup function, the code initializes serial communication, mounts both USB & internal storage.
-   It then creates a root directory in the internal storage and creates a subdirectory with files inside it.
+    In the setup function, the code initializes serial communication, and registers a callback for the insertion of the USB Drive. 
+    
+    If the device is successfully mounted, a folder for this instance of a backup will be created on the USB Drive.
 
-   The "addSomeFakeFiles" function generates random files in the specified folder, simulating real data.
+    Afterwards the sketch does the following:
+        - lists all partitions available on the InternalStorage
+        - mounts each partition
+        - creates a sub folder for each partition,
+        - copies everything on that partition to the corresponding subfolder.
+    
+    The "addSomeFakeFiles" function generates random files in the specified folder, simulating real data.
+    The "move" function is responsible for transferring folders and files between storage locations.
 
-   Afterward, it copies files from internal storage to USB storage and moves folders from each partition internal storage to USB storage.
+    INSTRUCTIONS
+    - Make sure you have "POSIXStorage" and "Arduino_UnifiedStorage" installed
+    - Insert a USB Drive whenever you want 
+    - Wait for the sketch to finish, it will display the following "DONE, you can restart the board now" when successful
+    - Unplug the USB device and inspect its contents. 
 
-   The "move" function is responsible for transferring folders and files between storage locations.
+    Created: 31th August 2023
+    By: Cristian Dragomir
 
-   The "backupPartitionsC33" and "backupPartitionsH7" functions backup partitions based on the board type, as each have a different default scheme. 
-
-   Created: 31th August 2023
-   By: Cristian Dragomir
-
-   Source: https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/BackupInternalPartitions/BackupInternalPartitions.ino
+    Source: https://github.com/arduino-libraries/Arduino_UnifiedStorage/blob/main/examples/BackupInternalPartitions/BackupInternalPartitions.ino
 */
 
 #include <Arduino_UnifiedStorage.h>
 
 
-#if defined(ARDUINO_PORTENTA_C33)
-InternalStorage ota = InternalStorage(1, "ota", FS_FAT);
-InternalStorage data = InternalStorage(2, "data", FS_FAT);
+constexpr boolean createFakeFiles = true;
+boolean done = false;
+volatile boolean connected = false;
 
-#elif defined(ARDUINO_PORTENTA_H7_M7)
-InternalStorage wifi = InternalStorage(1, "wifi", FS_FAT);
-InternalStorage ota = InternalStorage(2, "ota", FS_FAT);
-InternalStorage data = InternalStorage(3, "data", FS_FAT);
-#endif
-
-USBStorage thumbDrive = USBStorage();
+USBStorage thumbDrive;
 
 
 void addSomeFakeFiles(Folder * folder){
-    Serial.println("* adding some fake files to: " + String(folder -> getPathAsString()));
+    Serial.println("Adding some fake files to: " + String(folder -> getPathAsString()));
 
     for (int i = 0; i < random(0, 9); i++){
         UFile thisFile = folder -> createFile("File_"+ String(random(999)), FileMode::WRITE);
@@ -59,124 +61,70 @@ void addSomeFakeFiles(Folder * folder){
 
 void move(Folder * source, Folder * dest){
     for(Folder f: source -> getFolders()){
-        Serial.println("* copying folder :" + String(f.getPathAsString()));
+        Serial.println("Copying folder :" + String(f.getPathAsString()));
         f.moveTo(*dest);
     }
 
     for(UFile f: source -> getFiles()){
-        Serial.println("* copying file :" + String(f.getPathAsString()));
+        Serial.println("Copying file :" + String(f.getPathAsString()));
         f.moveTo(*dest);
     }
 }
 
 
-#if defined(ARDUINO_PORTENTA_C33)
-void backupPartitionsC33(Folder * backupFolder){
-
-    Serial.println("* backup location: " + String(backupFolder -> getPathAsString()));
-
-    int otaMounted = ota.begin(FS_FAT);
-    Serial.println("* ota partition mount: " + String(otaMounted));
-
-    int dataMounted = data.begin(FS_FAT);
-    Serial.println("* data partition mount: " + String(dataMounted));
 
 
-    if(otaMounted == 1){
-        Folder otaRoot = ota.getRootFolder();
-        addSomeFakeFiles(&otaRoot);
-        Folder otaFolder = backupFolder -> createSubfolder("ota");
-        move(&otaRoot, &otaFolder);
-        ota.unmount();
-    } else {
-        Serial.println("OTA partition not mounted, cannot proceed");
-    }
-
-
-    if(dataMounted == 1){
-        Folder dataRoot = data.getRootFolder();
-        addSomeFakeFiles(&dataRoot); 
-        Folder dataFolder = backupFolder -> createSubfolder("data");
-        move(&dataRoot, &dataFolder);
-        data.unmount();
-    } else {
-        Serial.println("Data partition not mounted, cannot proceed");
-    }
-}
-#endif 
-
-
-#if defined(ARDUINO_PORTENTA_H7_M7)
-void backupPartitionsH7(Folder * backupFolder){
-    Serial.println("* backup location: " + String(backupFolder -> getPathAsString()));
-
-    int wifiMounted = wifi.begin(FS_FAT);
-    Serial.println("* wifi partition mount: " + String(wifiMounted));
-
-    int otaMounted = ota.begin(FS_FAT);
-    Serial.println("* ota partition mount: " + String(otaMounted));
-
-    int dataMounted = data.begin(FS_FAT);
-    Serial.println("* data partition mounted: " + String(dataMounted));
-
-    if(wifiMounted == 1){
-        Folder wifiRoot = wifi.getRootFolder();
-        addSomeFakeFiles(&wifiRoot);
-        Folder wifiFolder = backupFolder -> createSubfolder("wifi");
-        move(&wifiRoot, &wifiFolder);
-        wifi.unmount();
-    } else {
-        Serial.println("WiFi partition not mounted, cannot proceed");
-    }
-
-    if(otaMounted == 1){
-        Folder otaRoot = ota.getRootFolder();
-        addSomeFakeFiles(&otaRoot);
-        Folder otaFolder = backupFolder -> createSubfolder("ota");
-        move(&otaRoot, &otaFolder);
-        ota.unmount();
-    } else {
-        Serial.println("OTA partition not mounted, cannot proceed");
-    }
-
-
-    if(dataMounted == 1){
-        Folder dataRoot = data.getRootFolder();
-        addSomeFakeFiles(&dataRoot); 
-        Folder dataFolder = backupFolder -> createSubfolder("data");
-        move(&dataRoot, &dataFolder);
-        data.unmount();
-    } else {
-        Serial.println("Data partition not mounted, cannot proceed");
-    }
-}
-#endif 
 
 void setup(){
     randomSeed(analogRead(A0));
 
-
     Serial.begin(115200);
     while(!Serial);
 
-    int thumbMounted = thumbDrive.begin(FS_FAT);
-    Serial.println("* usb drive mounted:" + String(thumbMounted));
+    // toggle this to enable debugging output
+    Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
+    thumbDrive = USBStorage();
 
-    Folder thumbRoot = thumbDrive.getRootFolder();
-    String folderName = "InternalBackup_" + String(millis());
-    Folder backupFolder = thumbRoot.createSubfolder(folderName);
+    bool thumbMounted = thumbDrive.begin(FS_FAT);
+    if(thumbMounted){
+        Serial.println("USB Thumb Drive has been mounted");
 
+        Folder thumbRoot = thumbDrive.getRootFolder();
+        String folderName = "InternalBackup_" + String(millis());
+        Serial.println(folderName);
+        Folder backupFolder = thumbRoot.createSubfolder(folderName);
 
-    #if defined(ARDUINO_PORTENTA_H7_M7)
-        backupPartitionsH7(&backupFolder);
-    #elif defined(ARDUINO_PORTENTA_C33)
-        backupPartitionsC33(&backupFolder);
-    #endif
+        int partitionIndex = 0;
 
-    thumbDrive.unmount();
+        std::vector<Partition> partitions = InternalStorage::readPartitions();
+        Serial.println("Found " + String(partitions.size()) + " partitions on internalStorage \n");
 
-    Serial.println("DONE, you can restart the board now");
+        for (auto part: partitions){
+            partitionIndex++;
+            const char * partitionName = createPartitionName(partitionIndex);
+            Folder thisPartitionBackupFolder = backupFolder.createSubfolder(partitionName);
+
+            InternalStorage thisPartition = InternalStorage(partitionIndex, partitionName, part.fileSystemType);
+            thisPartition.begin();
+
+            Folder partitionRootFolder = thisPartition.getRootFolder();
+            Serial.println(partitionRootFolder.getPathAsString());
+
+            if(createFakeFiles){
+                addSomeFakeFiles(&partitionRootFolder);
+            }
+
+            move(&partitionRootFolder, &thisPartitionBackupFolder);
+            thisPartition.unmount();
+        }
+
+        thumbDrive.unmount();
+    
+
+        Serial.println("DONE, you can restart the board now");
+    }
+
 
 }
 

@@ -2,14 +2,21 @@
 #define InternalStorage_H
 
 #include "Arduino_UnifiedStorage.h"
+#include "Types.h"
+
 
 /**
  * Represents internal storage using the Arduino Unified Storage library.
  */
 class InternalStorage : public Arduino_UnifiedStorage {
 public:
+    
+
     /**
-     * Default constructor for the InternalStorage class.
+     * Constructs an InternalStorage object with default settings.
+     * If no partitions are available, it restores the default partitioning scheme (See restoreDefaultPartitions() for more info).
+     * If partitions are available, it sets the partition number, file system type, and partition name based on the last partition available.
+     * When using the default partitioning scheme the last partition would be the user partition. 
      */
     InternalStorage();
 
@@ -51,19 +58,6 @@ public:
      */
     Folder getRootFolder() override;
 
-    /**
-     * Sets the QSPI partition number.
-     * 
-     * @param partition The partition number.
-     */
-    void setQSPIPartition(int partition);
-
-    /**
-     * Sets the QSPI partition name.
-     * 
-     * @param name The name of the partition.
-     */
-    void setQSPIPartitionName(const char *name);
 
     /**
      * Formats the internal storage with the selected file system.
@@ -78,30 +72,43 @@ public:
      * 
      * @return The block device as a BlockDevice object.
      */
-    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_OPTA)
-        mbed::BlockDevice *getBlockDevice();
-    #endif
+    BlockDeviceType *getBlockDevice();
 
-    #if defined(ARDUINO_PORTENTA_C33)
-        BlockDevice *getBlockDevice();
-    #endif
+    /**
+     * Partitions the internal storage according to the partitioning scheme given in the `partitions` parameter erasing the existing partitions
+     * @param partitions - vector of structs of type Partition that represents the partitioning scheme
+     * @return true if successful, false if failed.
+     */
+    static bool partition(std::vector<Partition> partitions);
 
+
+    /**
+     * Creates one partition spanning over the whole size of the internal storage drive erasing the existing partitions.
+     * @return true if successful, false if failed.
+     */
+    static bool partition(); 
+
+    /**
+     * Restores the default partitioning scheme (1MB FAT32 for Certificates, 5MB FAT32 for OTA, 8MB user storage) to the internal storage drive erasing the existing partitions.
+     * @return true if successful, false if failed.
+     */
+    static bool restoreDefaultPartitions();
+
+    /**
+     * Reads the partitioning scheme from the MBR sector of the internal storage drive and returns a vector of structs of type Partition that represents the partitioning scheme
+     * @return vector of structs of type Partition 
+    */
+    static std::vector<Partition> readPartitions();
 
     private:
-        #if defined(ARDUINO_PORTENTA_C33)
-        BlockDevice * blockDevice;
-        MBRBlockDevice * userData;
-        FileSystem * userDataFileSystem;
-        int partitionNumber = 2;
-        #elif defined(ARDUINO_PORTENTA_H7_M7)  ||  defined(ARDUINO_OPTA)
-        mbed::BlockDevice * blockDevice;
-        mbed::MBRBlockDevice * userData;
-        mbed::FileSystem * userDataFileSystem;
-        int partitionNumber = 3;
-        #endif
+        BlockDeviceType * blockDevice;
+        MBRBlockDeviceType * mbrBlockDevice;
+        FileSystemType * fileSystem;
+        int partitionNumber;
+        char * partitionName;        
+        FileSystems fileSystemType;
 
-        char * partitionName;
-        FileSystems fileSystem;
 };
+
 
 #endif

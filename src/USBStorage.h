@@ -1,10 +1,12 @@
-#include "Arduino_UnifiedStorage.h"
+
 
 #ifndef USBStorage_H
 #define USBStorage_H
 
+#include "Arduino_UnifiedStorage.h"
 /**
- * Represents a USB storage using the Arduino Unified Storage library.
+ * USBStorage class provides an interface to access USB storage devices.
+ * It inherits from the Arduino_UnifiedStorage class and implements its pure virtual functions.
  */
 class USBStorage : public Arduino_UnifiedStorage {
 public:
@@ -51,21 +53,44 @@ public:
     bool format(FileSystems fs) override;
 
     /**
-     * Checks if the USB storage is connected.
+     * Checks if the USB storage is mounted.
      * 
-     * @return true if connected, false otherwise.
+     * @return true if mounted, false otherwise.
      */
-    bool isConnected();
+    bool isMounted();
 
+    /**
+     * Sets the callback function to be called when a USB connection is established.
+     *
+     * @param callbackFunction A pointer to the function to be called when a USB connection is established.
+     */
+    void onConnect(void (* const callbackFunction)());
 
+    /**
+     * @brief Removes the callback function that is executed when the USB storage device is connected.
+     * 
+     */
+    void removeOnConnectCallback();
 
+    /**
+     * @brief Sets a callback function to be called when the USB storage device is disconnected.
+     * 
+     * @param callbackFunction A pointer to the function to be called when the USB storage device is disconnected.
+     */
+    void onDisconnect(void (* const callbackFunction)());
+
+    /**
+     * @brief Removes the callback function that is called when the USB storage device is disconnected.
+     * 
+     */
+    void removeOnDisconnectCallback();
 
 
 private:
-    FileSystems fileSystem = FS_FAT;
-    bool connected = false;
+    FileSystems fileSystemType = FS_FAT;
+    bool mounted = false;
     unsigned long previousMillis; 
-    unsigned int interval = 500;
+    unsigned int interval = 500; // document what this does too, make it constexp (mountRetryInterval)
 };
 
 #endif

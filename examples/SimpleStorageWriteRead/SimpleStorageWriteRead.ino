@@ -11,6 +11,12 @@
     switching file modes to read, resetting file pointers to the start,
     and printing the read data to the serial monitor using a while loop.
 
+    INSTRUCTIONS
+      1. Check compatibility with your board and make sure you have "POSIXStorage" and "Arduino_UnifiedStorage" installed
+      2. Connect your board to the serial monitor
+      3. Wait for the sketch to run 
+
+
     Created 28th July 2023
     By Cristian Dragomir
 
@@ -22,6 +28,7 @@
 */
 
 #include "Arduino_UnifiedStorage.h"
+
 
 void printFolderContents(Folder dir, int indentation = 0) {
   std::vector<Folder> directories = dir.getFolders();
@@ -49,20 +56,29 @@ void printFolderContents(Folder dir, int indentation = 0) {
 
 
 // Uncomment one of the three lines below to select between SD card, USB or internal storage
-//SDStorage unifiedStorage = SDStorage();             // Create an instance for interacting with SD card storage
-//USBStorage unifiedStorage = USBStorage()            // Create an instance for interacting with USB storage
-InternalStorage internalStorage = InternalStorage();  // Create an instance for interacting with internal Flash storage (default)
+//SDStorage storage;             // Create an instance for interacting with SD card storage
+//USBStorage storage;            // Create an instance for interacting with USB storage
+InternalStorage storage;
+
 
 void setup() {
   Serial.begin(115200);
   while (!Serial);
 
-  if(!internalStorage.begin(FS_FAT)){
+  // toggle this to enable debugging output
+  Arduino_UnifiedStorage::debuggingModeEnabled = false;
+
+
+  storage = InternalStorage();
+  // storage = SDStorage(); // Uncomment this line to use SD card storage
+  // storage = USBStorage(); // Uncomment this line to use USB storage
+
+  if(!storage.begin()){
     Serial.println("Error mounting storage device.");
   }
   
   // Create a root directory in storage device
-  Folder root = internalStorage.getRootFolder();
+  Folder root = storage.getRootFolder();
 
   // Create subdirectories inside the root directory
   Folder subdir1 = root.createSubfolder("subdir1");
@@ -90,7 +106,6 @@ void setup() {
 
   // Read data from file1
   file1.seek(0); // Move the file pointer to the beginning
-  Serial.println(file1.available());
   while (file1.available()) {
   char data = file1.read();
     Serial.write(data);
@@ -113,7 +128,7 @@ void setup() {
   }
   Serial.println();
 
-  printFolderContents(internalStorage.getRootFolder());
+  printFolderContents(storage.getRootFolder());
 }
 
 void loop() {

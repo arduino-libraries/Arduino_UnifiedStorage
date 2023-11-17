@@ -1,13 +1,6 @@
+
+#define ARDUINO_UNIFIED_STORAGE_DEBUG
 #include <Arduino_UnifiedStorage.h>
-
-
-#if !defined(ARDUINO_OPTA)
-#define HAS_SD 
-#endif
-
-#define HAS_USB 
-
-#define HAS_QSPI 
 
 #if defined(HAS_USB)
 USBStorage usb = USBStorage();
@@ -21,40 +14,17 @@ SDStorage sd = SDStorage();
 InternalStorage internal = InternalStorage();
 #endif
 
-void printFolderContents(Folder dir, int indentation = 0) {
-  std::vector<Folder> directories = dir.getFolders();
-  std::vector<UFile>files = dir.getFiles();
-
-  // Print directories
-  for (Folder subdir : directories) {
-    for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
-    }
-    Serial.print("[D] ");
-    Serial.println(subdir.getPath());
-    printFolderContents(subdir, indentation + 1);
-  }
-
-  // Print files
-  for (UFile file : files) {
-    for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
-    }
-    Serial.print("[F] ");
-    Serial.println(file.getPath());
-  }
-}
 
 
 bool testFolderCreation(Folder root) {
   Folder subfolder = root.createSubfolder("test_folder");
   if (subfolder.exists()) {
-    Serial.println("\n--- Test creating folder using root.createSubfolder ---");
-    Serial.println("Test creating folder using root.createSubfolder - Success");
+    Arduino_UnifiedStorage::testPrint("\n--- Test creating folder using root.createSubfolder ---");
+    Arduino_UnifiedStorage::testPrint("Test creating folder using root.createSubfolder - Success");
     subfolder.remove();
     return true;
   } else {
-    Serial.println("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::testPrint("Test creating folder using root.createSubfolder - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -62,18 +32,18 @@ bool testFolderCreation(Folder root) {
 bool testFolderRenaming(Folder root) {
   Folder sourceFolder = root.createSubfolder("source_folder");
   if (sourceFolder.exists()) {
-    Serial.println("\n--- Test renaming folder ---");
-    Serial.println("Source folder name: " + String(sourceFolder.getPathAsString()));
+    Arduino_UnifiedStorage::testPrint("\n--- Test renaming folder ---");
+    Arduino_UnifiedStorage::testPrint("Source folder name: " + String(sourceFolder.getPathAsString()));
     if (sourceFolder.rename("renamed_folder")) {
-      Serial.println("Folder renamed to: " + String(sourceFolder.getPathAsString()));
+      Arduino_UnifiedStorage::testPrint("Folder renamed to: " + String(sourceFolder.getPathAsString()));
       sourceFolder.remove();
       return true;
     } else {
-      Serial.println("Folder renaming failed. Error: " + String(getErrno()));
+      Arduino_UnifiedStorage::testPrint("Folder renaming failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    Serial.println("Test folder renaming - Failed. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::testPrint("Test folder renaming - Failed. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -83,24 +53,24 @@ bool testCopyingFolder(Folder root) {
   Folder copyDestination = root.createSubfolder("copy_destination");
 
   if (sourceFolder.exists()) {
-    Serial.println("\n--- Test copying a folder ---");
-    Serial.println("Source folder name: " + String(sourceFolder.getPathAsString()));
-    Serial.println("Destination folder name: " + String(copyDestination.getPathAsString()));
+    Arduino_UnifiedStorage::testPrint("\n--- Test copying a folder ---");
+    Arduino_UnifiedStorage::testPrint("Source folder name: " + String(sourceFolder.getPathAsString()));
+    Arduino_UnifiedStorage::testPrint("Destination folder name: " + String(copyDestination.getPathAsString()));
 
    
 
     if (sourceFolder.copyTo(copyDestination, true)) {
-      Serial.println("Folder copied successfully!");
+      Arduino_UnifiedStorage::testPrint("Folder copied successfully!");
       sourceFolder.remove();
       copyDestination.remove();
       return true;
     } else {
-      Serial.println("Folder copying failed. Error: " + String(getErrno()));
+      Arduino_UnifiedStorage::testPrint("Folder copying failed. Error: " + String(getErrno()));
       sourceFolder.remove();
       return false;
     }
   } else {
-    Serial.println("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::testPrint("Test copying a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 }
@@ -112,20 +82,20 @@ bool testMovingFolder(Folder root) {
   Folder moveDestination = root.createSubfolder("move_destination");
 
   if (sourceFolderMove.exists()) {
-    Serial.println("\n--- Test moving a folder ---");
-    Serial.println("Source folder name: " + String(sourceFolderMove.getPathAsString()));
-    Serial.println("Destination folder name: " + String(moveDestination.getPathAsString()));
+    Arduino_UnifiedStorage::testPrint("\n--- Test moving a folder ---");
+    Arduino_UnifiedStorage::testPrint("Source folder name: " + String(sourceFolderMove.getPathAsString()));
+    Arduino_UnifiedStorage::testPrint("Destination folder name: " + String(moveDestination.getPathAsString()));
     if (sourceFolderMove.moveTo(moveDestination)) {
-      Serial.println("Folder moved successfully!");
+      Arduino_UnifiedStorage::testPrint("Folder moved successfully!");
       sourceFolderMove.remove();
       moveDestination.remove();
       return true;
     } else {
-      Serial.println("Folder moving failed. Error: " + String(getErrno()));
+      Arduino_UnifiedStorage::testPrint("Folder moving failed. Error: " + String(getErrno()));
       return false;
     }
   } else {
-    Serial.println("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
+    Arduino_UnifiedStorage::testPrint("Test moving a folder - Failed to create source folder. Error: " + String(getErrno()));
     return false;
   }
 
@@ -137,32 +107,36 @@ bool testMovingFolder(Folder root) {
 void runTests(Arduino_UnifiedStorage * storage, String storageType) {
     if (storage->begin()) {
         Folder root = storage->getRootFolder();
-
-
-        Serial.println("========= Folder Tests =========");
+        Arduino_UnifiedStorage::testPrint("========= Folder Tests =========");
 
         testFolderCreation(root);
         testFolderRenaming(root);
         testCopyingFolder(root);
         testMovingFolder(root);
 
-        Serial.println("========= FS Contents after Folder Tests =========");
-        printFolderContents(root);
         storage->unmount();
-        Serial.println();
+        Arduino_UnifiedStorage::testPrint("");
     }
 }
 
 void setup(){
-    Serial.begin(115200);
-    while(!Serial);
-    
-    #if defined(HAS_USB)
-        runTests(&usb, "USB");
+    #if defined(HAS_SERIAL)
+        Serial.begin(115200);
+        while(!Serial);
+    #elif defined(HAS_RS485)
+        beginRS485(115200);
     #endif 
+
+
+    // toggle this to enable debugging output
+    Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
     #if defined(HAS_QSPI)
         runTests(&internal, "QSPI");
+    #endif 
+
+    #if defined(HAS_USB)
+        runTests(&usb, "USB");
     #endif 
 
     #if defined(HAS_SD)
