@@ -57,5 +57,5 @@ jobs:
       - name: Fail workflow if failed
         if: ${{ steps.compare_version.outputs.version != steps.get_latest_release.outputs.release }}
         run: |
-          echo "Versions don't match. Failing the workflow."
+          echo "::error::Versions don't match. Failing the workflow."
           exit 1
