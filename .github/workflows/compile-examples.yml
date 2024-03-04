@@ -46,12 +46,15 @@ jobs:
           - fqbn: arduino:mbed_portenta:envie_m7
             platforms: |
               - name: arduino:mbed_portenta
+            artifact-name-suffix: arduino-mbed_portenta-envie_m7
           - fqbn: arduino:renesas_portenta:portenta_c33
             platforms: |
               - name: arduino:renesas_portenta
+            artifact-name-suffix: arduino-renesas_portenta-portenta_c33
           - fqbn: arduino:mbed_opta:opta
             platforms: |
               - name: arduino:mbed_opta
+            artifact-name-suffix: arduino-mbed_opta-opta
 
     steps:
       - name: Checkout repository
@@ -81,29 +84,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
+          name: sketches-report-${{ matrix.board.artifact-name-suffix }}
           path: ${{ env.SKETCHES_REPORTS_PATH }}
-          name: ${{ env.SKETCHES_REPORTS_ARTIFACT_NAME }}
-
-  report-size-deltas:
-    needs: build
-    # Run even if some compilations failed.
-    if: always() && github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-
-    steps:
-      - name: Download sketches reports artifact
-        id: download-artifact
-        continue-on-error: true # If compilation failed for all boards then there are no artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.SKETCHES_REPORTS_ARTIFACT_NAME }}
-          path: ${{ env.SKETCHES_REPORTS_PATH }}
-
-      - name: Comment size deltas report to PR
-        uses: arduino/report-size-deltas@v1
-        # If actions/download-artifact failed, there are no artifacts to report from.
-        if: steps.download-artifact.outcome == 'success'
-        with:
-          sketches-reports-source: ${{ env.SKETCHES_REPORTS_PATH }}
