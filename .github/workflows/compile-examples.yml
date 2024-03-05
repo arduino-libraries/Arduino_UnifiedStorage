@@ -24,9 +24,12 @@ on:
 env:
   UNIVERSAL_SKETCH_PATHS: |
         - extras/tests
-        - examples/SimpleStorageWriteRead
         - examples/AdvancedUSBInternalOperations
         - examples/BackupInternalPartitions
+        - examples/Callbacks
+        - examples/InternalStoragePartitioning
+        - examples/Logger
+        - examples/SimpleStorageWriteRead
   SKETCHES_REPORTS_PATH: sketches-reports
   SKETCHES_REPORTS_ARTIFACT_NAME: sketches-reports
 
