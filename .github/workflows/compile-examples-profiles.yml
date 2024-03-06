@@ -56,7 +56,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cli-compile-flags: |
-            - --profile="${{ matrix.board.fqbn }}"
+            - --profile=${{ matrix.board.fqbn }}
           sketch-paths: |
             ${{ env.UNIVERSAL_SKETCH_PATHS }}
             ${{ matrix.board.additional-sketch-paths }}
