@@ -55,7 +55,8 @@ jobs:
         uses: arduino/compile-sketches@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          cli-compile-flags: --profile ${{ matrix.board.fqbn }} 
+          cli-compile-flags: |
+            - --profile="${{ matrix.board.fqbn }}"
           sketch-paths: |
             ${{ env.UNIVERSAL_SKETCH_PATHS }}
             ${{ matrix.board.additional-sketch-paths }}
