@@ -56,16 +56,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cli-compile-flags: --profile ${{ matrix.board.fqbn }} 
-          fqbn: ${{ matrix.board.fqbn }}
-          platforms: ${{ matrix.board.platforms }}
-          libraries: |
-            # Install the library from the local path.
-            - source-path: ./
-            - name: Arduino_USBHostMbed5
-            - name: Arduino_POSIXStorage
-            - name: ArduinoRS485
-            # Additional library dependencies can be listed here.
-            # See: https://github.com/arduino/compile-sketches#libraries
           sketch-paths: |
             ${{ env.UNIVERSAL_SKETCH_PATHS }}
             ${{ matrix.board.additional-sketch-paths }}
