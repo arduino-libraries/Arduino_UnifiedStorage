@@ -54,6 +54,7 @@ jobs:
           sketches-report-path: ${{ env.SKETCHES_REPORTS_PATH }}
           cli-compile-flags: |
             - --profile=${{ matrix.board.name }}
+          fqbn: ${{ matrix.board.fqbn }}
 
       - name: Save sketches report as workflow artifact
         uses: actions/upload-artifact@v4
