@@ -1,20 +1,8 @@
 # Source: https://github.com/per1234/.github/blob/main/workflow-templates/compile-examples-private.md
-name: Compile Examples
+name: Compile Examples with Build Profiles
 
 # See: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
-  push:
-    paths:
-      - ".github/workflows/compile-examples.ya?ml"
-      - "library.properties"
-      - "examples/**"
-      - "src/**"
-  pull_request:
-    paths:
-      - ".github/workflows/compile-examples.ya?ml"
-      - "library.properties"
-      - "examples/**"
-      - "src/**"
   schedule:
     # Run every Tuesday at 8 AM UTC to catch breakage caused by changes to external resources (libraries, platforms).
     - cron: "0 8 * * TUE"
@@ -67,16 +55,7 @@ jobs:
         uses: arduino/compile-sketches@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          fqbn: ${{ matrix.board.fqbn }}
-          platforms: ${{ matrix.board.platforms }}
-          libraries: |
-            # Install the library from the local path.
-            - source-path: ./
-            - name: Arduino_USBHostMbed5
-            - name: Arduino_POSIXStorage
-            - name: ArduinoRS485
-            # Additional library dependencies can be listed here.
-            # See: https://github.com/arduino/compile-sketches#libraries
+          cli-compile-flags: --profile ${{ matrix.board.fqbn }} 
           sketch-paths: |
             ${{ env.UNIVERSAL_SKETCH_PATHS }}
             ${{ matrix.board.additional-sketch-paths }}
