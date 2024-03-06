@@ -10,14 +10,6 @@ on:
   repository_dispatch:
 
 env:
-  UNIVERSAL_SKETCH_PATHS: |
-        - extras/tests
-        - examples/AdvancedUSBInternalOperations
-        - examples/BackupInternalPartitions
-        - examples/Callbacks
-        - examples/InternalStoragePartitioning
-        - examples/Logger
-        - examples/SimpleStorageWriteRead
   SKETCHES_REPORTS_PATH: sketches-reports
   SKETCHES_REPORTS_ARTIFACT_NAME: sketches-reports
 
@@ -34,15 +26,18 @@ jobs:
 
       matrix:
         board:
-          - fqbn: arduino:mbed_portenta:envie_m7
+          - name: envie_m7
+            fqbn: arduino:mbed_portenta:envie_m7
             platforms: |
               - name: arduino:mbed_portenta
             artifact-name-suffix: arduino-mbed_portenta-envie_m7
-          - fqbn: arduino:renesas_portenta:portenta_c33
+          - name: portenta_c33
+            fqbn: arduino:renesas_portenta:portenta_c33
             platforms: |
               - name: arduino:renesas_portenta
             artifact-name-suffix: arduino-renesas_portenta-portenta_c33
-          - fqbn: arduino:mbed_opta:opta
+          - name: opta
+            fqbn: arduino:mbed_opta:opta
             platforms: |
               - name: arduino:mbed_opta
             artifact-name-suffix: arduino-mbed_opta-opta
@@ -55,13 +50,10 @@ jobs:
         uses: arduino/compile-sketches@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          cli-compile-flags: |
-            - --profile=${{ matrix.board.fqbn }}
-          sketch-paths: |
-            ${{ env.UNIVERSAL_SKETCH_PATHS }}
-            ${{ matrix.board.additional-sketch-paths }}
           enable-deltas-report: true
           sketches-report-path: ${{ env.SKETCHES_REPORTS_PATH }}
+          cli-compile-flags: |
+            - --profile=${{ matrix.board.name }}
 
       - name: Save sketches report as workflow artifact
         uses: actions/upload-artifact@v4
