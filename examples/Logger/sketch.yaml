@@ -1,0 +1,31 @@
+profiles:
+  arduino:mbed_portenta:envie_m7:
+    notes: Portenta H7 family & Portenta Machine Control
+    fqbn: arduino:mbed_portenta:envie_m7
+    platforms:
+      - platform: arduino:mbed_portenta (4.1.1)
+    libraries:
+      - Arduino_USBHostMbed5 (0.3.1)
+      - Arduino_POSIXStorage (1.2.0)
+      - Arduino_UnifiedStorage (1.1.0)
+      - ArduinoRS485 (1.0.5)
+  arduino:renesas_portenta:portenta_c33:
+    notes: Portenta C33
+    fqbn: arduino:renesas_portenta:portenta_c33
+    platforms:
+      - platform: arduino:renesas_portenta (4.1.1)
+    libraries:
+      - Arduino_USBHostMbed5 (0.3.1)
+      - Arduino_POSIXStorage (1.2.0)
+      - Arduino_UnifiedStorage (1.1.0)
+      - ArduinoRS485 (1.0.5)
+  arduino:mbed_opta:opta:
+    notes: Portenta Opta
+    fqbn: arduino:mbed_opta:opta
+    platforms:
+      - platform: arduino:mbed_opta (4.1.1)
+    libraries:
+      - Arduino_USBHostMbed5 (0.3.1)
+      - Arduino_POSIXStorage (1.2.0)
+      - Arduino_UnifiedStorage (1.1.0)
+      - ArduinoRS485 (1.0.5)  
