@@ -39,7 +39,7 @@
 
 [[gnu::unused]] static String prettyPrintFileSystemType(FileSystems f){
     if(f == 0) return "FAT";
-    else if(f == 1) return "LitlleFS";
+    else if(f == 1) return "LittleFS";
     else return "";
 }
 
