@@ -21,7 +21,7 @@ bool Partitioning::eraseMBRSector(BlockDeviceType * blockDevice)
 }
 
 bool Partitioning::isPartitionSchemeValid(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
-    size_t driveSize = blockDevice -> size() / 1024; // 
+    size_t driveSize = blockDevice -> size() / 1024; //
     size_t totalSize = 0;
 
     for (size_t i = 1; i < partitions.size() + 1; ++i) {
@@ -72,7 +72,7 @@ bool Partitioning::formatPartition(BlockDeviceType * blockDevice, int partitionN
 }
 
 bool Partitioning::createAndFormatPartitions(BlockDeviceType * blockDevice, std::vector<Partition> partitions){
-       
+
     bool success = true; // initialize to true
     int lastPartitionEnd = 0;
 
@@ -117,7 +117,7 @@ bool Partitioning::partitionDrive(BlockDeviceType * blockDevice, std::vector<Par
 
 std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevice){
     std::vector<Partition> partitions;
-    
+
     auto returnCode = blockDevice->init();
     if (returnCode) {
         Arduino_UnifiedStorage::debugPrint("[Partitioning][readPartitions][ERROR] Unable to read the Block Device.");
@@ -142,9 +142,9 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
 
     auto table_start_offset = buffer_size - sizeof(mbrTable);
     auto table = reinterpret_cast<mbrTable*>(&buffer[table_start_offset]);
-    
+
     if (table->signature[0] != mbrMagicNumbers[0] || table->signature[1] != mbrMagicNumbers[1]) {
- 
+
         Arduino_UnifiedStorage::debugPrint("[Partitioning][readPartitions][INFO] MBR Not Found - Flash Memory doesn't have partitions.");
         delete[] buffer;
         return partitions;
@@ -156,9 +156,9 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
         Partition partition;
 
         /*This code calculates the size of a partition in kilobytes.
-        It takes the Logical Block Address (LBA) size of the partition, 
+        It takes the Logical Block Address (LBA) size of the partition,
         multiplies it by 4096 (the size of a block in bytes),
-        and then shifts the result 10 bits to the right to convert it to kilobytes. 
+        and then shifts the result 10 bits to the right to convert it to kilobytes.
         */
        partition.size = (entry.lbaSize * 4096) >> 10;
 
