@@ -74,6 +74,8 @@ void testAllPartitions(std::vector<Partition> partitions) {
             Serial.println("\t - Successfully mounted partition: /" + String(partitionName));
             Serial.println("\t - Testing file operations: ");
             testWriting(&thisPartition); // Test writing to a file in the partition
+            thisPartition.unmount();
+            freePartitionName(partitionName);
         }
 
         Serial.println();

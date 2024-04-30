@@ -29,6 +29,8 @@ public:
      */
     InternalStorage(int partition, const char *name, FileSystems fs);
 
+    ~InternalStorage();
+
     /**
      * Initializes the internal storage.
      *
@@ -105,7 +107,7 @@ public:
         MBRBlockDeviceType * mbrBlockDevice;
         FileSystemType * fileSystem;
         int partitionNumber;
-        char * partitionName;        
+        const char * partitionName;
         FileSystems fileSystemType;
 
 };
