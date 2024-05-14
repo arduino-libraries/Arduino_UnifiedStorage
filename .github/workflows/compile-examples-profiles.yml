@@ -3,6 +3,18 @@ name: Compile Examples with Build Profiles
 
 # See: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
+  push:
+    paths:
+      - ".github/workflows/compile-examples.ya?ml"
+      - "library.properties"
+      - "examples/**"
+      - "src/**"
+  pull_request:
+    paths:
+      - ".github/workflows/compile-examples.ya?ml"
+      - "library.properties"
+      - "examples/**"
+      - "src/**"
   schedule:
     # Run every Tuesday at 8 AM UTC to catch breakage caused by changes to external resources (libraries, platforms).
     - cron: "0 8 * * TUE"
