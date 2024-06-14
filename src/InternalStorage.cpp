@@ -6,21 +6,32 @@ InternalStorage::InternalStorage(){
 
         //Arduino_UnifiedStorage::debugPrint("[InternalStorage][INFO] No partitions found, restoring default partitions");
         restoreDefaultPartitions();
-    } else {
-        int lastPartitionNumber = partitionsAvailable.size();
-        FileSystems lastPartitionFileSystem = partitionsAvailable.back().fileSystemType;
-        //Arduino_UnifiedStorage::debugPrint("[InternalStorage][INFO] Found " + String(lastPartitionNumber) + " partitions, using last partition as internal storage");
-
-        this -> partitionNumber = lastPartitionNumber;
-        this -> fileSystemType = lastPartitionFileSystem;
-        this -> partitionName = (char *)"internal"; 
+        // re-read table
+        partitionsAvailable = Partitioning::readPartitions(QSPIFBlockDeviceType::get_default_instance());
     }
+
+    int lastPartitionNumber = partitionsAvailable.size();
+    FileSystems lastPartitionFileSystem = partitionsAvailable.back().fileSystemType;
+    //Arduino_UnifiedStorage::debugPrint("[InternalStorage][INFO] Found " + String(lastPartitionNumber) + " partitions, using last partition as internal storage");
+
+    this -> partitionNumber = lastPartitionNumber;
+    this -> fileSystemType = lastPartitionFileSystem;
+    this -> partitionName = (char *)"internal";
+    this -> blockDevice = BlockDeviceType::get_default_instance();
+    this -> mbrBlockDevice = new MBRBlockDeviceType(this -> blockDevice, this->partitionNumber);
 }
 
 InternalStorage::InternalStorage(int partition, const char * name, FileSystems fileSystemType){
     this -> partitionNumber = partition;
-    this -> partitionName = (char *)name;
+    this -> partitionName = name;
     this -> fileSystemType = fileSystemType;
+    this -> blockDevice = BlockDeviceType::get_default_instance();
+    this -> mbrBlockDevice = new MBRBlockDeviceType(this -> blockDevice, this->partitionNumber);
+}
+
+InternalStorage::~InternalStorage()
+{
+  delete this -> mbrBlockDevice;
 }
 
 bool InternalStorage::begin(FileSystems fileSystemType){
@@ -49,9 +60,6 @@ std::vector<Partition> InternalStorage::readPartitions(){
 }
 
 bool InternalStorage::begin(){
- 
-        this -> blockDevice = BlockDeviceType::get_default_instance();
-        this -> mbrBlockDevice = new MBRBlockDeviceType(this->blockDevice, this->partitionNumber);
 
         if(this -> fileSystemType == FS_FAT){
             this -> fileSystem = new FATFileSystemType(this->partitionName);
@@ -61,7 +69,7 @@ bool InternalStorage::begin(){
             Arduino_UnifiedStorage::debugPrint("[InternalStorage][begin][INFO] Mounting partition " + String(this->partitionNumber) + " as LittleFS");
         }
 
-        int err = this -> fileSystem -> mount(mbrBlockDevice);
+        int err = this -> fileSystem -> mount(this -> mbrBlockDevice);
         if(err!=0){
             Arduino_UnifiedStorage::debugPrint("[InternalStorage][ERROR] Could not mount partition " + String(this->partitionNumber) + " as " + prettyPrintFileSystemType(this->fileSystemType) + ", error code: " + String(errno));
         }
@@ -69,7 +77,15 @@ bool InternalStorage::begin(){
 }
 
 bool InternalStorage::unmount(){
-    int err = this -> fileSystem -> unmount();
+    int err = 0;
+
+    if(this -> fileSystem)
+    {
+      err = this -> fileSystem -> unmount();
+      delete this -> fileSystem;
+      this -> fileSystem = NULL;
+    }
+
     return err == 0;
 }
 
@@ -78,23 +94,25 @@ Folder InternalStorage::getRootFolder(){
 }
 
 bool InternalStorage::format(FileSystems fs){
-    this -> begin();
+    FileSystemType * tmpFileSystem = nullptr;
     this -> unmount();
     this -> fileSystemType = fs;
 
     if(fs == FS_FAT){
-            this -> fileSystem = new FATFileSystemType(this->partitionName);
-            int err = this -> fileSystem -> reformat(this-> mbrBlockDevice);
+            tmpFileSystem = new FATFileSystemType(this->partitionName);
+            int err = tmpFileSystem -> reformat(this-> mbrBlockDevice);
             if(err != 0){
                 Arduino_UnifiedStorage::debugPrint("[InternalStorage][format][ERROR] Error formatting partition " + String(this->partitionNumber) + " as FAT: " + String(errno));
-            } 
+            }
+            delete tmpFileSystem;
             return err == 0;
     } if (fs == FS_LITTLEFS) {
-            this -> fileSystem =  new LittleFileSystemType(this->partitionName);
-            int err = this -> fileSystem -> reformat(this-> mbrBlockDevice);
+            tmpFileSystem =  new LittleFileSystemType(this->partitionName);
+            int err = tmpFileSystem -> reformat(this-> mbrBlockDevice);
             if(err != 0){
                 Arduino_UnifiedStorage::debugPrint("[InternalStorage][format][ERROR] Error formatting partition " + String(this->partitionNumber) + " as LittleFS: " + String(errno));
             }
+            delete tmpFileSystem;
             return err  == 0;
     }
 
