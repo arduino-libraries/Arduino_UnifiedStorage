@@ -6,21 +6,32 @@ InternalStorage::InternalStorage(){
 
         //Arduino_UnifiedStorage::debugPrint("[InternalStorage][INFO] No partitions found, restoring default partitions");
         restoreDefaultPartitions();
-    } else {
-        int lastPartitionNumber = partitionsAvailable.size();
-        FileSystems lastPartitionFileSystem = partitionsAvailable.back().fileSystemType;
-        //Arduino_UnifiedStorage::debugPrint("[InternalStorage][INFO] Found " + String(lastPartitionNumber) + " partitions, using last partition as internal storage");
-
-        this -> partitionNumber = lastPartitionNumber;
-        this -> fileSystemType = lastPartitionFileSystem;
-        this -> partitionName = (char *)"internal"; 
+        // re-read table
+        partitionsAvailable = Partitioning::readPartitions(QSPIFBlockDeviceType::get_default_instance());
     }
+
+    int lastPartitionNumber = partitionsAvailable.size();
+    FileSystems lastPartitionFileSystem = partitionsAvailable.back().fileSystemType;
+    //Arduino_UnifiedStorage::debugPrint("[InternalStorage][INFO] Found " + String(lastPartitionNumber) + " partitions, using last partition as internal storage");
+
+    this -> partitionNumber = lastPartitionNumber;
+    this -> fileSystemType = lastPartitionFileSystem;
+    this -> partitionName = (char *)"internal";
+    this -> blockDevice = BlockDeviceType::get_default_instance();
+    this -> mbrBlockDevice = new MBRBlockDeviceType(this -> blockDevice, this->partitionNumber);
 }
 
 InternalStorage::InternalStorage(int partition, const char * name, FileSystems fileSystemType){
     this -> partitionNumber = partition;
-    this -> partitionName = (char *)name;
+    this -> partitionName = name;
     this -> fileSystemType = fileSystemType;
+    this -> blockDevice = BlockDeviceType::get_default_instance();
+    this -> mbrBlockDevice = new MBRBlockDeviceType(this -> blockDevice, this->partitionNumber);
+}
+
+InternalStorage::~InternalStorage()
+{
+  delete this -> mbrBlockDevice;
 }
 
 bool InternalStorage::begin(FileSystems fileSystemType){

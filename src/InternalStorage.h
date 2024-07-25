@@ -19,6 +19,9 @@ public:
      * When using the default partitioning scheme the last partition would be the user partition. 
      */
     InternalStorage();
+    
+    ~InternalStorage();
+
 
     /**
      * Constructs an InternalStorage object with the specified partition, name, and file system.
@@ -105,7 +108,7 @@ public:
         MBRBlockDeviceType * mbrBlockDevice;
         FileSystemType * fileSystem;
         int partitionNumber;
-        char * partitionName;        
+        const char * partitionName;        
         FileSystems fileSystemType;
 
 };
