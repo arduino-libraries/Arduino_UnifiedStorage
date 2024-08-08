@@ -52,7 +52,6 @@ class Folder {
 
     /**
      * @brief Removes a directory.
-     * @param dirname The name of the directory to remove.
      * @return True if the directory was removed successfully, false otherwise.
      */
     bool remove();
