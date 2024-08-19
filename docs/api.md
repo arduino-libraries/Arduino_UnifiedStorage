@@ -24,15 +24,15 @@ Abstract class representing the common features of the supported storage methods
 | [`unmount`](#class_arduino___unified_storage_1a4281bc190ee4f2ad35265eab64ef6f7f) | Unmounts the storage.  |
 | [`getRootFolder`](#class_arduino___unified_storage_1a7166075ba695d54bf74c6c71b8c4c1bf) | Retrieves the root folder of the storage.  |
 | [`format`](#class_arduino___unified_storage_1ad6d045b4bdafd4dcb75daed305888e25) | Formats the storage with the selected file system.  |
-| [`debugPrint`](#class_arduino___unified_storage_1a466b794918c895d105501507f9337e61) |  |
-| [`testPrint`](#class_arduino___unified_storage_1ab76317acb2bf69c6fdf7575ed317e8f2) |  |
+| [`debugPrint`](#class_arduino___unified_storage_1ab0b726c7f98ea3623679097224290a07) |  |
+| [`testPrint`](#class_arduino___unified_storage_1a1fafe7a15fbd21c8705a9f86a92f6dd9) |  |
 
 ## Members
 
 ### `begin` <a id="class_arduino___unified_storage_1a350443027c76ea18f2812a54aa8ab437" class="anchor"></a>
 
 ```cpp
-public bool begin()
+bool begin()
 ```
 
 Initializes the storage.
@@ -44,7 +44,7 @@ true if successful, false if failed.
 ### `begin` <a id="class_arduino___unified_storage_1acb25f75f3dcdb89ebce3c7cd08970a99" class="anchor"></a>
 
 ```cpp
-public bool begin(FileSystems fs)
+bool begin(FileSystems fs)
 ```
 
 Initializes the storage with the specified file system. 
@@ -58,7 +58,7 @@ true if successful, false if failed.
 ### `unmount` <a id="class_arduino___unified_storage_1a4281bc190ee4f2ad35265eab64ef6f7f" class="anchor"></a>
 
 ```cpp
-public bool unmount()
+bool unmount()
 ```
 
 Unmounts the storage. 
@@ -69,7 +69,7 @@ true if successful, false if failed.
 ### `getRootFolder` <a id="class_arduino___unified_storage_1a7166075ba695d54bf74c6c71b8c4c1bf" class="anchor"></a>
 
 ```cpp
-public Folder getRootFolder()
+Folder getRootFolder()
 ```
 
 Retrieves the root folder of the storage. 
@@ -80,7 +80,7 @@ The root folder as a [Folder](#class_folder) object.
 ### `format` <a id="class_arduino___unified_storage_1ad6d045b4bdafd4dcb75daed305888e25" class="anchor"></a>
 
 ```cpp
-public bool format(FileSystems fs)
+bool format(FileSystems fs)
 ```
 
 Formats the storage with the selected file system. 
@@ -88,18 +88,18 @@ Formats the storage with the selected file system.
 true if successful, false if failed.
 <hr />
 
-### `debugPrint` <a id="class_arduino___unified_storage_1a466b794918c895d105501507f9337e61" class="anchor"></a>
+### `debugPrint` <a id="class_arduino___unified_storage_1ab0b726c7f98ea3623679097224290a07" class="anchor"></a>
 
 ```cpp
-public static void debugPrint(String message)
+static void debugPrint(String message)
 ```
 
 <hr />
 
-### `testPrint` <a id="class_arduino___unified_storage_1ab76317acb2bf69c6fdf7575ed317e8f2" class="anchor"></a>
+### `testPrint` <a id="class_arduino___unified_storage_1a1fafe7a15fbd21c8705a9f86a92f6dd9" class="anchor"></a>
 
 ```cpp
-public static void testPrint(String message)
+static void testPrint(String message)
 ```
 
 <hr />
@@ -121,12 +121,12 @@ Class representing a directory.
 | [`rename`](#class_folder_1adcbb7766d628810f716887d1e7e8d36f) | Renames a directory. |
 | [`rename`](#class_folder_1a14519c2a344ebfb8161c2bee2a2b5464) | Renames a directory. |
 | [`exists`](#class_folder_1aa548278d3ec09fd4abcaa827a79c40f4) | Checks if the directory exists. |
-| [`getPath`](#class_folder_1a0ef68289c526f8bf24020389c4e09e86) | Returns the path of the file. |
+| [`getPath`](#class_folder_1a731e8d84685eca8e273affba152468a6) | Returns the path of the file. |
 | [`getPathAsString`](#class_folder_1ac816d0fe5674c4648e97423b6f9c51f8) | Returns the path of the file. |
 | [`createSubfolder`](#class_folder_1a78f2f9b297f62b67c2e0656b15a95868) | Creates a subfolder in the directory. |
 | [`createSubfolder`](#class_folder_1ab50743664becb7b2a1fb564b5513d69c) | Creates a subfolder in the directory. |
-| [`getFiles`](#class_folder_1a2e7f604d19b8ad61524f86ade86ed4ad) | Returns File objects for all files in the current directory. |
-| [`getFolders`](#class_folder_1a5554b8cc2fd1ca39dfccbd06bc635e10) | Returns [Folder](#class_folder) objects for all files in the current directory. |
+| [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78) | Returns File objects for all files in the current directory. |
+| [`getFolders`](#class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb) | Returns [Folder](#class_folder) objects for all files in the current directory. |
 | [`copyTo`](#class_folder_1aabf0818b7ee45b2d871e82e86edb4ebd) | Copies the current directory. |
 | [`copyTo`](#class_folder_1a058d193f53c559eefe343b30797500eb) | Copies the current directory. |
 | [`copyTo`](#class_folder_1a3162979e4c679c7f5503cc4584949714) | Copies the current directory. |
@@ -139,7 +139,7 @@ Class representing a directory.
 ### `Folder` <a id="class_folder_1a8af69fd19ba86816c60b4c2291311eb1" class="anchor"></a>
 
 ```cpp
-public Folder()
+Folder()
 ```
 
 Creates an empty [Folder](#class_folder) object. Please note that any operation on this object will fail until a valid directory is assigned to it.
@@ -149,7 +149,7 @@ Creates an empty [Folder](#class_folder) object. Please note that any operation 
 ### `Folder` <a id="class_folder_1aa2a4dc98e8c383c7b4fa503b45813fe3" class="anchor"></a>
 
 ```cpp
-public Folder(const char * dirname)
+Folder(const char * dirname)
 ```
 
 Creates a directory with the specified name. If the directory already exists, it returns a [Folder](#class_folder) object representing the existing directory. Otherwise, it tries to create a new directory with the specified name. If it fails the `path` property of the [Folder](#class_folder) object will be null.
@@ -161,7 +161,7 @@ Creates a directory with the specified name. If the directory already exists, it
 ### `Folder` <a id="class_folder_1a6f445bfe0214a03ba00a1408e41726dd" class="anchor"></a>
 
 ```cpp
-public Folder(String dirname)
+Folder(String dirname)
 ```
 
 Creates a directory with the specified name. If the directory already exists, it returns a [Folder](#class_folder) object representing the existing directory. Otherwise, it tries to create a new directory with the specified name. If it fails the `path` property of the [Folder](#class_folder) object will be empty.
@@ -173,7 +173,7 @@ Creates a directory with the specified name. If the directory already exists, it
 ### `createFile` <a id="class_folder_1a04eceb0406b02e2d8a628d3c359dba5d" class="anchor"></a>
 
 ```cpp
-public UFile createFile(const char * fileName, FileMode fmode)
+UFile createFile(const char * fileName, FileMode fmode)
 ```
 
 Creates a file inside the directory.
@@ -188,7 +188,7 @@ A File object if successful, NULL if not.
 ### `createFile` <a id="class_folder_1a44255e2c0c4ffa37d7637a601bc590f6" class="anchor"></a>
 
 ```cpp
-public UFile createFile(String fileName, FileMode fmode)
+UFile createFile(String fileName, FileMode fmode)
 ```
 
 Creates a file inside the directory.
@@ -203,13 +203,10 @@ A File object if successful, NULL if not.
 ### `remove` <a id="class_folder_1aca893daac6c6747895d50987cf9cf34c" class="anchor"></a>
 
 ```cpp
-public bool remove()
+bool remove()
 ```
 
 Removes a directory.
-
-#### Parameters
-* `dirname` The name of the directory to remove. 
 
 #### Returns
 True if the directory was removed successfully, false otherwise.
@@ -218,7 +215,7 @@ True if the directory was removed successfully, false otherwise.
 ### `rename` <a id="class_folder_1adcbb7766d628810f716887d1e7e8d36f" class="anchor"></a>
 
 ```cpp
-public bool rename(const char * newDirname)
+bool rename(const char * newDirname)
 ```
 
 Renames a directory.
@@ -233,7 +230,7 @@ True if the directory was renamed successfully, false otherwise.
 ### `rename` <a id="class_folder_1a14519c2a344ebfb8161c2bee2a2b5464" class="anchor"></a>
 
 ```cpp
-public bool rename(String newDirname)
+bool rename(String newDirname)
 ```
 
 Renames a directory.
@@ -248,7 +245,7 @@ True if the directory was renamed successfully, false otherwise.
 ### `exists` <a id="class_folder_1aa548278d3ec09fd4abcaa827a79c40f4" class="anchor"></a>
 
 ```cpp
-public bool exists()
+bool exists()
 ```
 
 Checks if the directory exists.
@@ -257,10 +254,10 @@ Checks if the directory exists.
 True if the directory exists, false otherwise.
 <hr />
 
-### `getPath` <a id="class_folder_1a0ef68289c526f8bf24020389c4e09e86" class="anchor"></a>
+### `getPath` <a id="class_folder_1a731e8d84685eca8e273affba152468a6" class="anchor"></a>
 
 ```cpp
-public const char * getPath()
+const char * getPath()
 ```
 
 Returns the path of the file.
@@ -272,7 +269,7 @@ The path of the file as a const char *
 ### `getPathAsString` <a id="class_folder_1ac816d0fe5674c4648e97423b6f9c51f8" class="anchor"></a>
 
 ```cpp
-public String getPathAsString()
+String getPathAsString()
 ```
 
 Returns the path of the file.
@@ -284,7 +281,7 @@ The path of the file as an Arduino String
 ### `createSubfolder` <a id="class_folder_1a78f2f9b297f62b67c2e0656b15a95868" class="anchor"></a>
 
 ```cpp
-public Folder createSubfolder(const char * subfolderName, bool overwrite)
+Folder createSubfolder(const char * subfolderName, bool overwrite)
 ```
 
 Creates a subfolder in the directory.
@@ -301,7 +298,7 @@ The created subfolder.
 ### `createSubfolder` <a id="class_folder_1ab50743664becb7b2a1fb564b5513d69c" class="anchor"></a>
 
 ```cpp
-public Folder createSubfolder(String subfolderName, bool overwrite)
+Folder createSubfolder(String subfolderName, bool overwrite)
 ```
 
 Creates a subfolder in the directory.
@@ -315,10 +312,10 @@ Creates a subfolder in the directory.
 The created subfolder.
 <hr />
 
-### `getFiles` <a id="class_folder_1a2e7f604d19b8ad61524f86ade86ed4ad" class="anchor"></a>
+### `getFiles` <a id="class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78" class="anchor"></a>
 
 ```cpp
-public std::vector< UFile > getFiles()
+std::vector< UFile > getFiles()
 ```
 
 Returns File objects for all files in the current directory.
@@ -327,10 +324,10 @@ Returns File objects for all files in the current directory.
 A std::vector of File objects representing the files in the directory.
 <hr />
 
-### `getFolders` <a id="class_folder_1a5554b8cc2fd1ca39dfccbd06bc635e10" class="anchor"></a>
+### `getFolders` <a id="class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb" class="anchor"></a>
 
 ```cpp
-public std::vector< Folder > getFolders()
+std::vector< Folder > getFolders()
 ```
 
 Returns [Folder](#class_folder) objects for all files in the current directory.
@@ -342,7 +339,7 @@ A std::vector of [Folder](#class_folder) objects representing the files in the d
 ### `copyTo` <a id="class_folder_1aabf0818b7ee45b2d871e82e86edb4ebd" class="anchor"></a>
 
 ```cpp
-public bool copyTo( Folder destination, bool overwrite)
+bool copyTo( Folder destination, bool overwrite)
 ```
 
 Copies the current directory.
@@ -357,7 +354,7 @@ True upon success, false otherwise.
 ### `copyTo` <a id="class_folder_1a058d193f53c559eefe343b30797500eb" class="anchor"></a>
 
 ```cpp
-public bool copyTo(const char * destination, bool overwrite)
+bool copyTo(const char * destination, bool overwrite)
 ```
 
 Copies the current directory.
@@ -374,7 +371,7 @@ True upon success, false otherwise.
 ### `copyTo` <a id="class_folder_1a3162979e4c679c7f5503cc4584949714" class="anchor"></a>
 
 ```cpp
-public bool copyTo(String destination, bool overwrite)
+bool copyTo(String destination, bool overwrite)
 ```
 
 Copies the current directory.
@@ -391,7 +388,7 @@ True upon success, false otherwise.
 ### `moveTo` <a id="class_folder_1a5002b388b7e503ba79a8623ca6c1cbbd" class="anchor"></a>
 
 ```cpp
-public bool moveTo( Folder destination, bool overwrite)
+bool moveTo( Folder destination, bool overwrite)
 ```
 
 Moves the current directory.
@@ -408,7 +405,7 @@ True upon success, false otherwise.
 ### `moveTo` <a id="class_folder_1a0ab690abfff790a2bd9fff3dd5976e82" class="anchor"></a>
 
 ```cpp
-public bool moveTo(const char * destination, bool overwrite)
+bool moveTo(const char * destination, bool overwrite)
 ```
 
 Moves the current directory.
@@ -425,7 +422,7 @@ True upon success, false otherwise.
 ### `moveTo` <a id="class_folder_1a3125db272185165a03b891efe5985a32" class="anchor"></a>
 
 ```cpp
-public bool moveTo(String destination, bool overwrite)
+bool moveTo(String destination, bool overwrite)
 ```
 
 Move the current directory.
@@ -452,34 +449,34 @@ Represents internal storage using the Arduino Unified Storage library.
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-| [`InternalStorage`](#class_internal_storage_1ac45948ef554bc659efed81240140192e) | Constructs an [InternalStorage](#class_internal_storage) object with default settings. If no partitions are available, it restores the default partitioning scheme (See [restoreDefaultPartitions()](#class_internal_storage_1aa437dd0c91b3481f93fcd8239ed6dc82) for more info). If partitions are available, it sets the partition number, file system type, and partition name based on the last partition available. When using the default partitioning scheme the last partition would be the user partition. |
+| [`InternalStorage`](#class_internal_storage_1ac45948ef554bc659efed81240140192e) | Constructs an [InternalStorage](#class_internal_storage) object with default settings. If no partitions are available, it restores the default partitioning scheme (See [restoreDefaultPartitions()](#class_internal_storage_1ace77d2372832c2f9ef39d382cc443259) for more info). If partitions are available, it sets the partition number, file system type, and partition name based on the last partition available. When using the default partitioning scheme the last partition would be the user partition. |
 | [`InternalStorage`](#class_internal_storage_1ac13cad019a2ae66647d1c3604690eca7) | Constructs an [InternalStorage](#class_internal_storage) object with the specified partition, name, and file system. |
 | [`begin`](#class_internal_storage_1a984731348dfbdade84e24250133a033e) | Initializes the internal storage. |
 | [`begin`](#class_internal_storage_1a90cd409874d9c578ce3add4df88875e5) | Initializes the internal storage with the specified file system. |
 | [`unmount`](#class_internal_storage_1a663446e2135a4e91d7fdb8ca638cc027) | Unmounts the internal storage. |
 | [`getRootFolder`](#class_internal_storage_1a87142ddbdad62217e33851b32572082d) | Retrieves the root folder of the internal storage. |
 | [`format`](#class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601) | Formats the internal storage with the selected file system. |
-| [`getBlockDevice`](#class_internal_storage_1af347558e09045a5dd868f93b24286bab) | Retrieves the block device associated with the internal storage. |
-| [`partition`](#class_internal_storage_1aa184679273e351e17a3a713d36aba6aa) | Partitions the internal storage according to the partitioning scheme given in the `partitions` parameter erasing the existing partitions  |
-| [`partition`](#class_internal_storage_1a6e9670923ace01a0ffba456ae460b1bb) | Creates one partition spanning over the whole size of the internal storage drive erasing the existing partitions.  |
-| [`restoreDefaultPartitions`](#class_internal_storage_1aa437dd0c91b3481f93fcd8239ed6dc82) | Restores the default partitioning scheme (1MB FAT32 for Certificates, 5MB FAT32 for OTA, 8MB user storage) to the internal storage drive erasing the existing partitions.  |
-| [`readPartitions`](#class_internal_storage_1a044927dfb048440a9c73985af9c3cf80) | Reads the partitioning scheme from the MBR sector of the internal storage drive and returns a vector of structs of type [Partition](#struct_partition) that represents the partitioning scheme  |
+| [`getBlockDevice`](#class_internal_storage_1a499c1975764c56ad3770ef9c582d7dda) | Retrieves the block device associated with the internal storage. |
+| [`partition`](#class_internal_storage_1acd4f9617061b962f38b20a4c6ddb8d48) | Partitions the internal storage according to the partitioning scheme given in the `partitions` parameter erasing the existing partitions  |
+| [`partition`](#class_internal_storage_1aefb31c03b94006e75b18111f07c99331) | Creates one partition spanning over the whole size of the internal storage drive erasing the existing partitions.  |
+| [`restoreDefaultPartitions`](#class_internal_storage_1ace77d2372832c2f9ef39d382cc443259) | Restores the default partitioning scheme (1MB FAT32 for Certificates, 5MB FAT32 for OTA, 8MB user storage) to the internal storage drive erasing the existing partitions.  |
+| [`readPartitions`](#class_internal_storage_1a7191c21a719e9fe8132dc3cfaed3f0ec) | Reads the partitioning scheme from the MBR sector of the internal storage drive and returns a vector of structs of type [Partition](#struct_partition) that represents the partitioning scheme  |
 
 ## Members
 
 ### `InternalStorage` <a id="class_internal_storage_1ac45948ef554bc659efed81240140192e" class="anchor"></a>
 
 ```cpp
-public InternalStorage()
+InternalStorage()
 ```
 
-Constructs an [InternalStorage](#class_internal_storage) object with default settings. If no partitions are available, it restores the default partitioning scheme (See [restoreDefaultPartitions()](#class_internal_storage_1aa437dd0c91b3481f93fcd8239ed6dc82) for more info). If partitions are available, it sets the partition number, file system type, and partition name based on the last partition available. When using the default partitioning scheme the last partition would be the user partition.
+Constructs an [InternalStorage](#class_internal_storage) object with default settings. If no partitions are available, it restores the default partitioning scheme (See [restoreDefaultPartitions()](#class_internal_storage_1ace77d2372832c2f9ef39d382cc443259) for more info). If partitions are available, it sets the partition number, file system type, and partition name based on the last partition available. When using the default partitioning scheme the last partition would be the user partition.
 <hr />
 
 ### `InternalStorage` <a id="class_internal_storage_1ac13cad019a2ae66647d1c3604690eca7" class="anchor"></a>
 
 ```cpp
-public InternalStorage(int partition, const char * name, FileSystems fs)
+InternalStorage(int partition, const char * name, FileSystems fs)
 ```
 
 Constructs an [InternalStorage](#class_internal_storage) object with the specified partition, name, and file system.
@@ -495,7 +492,7 @@ Constructs an [InternalStorage](#class_internal_storage) object with the specifi
 ### `begin` <a id="class_internal_storage_1a984731348dfbdade84e24250133a033e" class="anchor"></a>
 
 ```cpp
-public virtual bool begin()
+virtual bool begin()
 ```
 
 Initializes the internal storage.
@@ -507,7 +504,7 @@ true if successful, false if failed.
 ### `begin` <a id="class_internal_storage_1a90cd409874d9c578ce3add4df88875e5" class="anchor"></a>
 
 ```cpp
-public virtual bool begin(FileSystems fs)
+virtual bool begin(FileSystems fs)
 ```
 
 Initializes the internal storage with the specified file system.
@@ -522,7 +519,7 @@ true if successful, false if failed.
 ### `unmount` <a id="class_internal_storage_1a663446e2135a4e91d7fdb8ca638cc027" class="anchor"></a>
 
 ```cpp
-public virtual bool unmount()
+virtual bool unmount()
 ```
 
 Unmounts the internal storage.
@@ -534,7 +531,7 @@ true if successful, false if failed.
 ### `getRootFolder` <a id="class_internal_storage_1a87142ddbdad62217e33851b32572082d" class="anchor"></a>
 
 ```cpp
-public virtual Folder getRootFolder()
+virtual Folder getRootFolder()
 ```
 
 Retrieves the root folder of the internal storage.
@@ -546,7 +543,7 @@ The root folder as a [Folder](#class_folder) object.
 ### `format` <a id="class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601" class="anchor"></a>
 
 ```cpp
-public virtual bool format(FileSystems fs)
+virtual bool format(FileSystems fs)
 ```
 
 Formats the internal storage with the selected file system.
@@ -555,10 +552,10 @@ Formats the internal storage with the selected file system.
 true if successful, false if failed.
 <hr />
 
-### `getBlockDevice` <a id="class_internal_storage_1af347558e09045a5dd868f93b24286bab" class="anchor"></a>
+### `getBlockDevice` <a id="class_internal_storage_1a499c1975764c56ad3770ef9c582d7dda" class="anchor"></a>
 
 ```cpp
-public BlockDeviceType * getBlockDevice()
+BlockDeviceType * getBlockDevice()
 ```
 
 Retrieves the block device associated with the internal storage.
@@ -567,10 +564,10 @@ Retrieves the block device associated with the internal storage.
 The block device as a BlockDevice object.
 <hr />
 
-### `partition` <a id="class_internal_storage_1aa184679273e351e17a3a713d36aba6aa" class="anchor"></a>
+### `partition` <a id="class_internal_storage_1acd4f9617061b962f38b20a4c6ddb8d48" class="anchor"></a>
 
 ```cpp
-public static bool partition(std::vector< Partition > partitions)
+static bool partition(std::vector< Partition > partitions)
 ```
 
 Partitions the internal storage according to the partitioning scheme given in the `partitions` parameter erasing the existing partitions 
@@ -581,10 +578,10 @@ Partitions the internal storage according to the partitioning scheme given in th
 true if successful, false if failed.
 <hr />
 
-### `partition` <a id="class_internal_storage_1a6e9670923ace01a0ffba456ae460b1bb" class="anchor"></a>
+### `partition` <a id="class_internal_storage_1aefb31c03b94006e75b18111f07c99331" class="anchor"></a>
 
 ```cpp
-public static bool partition()
+static bool partition()
 ```
 
 Creates one partition spanning over the whole size of the internal storage drive erasing the existing partitions. 
@@ -592,10 +589,10 @@ Creates one partition spanning over the whole size of the internal storage drive
 true if successful, false if failed.
 <hr />
 
-### `restoreDefaultPartitions` <a id="class_internal_storage_1aa437dd0c91b3481f93fcd8239ed6dc82" class="anchor"></a>
+### `restoreDefaultPartitions` <a id="class_internal_storage_1ace77d2372832c2f9ef39d382cc443259" class="anchor"></a>
 
 ```cpp
-public static bool restoreDefaultPartitions()
+static bool restoreDefaultPartitions()
 ```
 
 Restores the default partitioning scheme (1MB FAT32 for Certificates, 5MB FAT32 for OTA, 8MB user storage) to the internal storage drive erasing the existing partitions. 
@@ -603,10 +600,10 @@ Restores the default partitioning scheme (1MB FAT32 for Certificates, 5MB FAT32 
 true if successful, false if failed.
 <hr />
 
-### `readPartitions` <a id="class_internal_storage_1a044927dfb048440a9c73985af9c3cf80" class="anchor"></a>
+### `readPartitions` <a id="class_internal_storage_1a7191c21a719e9fe8132dc3cfaed3f0ec" class="anchor"></a>
 
 ```cpp
-public static std::vector< Partition > readPartitions()
+static std::vector< Partition > readPartitions()
 ```
 
 Reads the partitioning scheme from the MBR sector of the internal storage drive and returns a vector of structs of type [Partition](#struct_partition) that represents the partitioning scheme 
@@ -620,16 +617,16 @@ vector of structs of type [Partition](#struct_partition)
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-| [`eraseMBRSector`](#class_partitioning_1a21c0af41e2f29f3290dee36eb0f0d0b7) | Erases the first block (4096 bytes) of the BlockDevice to delete any already existing MBR partition table  |
-| [`partitionDrive`](#class_partitioning_1a450e1491d5d58d5d082dba6d45561b0f) | Partitions the BlockDevice according to the partitioning schemme given by the vector of [Partition](#struct_partition) structs  |
-| [`readPartitions`](#class_partitioning_1a21af9f41711668d2f80fb0c74ce9168f) | Reads and unpacks the MBR partition information and returns a list of partitions it can find on the drive  |
+| [`eraseMBRSector`](#class_partitioning_1a662f276b27785e76cdf9f89c5356e784) | Erases the first block (4096 bytes) of the BlockDevice to delete any already existing MBR partition table  |
+| [`partitionDrive`](#class_partitioning_1a803b6e9a67304c6551d2a90ed5473985) | Partitions the BlockDevice according to the partitioning schemme given by the vector of [Partition](#struct_partition) structs  |
+| [`readPartitions`](#class_partitioning_1a44886fc5c7320a07cc42171ce9581fec) | Reads and unpacks the MBR partition information and returns a list of partitions it can find on the drive  |
 
 ## Members
 
-### `eraseMBRSector` <a id="class_partitioning_1a21c0af41e2f29f3290dee36eb0f0d0b7" class="anchor"></a>
+### `eraseMBRSector` <a id="class_partitioning_1a662f276b27785e76cdf9f89c5356e784" class="anchor"></a>
 
 ```cpp
-public static bool eraseMBRSector(BlockDeviceType * blockDevice)
+static bool eraseMBRSector(BlockDeviceType * blockDevice)
 ```
 
 Erases the first block (4096 bytes) of the BlockDevice to delete any already existing MBR partition table 
@@ -640,10 +637,10 @@ Erases the first block (4096 bytes) of the BlockDevice to delete any already exi
 True upon success, False on failure
 <hr />
 
-### `partitionDrive` <a id="class_partitioning_1a450e1491d5d58d5d082dba6d45561b0f" class="anchor"></a>
+### `partitionDrive` <a id="class_partitioning_1a803b6e9a67304c6551d2a90ed5473985" class="anchor"></a>
 
 ```cpp
-public static bool partitionDrive(BlockDeviceType * blockDevice, std::vector< Partition > partitions)
+static bool partitionDrive(BlockDeviceType * blockDevice, std::vector< Partition > partitions)
 ```
 
 Partitions the BlockDevice according to the partitioning schemme given by the vector of [Partition](#struct_partition) structs 
@@ -656,10 +653,10 @@ Partitions the BlockDevice according to the partitioning schemme given by the ve
 True upon success, False on failure
 <hr />
 
-### `readPartitions` <a id="class_partitioning_1a21af9f41711668d2f80fb0c74ce9168f" class="anchor"></a>
+### `readPartitions` <a id="class_partitioning_1a44886fc5c7320a07cc42171ce9581fec" class="anchor"></a>
 
 ```cpp
-public static std::vector< Partition > readPartitions(BlockDeviceType * blockDevice)
+static std::vector< Partition > readPartitions(BlockDeviceType * blockDevice)
 ```
 
 Reads and unpacks the MBR partition information and returns a list of partitions it can find on the drive 
@@ -695,7 +692,7 @@ Represents an SD card storage using the Arduino Unified Storage library.
 ### `SDStorage` <a id="class_s_d_storage_1a992cb710f41462a7a35c6dfdc838f01f" class="anchor"></a>
 
 ```cpp
-public SDStorage()
+SDStorage()
 ```
 
 Default constructor for the [SDStorage](#class_s_d_storage) class.
@@ -704,7 +701,7 @@ Default constructor for the [SDStorage](#class_s_d_storage) class.
 ### `begin` <a id="class_s_d_storage_1ab49c772b785b6c97940baca60ae386ec" class="anchor"></a>
 
 ```cpp
-public virtual bool begin()
+virtual bool begin()
 ```
 
 Initializes the SD card storage.
@@ -716,7 +713,7 @@ true if successful, false if failed.
 ### `begin` <a id="class_s_d_storage_1a19520df98c5a52d403ac26a873f65860" class="anchor"></a>
 
 ```cpp
-public virtual bool begin(FileSystems fs)
+virtual bool begin(FileSystems fs)
 ```
 
 Initializes the SD card storage with the specified file system.
@@ -731,7 +728,7 @@ true if successful, false if failed.
 ### `unmount` <a id="class_s_d_storage_1a6f4d671e685d660d0aff8648d8288b9c" class="anchor"></a>
 
 ```cpp
-public virtual bool unmount()
+virtual bool unmount()
 ```
 
 Unmounts the SD card storage.
@@ -743,7 +740,7 @@ true if successful, false if failed.
 ### `getRootFolder` <a id="class_s_d_storage_1a2f7327c327985d88bd1305310ec0c5e8" class="anchor"></a>
 
 ```cpp
-public virtual Folder getRootFolder()
+virtual Folder getRootFolder()
 ```
 
 Retrieves the root folder of the SD card storage.
@@ -755,7 +752,7 @@ The root folder as a [Folder](#class_folder) object.
 ### `format` <a id="class_s_d_storage_1a93cac8330a5950138985e3712db1dc07" class="anchor"></a>
 
 ```cpp
-public virtual bool format(FileSystems fs)
+virtual bool format(FileSystems fs)
 ```
 
 Formats the SD card storage with the selected file system.
@@ -795,7 +792,7 @@ Class representing a File
 | [`moveTo`](#class_u_file_1ae676e42f3e5ad423da3386985fc8261f) | Moves the file to the specified destination path. |
 | [`moveTo`](#class_u_file_1a69f6a7cccce8cc40eb6698df15f38635) | Copies the file to the specified destination folder. |
 | [`getParentFolder`](#class_u_file_1a087b79b6d62a3ed122d1f8b0f25b0d24) | Returns a reference to the parent folder of the current folder. |
-| [`getPath`](#class_u_file_1a122edcf553a8929b703d70c6aa8a6e80) | Returns the path of the directory. |
+| [`getPath`](#class_u_file_1a41592023ea53cd1b46f383097a3db1f8) | Returns the path of the directory. |
 | [`getPathAsString`](#class_u_file_1a5adef9f3d538f92e51e52c4b1f3ada76) | Returns the path of the directory. |
 | [`available`](#class_u_file_1a82ad0fb6cffaf23aea794b508ec57bbb) | Returns the number of bytes available to read. |
 | [`read`](#class_u_file_1a62b544ebe9c3b144268016e6427917b5) | Returns one byte from the file. |
@@ -806,7 +803,7 @@ Class representing a File
 ### `UFile` <a id="class_u_file_1a2a04504d0135d28465e0547bec062ebf" class="anchor"></a>
 
 ```cpp
-public UFile()
+UFile()
 ```
 
 Constructor.
@@ -816,7 +813,7 @@ Constructor.
 ### `UFile` <a id="class_u_file_1acdd969b1c2f115fc105f6d08bd67b121" class="anchor"></a>
 
 ```cpp
-public UFile(const char * path)
+UFile(const char * path)
 ```
 
 Constructor.
@@ -828,7 +825,7 @@ Constructor.
 ### `~UFile` <a id="class_u_file_1a4f74e28f98898e3603140b6409fa52ba" class="anchor"></a>
 
 ```cpp
-public ~UFile()
+~UFile()
 ```
 
 <hr />
@@ -836,7 +833,7 @@ public ~UFile()
 ### `changeMode` <a id="class_u_file_1a744ad88f2037e87e3f5375c7aec28f6d" class="anchor"></a>
 
 ```cpp
-public bool changeMode(FileMode mode)
+bool changeMode(FileMode mode)
 ```
 
 Closes the file, and opens it again with a new file mode.
@@ -851,7 +848,7 @@ True if operation was successful, false otherwise.
 ### `open` <a id="class_u_file_1aa52ff2913386374e6e83ba35f595d213" class="anchor"></a>
 
 ```cpp
-public bool open(const char * filename, FileMode mode)
+bool open(const char * filename, FileMode mode)
 ```
 
 Opens a file with the specified mode.
@@ -868,7 +865,7 @@ True if the file was opened successfully, false otherwise.
 ### `open` <a id="class_u_file_1a0247abf7053b47463f73ca8cb1c7c23c" class="anchor"></a>
 
 ```cpp
-public bool open(String filename, FileMode mode)
+bool open(String filename, FileMode mode)
 ```
 
 Opens a file with the specified mode.
@@ -885,7 +882,7 @@ True if the file was opened successfully, false otherwise.
 ### `close` <a id="class_u_file_1ab5731b8e40a87a44a7322bf151597c55" class="anchor"></a>
 
 ```cpp
-public void close()
+void close()
 ```
 
 Closes the file and releases any allocated resources.
@@ -895,7 +892,7 @@ Closes the file and releases any allocated resources.
 ### `seek` <a id="class_u_file_1aa117a19e5efe6508e5e87ab65abbb560" class="anchor"></a>
 
 ```cpp
-public bool seek(size_t offset)
+bool seek(size_t offset)
 ```
 
 Seeks to a specific position in the file.
@@ -910,7 +907,7 @@ True if the seek operation was successful, false otherwise.
 ### `read` <a id="class_u_file_1a8192f041831d58ba8186798676c5ad3a" class="anchor"></a>
 
 ```cpp
-public size_t read(uint8_t * buffer, size_t size)
+size_t read(uint8_t * buffer, size_t size)
 ```
 
 Reads data from the file into a buffer.
@@ -927,7 +924,7 @@ The number of bytes read from the file.
 ### `readAsString` <a id="class_u_file_1ad70a29b0e436906bdaa7b99e3fc9e1b3" class="anchor"></a>
 
 ```cpp
-public String readAsString()
+String readAsString()
 ```
 
 Reads the contents of the file as an Arduino String.
@@ -939,7 +936,7 @@ The file contents as a String.
 ### `write` <a id="class_u_file_1a16625e123db35bf19f9088828d9e1305" class="anchor"></a>
 
 ```cpp
-public size_t write(const uint8_t * buffer, size_t size)
+size_t write(const uint8_t * buffer, size_t size)
 ```
 
 Writes data to the file from a buffer.
@@ -956,7 +953,7 @@ The number of bytes written to the file.
 ### `write` <a id="class_u_file_1a68ee9ecdb0a6efd9816f3382de67905e" class="anchor"></a>
 
 ```cpp
-public size_t write(String)
+size_t write(String)
 ```
 
 Writes a string to the file.
@@ -971,7 +968,7 @@ The number of bytes written to the file.
 ### `remove` <a id="class_u_file_1a0e9efb7c54053b6f507f6caa704fc101" class="anchor"></a>
 
 ```cpp
-public bool remove()
+bool remove()
 ```
 
 Removes the file.
@@ -983,7 +980,7 @@ True if the file was removed successfully, false otherwise.
 ### `rename` <a id="class_u_file_1a0511c1a498bcbce549b49db9e188c2c0" class="anchor"></a>
 
 ```cpp
-public bool rename(const char * newFilename)
+bool rename(const char * newFilename)
 ```
 
 Renames the file.
@@ -998,7 +995,7 @@ True if the file was renamed successfully, false otherwise.
 ### `rename` <a id="class_u_file_1a2122cd3e0e16481ecaff1af897790c03" class="anchor"></a>
 
 ```cpp
-public bool rename(String newFilename)
+bool rename(String newFilename)
 ```
 
 Renames the file.
@@ -1013,7 +1010,7 @@ True if the file was renamed successfully, false otherwise.
 ### `exists` <a id="class_u_file_1a4963afa70289718a3bd1ca50b6adb420" class="anchor"></a>
 
 ```cpp
-public bool exists()
+bool exists()
 ```
 
 Checks if the file exists.
@@ -1025,7 +1022,7 @@ True if the file exists, false otherwise.
 ### `copyTo` <a id="class_u_file_1a6178616dea1a897b0e4033dfdc7bc41d" class="anchor"></a>
 
 ```cpp
-public bool copyTo(const char * destinationPath, bool overwrite)
+bool copyTo(const char * destinationPath, bool overwrite)
 ```
 
 Copies the file to the specified destination path.
@@ -1040,7 +1037,7 @@ True upon success, false otherwise.
 ### `copyTo` <a id="class_u_file_1a908edbee6d38619798d63f72f8f58dd1" class="anchor"></a>
 
 ```cpp
-public bool copyTo(String destinationPath, bool overwrite)
+bool copyTo(String destinationPath, bool overwrite)
 ```
 
 Copies the file to the specified destination path.
@@ -1055,7 +1052,7 @@ True upon success, false otherwise.
 ### `copyTo` <a id="class_u_file_1a9e06719446533b73505a6f6a66091fa7" class="anchor"></a>
 
 ```cpp
-public bool copyTo( Folder destinationFolder, bool overwrite)
+bool copyTo( Folder destinationFolder, bool overwrite)
 ```
 
 Copies the file to the specified destination path.
@@ -1070,7 +1067,7 @@ True upon success, false otherwise.
 ### `moveTo` <a id="class_u_file_1abadd4af5700d94b2c3d74dd4dce51bdc" class="anchor"></a>
 
 ```cpp
-public bool moveTo(const char * destinationPath, bool overwrite)
+bool moveTo(const char * destinationPath, bool overwrite)
 ```
 
 Moves the file to the specified destination path.
@@ -1085,7 +1082,7 @@ True upon success, false otherwise.
 ### `moveTo` <a id="class_u_file_1ae676e42f3e5ad423da3386985fc8261f" class="anchor"></a>
 
 ```cpp
-public bool moveTo(String destinationPath, bool overwrite)
+bool moveTo(String destinationPath, bool overwrite)
 ```
 
 Moves the file to the specified destination path.
@@ -1100,7 +1097,7 @@ True upon success, false otherwise.
 ### `moveTo` <a id="class_u_file_1a69f6a7cccce8cc40eb6698df15f38635" class="anchor"></a>
 
 ```cpp
-public bool moveTo( Folder destinationFolder, bool overwrite)
+bool moveTo( Folder destinationFolder, bool overwrite)
 ```
 
 Copies the file to the specified destination folder.
@@ -1115,7 +1112,7 @@ True upon success, false otherwise.
 ### `getParentFolder` <a id="class_u_file_1a087b79b6d62a3ed122d1f8b0f25b0d24" class="anchor"></a>
 
 ```cpp
-public Folder getParentFolder()
+Folder getParentFolder()
 ```
 
 Returns a reference to the parent folder of the current folder.
@@ -1124,10 +1121,10 @@ Returns a reference to the parent folder of the current folder.
 A directory object representing the current folder.
 <hr />
 
-### `getPath` <a id="class_u_file_1a122edcf553a8929b703d70c6aa8a6e80" class="anchor"></a>
+### `getPath` <a id="class_u_file_1a41592023ea53cd1b46f383097a3db1f8" class="anchor"></a>
 
 ```cpp
-public const char * getPath()
+const char * getPath()
 ```
 
 Returns the path of the directory.
@@ -1139,7 +1136,7 @@ The path of the file as a const char *
 ### `getPathAsString` <a id="class_u_file_1a5adef9f3d538f92e51e52c4b1f3ada76" class="anchor"></a>
 
 ```cpp
-public String getPathAsString()
+String getPathAsString()
 ```
 
 Returns the path of the directory.
@@ -1151,7 +1148,7 @@ The path of the file as a String
 ### `available` <a id="class_u_file_1a82ad0fb6cffaf23aea794b508ec57bbb" class="anchor"></a>
 
 ```cpp
-public uint32_t available()
+uint32_t available()
 ```
 
 Returns the number of bytes available to read.
@@ -1163,7 +1160,7 @@ The number of bytes available to read as int
 ### `read` <a id="class_u_file_1a62b544ebe9c3b144268016e6427917b5" class="anchor"></a>
 
 ```cpp
-public int read()
+int read()
 ```
 
 Returns one byte from the file.
@@ -1175,7 +1172,7 @@ An int representing one byte from the file
 ### `write` <a id="class_u_file_1a4db87498c1a4205145816c14df704de7" class="anchor"></a>
 
 ```cpp
-public size_t write(uint8_t value)
+size_t write(uint8_t value)
 ```
 
 Writes one byte to the file.
@@ -1214,7 +1211,7 @@ class USBStorage
 ### `USBStorage` <a id="class_u_s_b_storage_1ad084f3bd2479b0a1daa88013f3cfe23a" class="anchor"></a>
 
 ```cpp
-public USBStorage()
+USBStorage()
 ```
 
 Default constructor for the [USBStorage](#class_u_s_b_storage) class.
@@ -1223,7 +1220,7 @@ Default constructor for the [USBStorage](#class_u_s_b_storage) class.
 ### `begin` <a id="class_u_s_b_storage_1aabf0868054a1741ffe4018301d145cb1" class="anchor"></a>
 
 ```cpp
-public virtual bool begin()
+virtual bool begin()
 ```
 
 Initializes the USB storage.
@@ -1235,7 +1232,7 @@ true if successful, false if failed.
 ### `begin` <a id="class_u_s_b_storage_1a9fac27a863b6d73bb78f956be4517f67" class="anchor"></a>
 
 ```cpp
-public virtual bool begin(FileSystems fs)
+virtual bool begin(FileSystems fs)
 ```
 
 Initializes the USB storage with the specified file system.
@@ -1250,7 +1247,7 @@ true if successful, false if failed.
 ### `unmount` <a id="class_u_s_b_storage_1acb602dc07465880ebaec64dca1b36506" class="anchor"></a>
 
 ```cpp
-public virtual bool unmount()
+virtual bool unmount()
 ```
 
 Unmounts the USB storage.
@@ -1262,7 +1259,7 @@ true if successful, false if failed.
 ### `getRootFolder` <a id="class_u_s_b_storage_1a1d39336ddd7ec401dc2ed99c3117af59" class="anchor"></a>
 
 ```cpp
-public virtual Folder getRootFolder()
+virtual Folder getRootFolder()
 ```
 
 Retrieves the root folder of the USB storage.
@@ -1274,7 +1271,7 @@ The root folder as a [Folder](#class_folder) object.
 ### `format` <a id="class_u_s_b_storage_1a8aec32e4e48d081183ad880a61836bc5" class="anchor"></a>
 
 ```cpp
-public virtual bool format(FileSystems fs)
+virtual bool format(FileSystems fs)
 ```
 
 Formats the USB storage with the selected file system.
@@ -1286,7 +1283,7 @@ true if successful, false if failed.
 ### `isMounted` <a id="class_u_s_b_storage_1a2d3e3a732f2a43ab67e2fcd05e4ac058" class="anchor"></a>
 
 ```cpp
-public bool isMounted()
+bool isMounted()
 ```
 
 Checks if the USB storage is mounted.
@@ -1298,7 +1295,7 @@ true if mounted, false otherwise.
 ### `onConnect` <a id="class_u_s_b_storage_1a1dfb2b9dde7fbdc26c0bf73be9babe25" class="anchor"></a>
 
 ```cpp
-public void onConnect(void(*)() callbackFunction)
+void onConnect(void(*)() callbackFunction)
 ```
 
 Sets the callback function to be called when a USB connection is established.
@@ -1310,7 +1307,7 @@ Sets the callback function to be called when a USB connection is established.
 ### `removeOnConnectCallback` <a id="class_u_s_b_storage_1afc58782a3f5207356d29392cb31730a0" class="anchor"></a>
 
 ```cpp
-public void removeOnConnectCallback()
+void removeOnConnectCallback()
 ```
 
 Removes the callback function that is executed when the USB storage device is connected.
@@ -1320,7 +1317,7 @@ Removes the callback function that is executed when the USB storage device is co
 ### `onDisconnect` <a id="class_u_s_b_storage_1a10ac0c8965eee6041b384a4823bb9720" class="anchor"></a>
 
 ```cpp
-public void onDisconnect(void(*)() callbackFunction)
+void onDisconnect(void(*)() callbackFunction)
 ```
 
 Sets a callback function to be called when the USB storage device is disconnected.
@@ -1332,7 +1329,7 @@ Sets a callback function to be called when the USB storage device is disconnecte
 ### `removeOnDisconnectCallback` <a id="class_u_s_b_storage_1a2333fb1697b7ca72e5127cf60fc6680f" class="anchor"></a>
 
 ```cpp
-public void removeOnDisconnectCallback()
+void removeOnDisconnectCallback()
 ```
 
 Removes the callback function that is called when the USB storage device is disconnected.
@@ -1353,7 +1350,7 @@ Removes the callback function that is called when the USB storage device is disc
 ### `size` <a id="struct_partition_1a718bdba639f222d90d23480b58caa1f9" class="anchor"></a>
 
 ```cpp
-public int size
+int size
 ```
 
 <hr />
@@ -1361,7 +1358,7 @@ public int size
 ### `fileSystemType` <a id="struct_partition_1af5c05bc6faa14fb253c3a39e5e883529" class="anchor"></a>
 
 ```cpp
-public FileSystems fileSystemType
+FileSystems fileSystemType
 ```
 
 <hr />
