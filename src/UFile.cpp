@@ -21,13 +21,13 @@ bool UFile::open(const char* filename, FileMode fileMode) {
     path = filename;
     // Set the mode based on the fileMode
     switch (fileMode) {
-        case READ:
+        case FileMode::READ:
             mode = "r+";
             break;
-        case WRITE:
+        case FileMode::WRITE:
             mode = "w+";
             break;
-        case APPEND:
+        case FileMode::APPEND:
             mode = "a+";
             break;
         default:
