@@ -3,7 +3,7 @@
 
 #include "Boards.h"
 
-enum FileMode { READ, WRITE, APPEND };
+enum class FileMode { READ, WRITE, APPEND };
 
 #if defined(USES_RENESAS_CORE)
     #include "BlockDevice.h"
