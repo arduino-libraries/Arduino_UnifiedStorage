@@ -51,6 +51,15 @@ bool UFile::open(String filename, FileMode mode) {
     return open(filename.c_str(), mode);
 }
 
+bool UFile::open(FileMode mode) {
+    if (path.empty()) {
+        // Path is not set
+        return false;
+    }
+
+    return open(path.c_str(), mode);
+}
+
 void UFile::close() {
     // Close the file
     if (filePointer != nullptr) {

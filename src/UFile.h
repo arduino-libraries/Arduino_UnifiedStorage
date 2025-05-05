@@ -52,6 +52,12 @@ public:
    */
   bool open(String filename, FileMode mode);
 
+  /**
+   * @brief Opens a file that was already initialized with a path.
+   * @param mode The file mode (READ, WRITE, or APPEND). The default is READ.
+   * @return True if the file was opened successfully, false otherwise.
+   */
+  bool open(FileMode mode = FileMode::READ);
 
   /**
    * @brief Closes the file and releases any allocated resources.
