@@ -56,11 +56,17 @@
 
     // Dynamically allocate memory for the string and copy the generated value
     char* dynamicName = new char[strlen(partitionName) + 1];
-    strcpy(dynamicName, partitionName);
+    if(dynamicName)
+    {
+      strcpy(dynamicName, partitionName);
+    }
 
     return dynamicName;
 }
 
+[[gnu::unused]] static void freePartitionName(const char* partitionName) {
+    delete[] partitionName;
+}
 
 [[gnu::unused]] static bool copyFolder(const char* source, const char* destination) {
   DIR* dir = opendir(source);
@@ -88,7 +94,16 @@
     size_t destinationPathLength = strlen(destination) + strlen(entry->d_name) + 1;
 
     char* sourcePath = new char[sourcePathLength];
+    if(!sourcePath)
+    {
+      return false;
+    }
     char* destinationPath = new char[destinationPathLength];
+    if(!destinationPath)
+    {
+      delete[] sourcePath;
+      return false;
+    }
 
     snprintf(sourcePath, sourcePathLength, "%s/%s", source, entry->d_name);
 
@@ -97,8 +112,8 @@
     struct stat fileInfo;
     if (stat(sourcePath, &fileInfo) != 0) {
       closedir(dir);
-      delete(sourcePath);
-      delete(destinationPath);
+      delete[] sourcePath;
+      delete[] destinationPath;
       return false;
     }
 
@@ -106,8 +121,8 @@
       // Recursively copy subdirectories
       if (!copyFolder(sourcePath, destinationPath)) {
         closedir(dir);
-        delete(sourcePath);
-        delete(destinationPath);
+        delete[] sourcePath;
+        delete[] destinationPath;
         return false;
       }
     } else {
@@ -115,8 +130,8 @@
       FILE* sourceFile = fopen(sourcePath, "r");
       if (sourceFile == nullptr) {
         closedir(dir);
-        delete(sourcePath);
-        delete(destinationPath);
+        delete[] sourcePath;
+        delete[] destinationPath;
         return false;
       }
 
@@ -124,8 +139,8 @@
       if (destinationFile == nullptr) {
         fclose(sourceFile);
         closedir(dir);
-        delete(sourcePath);
-        delete(destinationPath);
+        delete[] sourcePath;
+        delete[] destinationPath;
         return false;
       }
 
@@ -137,6 +152,10 @@
       fclose(sourceFile);
       fclose(destinationFile);
     }
+
+    delete[] sourcePath;
+    delete[] destinationPath;
+
   }
 
   closedir(dir);
@@ -215,4 +234,4 @@
 
 
 
-#endif 
+#endif

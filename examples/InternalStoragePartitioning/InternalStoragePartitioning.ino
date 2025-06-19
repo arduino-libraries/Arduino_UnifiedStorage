@@ -4,13 +4,13 @@
     This example demonstrates the usage of the "Arduino_UnifiedStorage" library for retrieving and creating partitions on the internal storage.
     The code should help you understand how to work with partitions and perform file operations in different partitions.
 
-    It creates the partitions specified in the std::vector<Partitions> you find at the top of the sketch. 
+    It creates the partitions specified in the std::vector<Partitions> you find at the top of the sketch.
     You can define your own, as long as the size of all partitions doesn't exceed the size of your board's QSPI flash( if you are in doubt about that check docs.arduino.com for more information) and as long as you don't have more than 4 partitions (MBR limitation)
     The Partition struct has two values:
         - `size` the size of your partition in kilobytes
         - 'fileSystemType` which can be either `FS_FAT` or `FS_LITTLEFS`
 
-    Here are a few examples of valid partitioning schemes: 
+    Here are a few examples of valid partitioning schemes:
         - std::vector<Partition> partitioningScheme  = {{16384, FS_FAT}};
         - std::vector<Partition> partitioningScheme  = {{2048, FS_FAT}, {6144, FS_FAT} {8192, FS_LITTLEFS}};
         - std::vector<Partition> partitioningScheme  = {{4096, FS_LITTLEFS}, {4096, FS_FAT}, {4096, FS_LITTLEFS}, {4096, FS_FAT}};
@@ -24,8 +24,8 @@
     INSTRUCTIONS:
     1. Check compatibility with your board and make sure you have "POSIXStorage" and "Arduino_UnifiedStorage" installed
     2. Connect your board to the serial monitor
-    3. Wait for the sketch to run 
-    4. Modify the partitioning scheme according to your needs 
+    3. Wait for the sketch to run
+    4. Modify the partitioning scheme according to your needs
 
     Created: 26th October 2023
     By: Cristian Dragomir
@@ -36,7 +36,7 @@
 #include <vector>
 
 // Create a vector of partitions with one partition of 16MB using LittleFS
-std::vector<Partition> partitioningScheme  = {   
+std::vector<Partition> partitioningScheme  = {
         {1024, FS_FAT}, // 1 MB for certificates
         {5120, FS_FAT}, // 5 MB for OTA firmware updates
         {8192, FS_LITTLEFS} // 8 MB for user data
@@ -50,7 +50,7 @@ void testWriting(Arduino_UnifiedStorage *storage) {
     // Create a new file named "file.txt" for writing
     UFile file = root.createFile("file.txt", FileMode::WRITE);
     Serial.println("\t\t - File path: " + file.getPathAsString());
-    
+
     // Write data to the file
     file.write("writing stuff to the file");
 
@@ -65,7 +65,7 @@ void testWriting(Arduino_UnifiedStorage *storage) {
 void testAllPartitions(std::vector<Partition> partitions) {
     for (size_t i = 1; i < partitions.size() + 1; ++i) {
         const char *partitionName = createPartitionName(i);
-        
+
         // Create an InternalStorage object for the partition
         InternalStorage thisPartition = InternalStorage(i, partitionName, partitions[i - 1].fileSystemType);
 
@@ -74,6 +74,8 @@ void testAllPartitions(std::vector<Partition> partitions) {
             Serial.println("\t - Successfully mounted partition: /" + String(partitionName));
             Serial.println("\t - Testing file operations: ");
             testWriting(&thisPartition); // Test writing to a file in the partition
+            thisPartition.unmount();
+            freePartitionName(partitionName);
         }
 
         Serial.println();
@@ -113,7 +115,7 @@ void setup() {
 
     delay(1000);
 
-    // Read the MBR sector and display the partitions 
+    // Read the MBR sector and display the partitions
     listPartitions();
 }
 
