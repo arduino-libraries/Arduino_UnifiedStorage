@@ -121,12 +121,12 @@ Class representing a directory.
 | [`rename`](#class_folder_1adcbb7766d628810f716887d1e7e8d36f) | Renames a directory. |
 | [`rename`](#class_folder_1a14519c2a344ebfb8161c2bee2a2b5464) | Renames a directory. |
 | [`exists`](#class_folder_1aa548278d3ec09fd4abcaa827a79c40f4) | Checks if the directory exists. |
-| [`getPath`](#class_folder_1a731e8d84685eca8e273affba152468a6) | Returns the path of the file. |
+| [`getPath`](#class_folder_1a0ef68289c526f8bf24020389c4e09e86) | Returns the path of the file. |
 | [`getPathAsString`](#class_folder_1ac816d0fe5674c4648e97423b6f9c51f8) | Returns the path of the file. |
 | [`createSubfolder`](#class_folder_1a78f2f9b297f62b67c2e0656b15a95868) | Creates a subfolder in the directory. |
 | [`createSubfolder`](#class_folder_1ab50743664becb7b2a1fb564b5513d69c) | Creates a subfolder in the directory. |
-| [`getFiles`](#class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78) | Returns File objects for all files in the current directory. |
-| [`getFolders`](#class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb) | Returns [Folder](#class_folder) objects for all files in the current directory. |
+| [`getFiles`](#class_folder_1a2e7f604d19b8ad61524f86ade86ed4ad) | Returns File objects for all files in the current directory. |
+| [`getFolders`](#class_folder_1a5554b8cc2fd1ca39dfccbd06bc635e10) | Returns [Folder](#class_folder) objects for all files in the current directory. |
 | [`copyTo`](#class_folder_1aabf0818b7ee45b2d871e82e86edb4ebd) | Copies the current directory. |
 | [`copyTo`](#class_folder_1a058d193f53c559eefe343b30797500eb) | Copies the current directory. |
 | [`copyTo`](#class_folder_1a3162979e4c679c7f5503cc4584949714) | Copies the current directory. |
@@ -254,7 +254,7 @@ Checks if the directory exists.
 True if the directory exists, false otherwise.
 <hr />
 
-### `getPath` <a id="class_folder_1a731e8d84685eca8e273affba152468a6" class="anchor"></a>
+### `getPath` <a id="class_folder_1a0ef68289c526f8bf24020389c4e09e86" class="anchor"></a>
 
 ```cpp
 const char * getPath()
@@ -312,7 +312,7 @@ Creates a subfolder in the directory.
 The created subfolder.
 <hr />
 
-### `getFiles` <a id="class_folder_1a3c2e01e19b48e3aa709cbdbb0acbdd78" class="anchor"></a>
+### `getFiles` <a id="class_folder_1a2e7f604d19b8ad61524f86ade86ed4ad" class="anchor"></a>
 
 ```cpp
 std::vector< UFile > getFiles()
@@ -324,7 +324,7 @@ Returns File objects for all files in the current directory.
 A std::vector of File objects representing the files in the directory.
 <hr />
 
-### `getFolders` <a id="class_folder_1a69d3df42dacbd1d64d0f527e090f1fbb" class="anchor"></a>
+### `getFolders` <a id="class_folder_1a5554b8cc2fd1ca39dfccbd06bc635e10" class="anchor"></a>
 
 ```cpp
 std::vector< Folder > getFolders()
@@ -451,16 +451,17 @@ Represents internal storage using the Arduino Unified Storage library.
 --------------------------------|---------------------------------------------
 | [`InternalStorage`](#class_internal_storage_1ac45948ef554bc659efed81240140192e) | Constructs an [InternalStorage](#class_internal_storage) object with default settings. If no partitions are available, it restores the default partitioning scheme (See [restoreDefaultPartitions()](#class_internal_storage_1ace77d2372832c2f9ef39d382cc443259) for more info). If partitions are available, it sets the partition number, file system type, and partition name based on the last partition available. When using the default partitioning scheme the last partition would be the user partition. |
 | [`InternalStorage`](#class_internal_storage_1ac13cad019a2ae66647d1c3604690eca7) | Constructs an [InternalStorage](#class_internal_storage) object with the specified partition, name, and file system. |
+| [`~InternalStorage`](#class_internal_storage_1a718df11687329b437bc4e2bf420490c0) |  |
 | [`begin`](#class_internal_storage_1a984731348dfbdade84e24250133a033e) | Initializes the internal storage. |
 | [`begin`](#class_internal_storage_1a90cd409874d9c578ce3add4df88875e5) | Initializes the internal storage with the specified file system. |
 | [`unmount`](#class_internal_storage_1a663446e2135a4e91d7fdb8ca638cc027) | Unmounts the internal storage. |
 | [`getRootFolder`](#class_internal_storage_1a87142ddbdad62217e33851b32572082d) | Retrieves the root folder of the internal storage. |
 | [`format`](#class_internal_storage_1a9ee819a55de5d411e6b10bdc9942c601) | Formats the internal storage with the selected file system. |
-| [`getBlockDevice`](#class_internal_storage_1a499c1975764c56ad3770ef9c582d7dda) | Retrieves the block device associated with the internal storage. |
+| [`getBlockDevice`](#class_internal_storage_1af347558e09045a5dd868f93b24286bab) | Retrieves the block device associated with the internal storage. |
 | [`partition`](#class_internal_storage_1acd4f9617061b962f38b20a4c6ddb8d48) | Partitions the internal storage according to the partitioning scheme given in the `partitions` parameter erasing the existing partitions  |
 | [`partition`](#class_internal_storage_1aefb31c03b94006e75b18111f07c99331) | Creates one partition spanning over the whole size of the internal storage drive erasing the existing partitions.  |
 | [`restoreDefaultPartitions`](#class_internal_storage_1ace77d2372832c2f9ef39d382cc443259) | Restores the default partitioning scheme (1MB FAT32 for Certificates, 5MB FAT32 for OTA, 8MB user storage) to the internal storage drive erasing the existing partitions.  |
-| [`readPartitions`](#class_internal_storage_1a7191c21a719e9fe8132dc3cfaed3f0ec) | Reads the partitioning scheme from the MBR sector of the internal storage drive and returns a vector of structs of type [Partition](#struct_partition) that represents the partitioning scheme  |
+| [`readPartitions`](#class_internal_storage_1a3d3303d7eb80a5d9471c60cb2bffc3b3) | Reads the partitioning scheme from the MBR sector of the internal storage drive and returns a vector of structs of type [Partition](#struct_partition) that represents the partitioning scheme  |
 
 ## Members
 
@@ -487,6 +488,14 @@ Constructs an [InternalStorage](#class_internal_storage) object with the specifi
 * `name` The name of the partition. 
 
 * `fs` The desired file system (FS_FAT or FS_LITTLEFS).
+<hr />
+
+### `~InternalStorage` <a id="class_internal_storage_1a718df11687329b437bc4e2bf420490c0" class="anchor"></a>
+
+```cpp
+~InternalStorage()
+```
+
 <hr />
 
 ### `begin` <a id="class_internal_storage_1a984731348dfbdade84e24250133a033e" class="anchor"></a>
@@ -552,7 +561,7 @@ Formats the internal storage with the selected file system.
 true if successful, false if failed.
 <hr />
 
-### `getBlockDevice` <a id="class_internal_storage_1a499c1975764c56ad3770ef9c582d7dda" class="anchor"></a>
+### `getBlockDevice` <a id="class_internal_storage_1af347558e09045a5dd868f93b24286bab" class="anchor"></a>
 
 ```cpp
 BlockDeviceType * getBlockDevice()
@@ -600,7 +609,7 @@ Restores the default partitioning scheme (1MB FAT32 for Certificates, 5MB FAT32 
 true if successful, false if failed.
 <hr />
 
-### `readPartitions` <a id="class_internal_storage_1a7191c21a719e9fe8132dc3cfaed3f0ec" class="anchor"></a>
+### `readPartitions` <a id="class_internal_storage_1a3d3303d7eb80a5d9471c60cb2bffc3b3" class="anchor"></a>
 
 ```cpp
 static std::vector< Partition > readPartitions()
@@ -619,7 +628,7 @@ vector of structs of type [Partition](#struct_partition)
 --------------------------------|---------------------------------------------
 | [`eraseMBRSector`](#class_partitioning_1a662f276b27785e76cdf9f89c5356e784) | Erases the first block (4096 bytes) of the BlockDevice to delete any already existing MBR partition table  |
 | [`partitionDrive`](#class_partitioning_1a803b6e9a67304c6551d2a90ed5473985) | Partitions the BlockDevice according to the partitioning schemme given by the vector of [Partition](#struct_partition) structs  |
-| [`readPartitions`](#class_partitioning_1a44886fc5c7320a07cc42171ce9581fec) | Reads and unpacks the MBR partition information and returns a list of partitions it can find on the drive  |
+| [`readPartitions`](#class_partitioning_1affe78fdf2a8a5f8324668de3353b402d) | Reads and unpacks the MBR partition information and returns a list of partitions it can find on the drive  |
 
 ## Members
 
@@ -653,7 +662,7 @@ Partitions the BlockDevice according to the partitioning schemme given by the ve
 True upon success, False on failure
 <hr />
 
-### `readPartitions` <a id="class_partitioning_1a44886fc5c7320a07cc42171ce9581fec" class="anchor"></a>
+### `readPartitions` <a id="class_partitioning_1affe78fdf2a8a5f8324668de3353b402d" class="anchor"></a>
 
 ```cpp
 static std::vector< Partition > readPartitions(BlockDeviceType * blockDevice)
@@ -775,6 +784,7 @@ Class representing a File
 | [`changeMode`](#class_u_file_1a744ad88f2037e87e3f5375c7aec28f6d) | Closes the file, and opens it again with a new file mode. |
 | [`open`](#class_u_file_1aa52ff2913386374e6e83ba35f595d213) | Opens a file with the specified mode. |
 | [`open`](#class_u_file_1a0247abf7053b47463f73ca8cb1c7c23c) | Opens a file with the specified mode. |
+| [`open`](#class_u_file_1a013a90e9e0a4b44a0fde722f1e9af6bc) | Opens a file that was already initialized with a path. |
 | [`close`](#class_u_file_1ab5731b8e40a87a44a7322bf151597c55) | Closes the file and releases any allocated resources. |
 | [`seek`](#class_u_file_1aa117a19e5efe6508e5e87ab65abbb560) | Seeks to a specific position in the file. |
 | [`read`](#class_u_file_1a8192f041831d58ba8186798676c5ad3a) | Reads data from the file into a buffer. |
@@ -792,7 +802,7 @@ Class representing a File
 | [`moveTo`](#class_u_file_1ae676e42f3e5ad423da3386985fc8261f) | Moves the file to the specified destination path. |
 | [`moveTo`](#class_u_file_1a69f6a7cccce8cc40eb6698df15f38635) | Copies the file to the specified destination folder. |
 | [`getParentFolder`](#class_u_file_1a087b79b6d62a3ed122d1f8b0f25b0d24) | Returns a reference to the parent folder of the current folder. |
-| [`getPath`](#class_u_file_1a41592023ea53cd1b46f383097a3db1f8) | Returns the path of the directory. |
+| [`getPath`](#class_u_file_1a122edcf553a8929b703d70c6aa8a6e80) | Returns the path of the directory. |
 | [`getPathAsString`](#class_u_file_1a5adef9f3d538f92e51e52c4b1f3ada76) | Returns the path of the directory. |
 | [`available`](#class_u_file_1a82ad0fb6cffaf23aea794b508ec57bbb) | Returns the number of bytes available to read. |
 | [`read`](#class_u_file_1a62b544ebe9c3b144268016e6427917b5) | Returns one byte from the file. |
@@ -874,6 +884,21 @@ Opens a file with the specified mode.
 * `String` filename - The name of the file to open. 
 
 * `mode` The file mode (READ, WRITE, or APPEND). 
+
+#### Returns
+True if the file was opened successfully, false otherwise.
+<hr />
+
+### `open` <a id="class_u_file_1a013a90e9e0a4b44a0fde722f1e9af6bc" class="anchor"></a>
+
+```cpp
+bool open(FileMode mode)
+```
+
+Opens a file that was already initialized with a path.
+
+#### Parameters
+* `mode` The file mode (READ, WRITE, or APPEND). The default is READ. 
 
 #### Returns
 True if the file was opened successfully, false otherwise.
@@ -1121,7 +1146,7 @@ Returns a reference to the parent folder of the current folder.
 A directory object representing the current folder.
 <hr />
 
-### `getPath` <a id="class_u_file_1a41592023ea53cd1b46f383097a3db1f8" class="anchor"></a>
+### `getPath` <a id="class_u_file_1a122edcf553a8929b703d70c6aa8a6e80" class="anchor"></a>
 
 ```cpp
 const char * getPath()
