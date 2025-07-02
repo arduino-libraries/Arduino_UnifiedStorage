@@ -65,3 +65,16 @@ This limitation only affects Portenta C33 boards.
 ## 📖 Documentation
 
 For more information about this library please read the documentation [here](./docs).
+
+## 🐛 Debugging
+
+Printing debug messages over the USB Serial port is not possible when the USB port is used for data storage operations. On Arduino Opta this is the only accessible option however, since no JTAG connector is exposed. Therefore you need to resort to the RS485 connector to see the output of your messages. To do so you can use the `debugPrint` function from this library. In order to make it work you will have to install the `ArduinoRS485` library beforehand and add the corresponding header in your sketch above the include for this library. e.g.
+
+```cpp
+#include <ArduinoRS485.h>
+#include <Arduino_UnifiedStorage.h>
+
+void setup(){
+    debugPrint("I'm alive!");
+}
+```
