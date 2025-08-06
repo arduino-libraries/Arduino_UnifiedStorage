@@ -29,6 +29,20 @@
 
 #include "Arduino_UnifiedStorage.h"
 
+// Set one of the following to "true" and the rest to "false" in order to select one storage medium
+#define USE_SD_STORAGE              false
+#define USE_USB_STORAGE             false
+#define USE_INTERNAL_STORAGE        true
+
+#if defined(USE_SD_STORAGE) && (USE_SD_STORAGE == true)
+SDStorage storage;             // Create an instance for interacting with SD card storage
+#elif defined(USE_USB_STORAGE) && (USE_USB_STORAGE == true)
+USBStorage storage;            // Create an instance for interacting with USB storage
+#elif defined(USE_INTERNAL_STORAGE) && (USE_INTERNAL_STORAGE == true)
+InternalStorage storage;
+#else
+#error "No valid storage option defined! Please define one of USE_SD_STORAGE, USE_USB_STORAGE, or USE_INTERNAL_STORAGE as true."
+#endif
 
 void printFolderContents(Folder dir, int indentation = 0) {
   std::vector<Folder> directories = dir.getFolders();
@@ -54,24 +68,18 @@ void printFolderContents(Folder dir, int indentation = 0) {
   }
 }
 
-
-// Uncomment one of the three lines below to select between SD card, USB or internal storage
-//SDStorage storage;             // Create an instance for interacting with SD card storage
-//USBStorage storage;            // Create an instance for interacting with USB storage
-InternalStorage storage;
-
-
 void setup() {
-  Serial.begin(115200);
-  while (!Serial);
+
+// if we are on the Arduino Opta, and have decided to log on an USB drive connected to the USB-C connecter, we have to output the serial data through the RJ45 channel.
+#if (defined(ARDUINO_OPTA)) && (defined(USE_USB_STORAGE) &&  (USE_USB_STORAGE == true))
+    beginRS485(115200);
+#else
+    Serial.begin(115200);
+    while (!Serial);
+#endif
 
   // toggle this to enable debugging output
   Arduino_UnifiedStorage::debuggingModeEnabled = false;
-
-
-  storage = InternalStorage();
-  // storage = SDStorage(); // Uncomment this line to use SD card storage
-  // storage = USBStorage(); // Uncomment this line to use USB storage
 
   if(!storage.begin()){
     Serial.println("Error mounting storage device.");

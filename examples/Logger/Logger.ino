@@ -25,7 +25,6 @@
 #include "Arduino_UnifiedStorage.h"
 #include <vector>
 
-
 #if defined(ARDUINO_PORTENTA_H7_M7)
 #define USB_MOUNTED_LED LED_BLUE
 #elif defined(ARDUINO_PORTENTA_C33)
@@ -53,12 +52,13 @@ bool backingUP = false;
 void connectionCallback(){
     usbAvailable = true;
     usbStorage.removeOnConnectCallback();
+    Serial.println("USB drive connected.");
 }
 
 void disconnectionCallback(){
     usbAvailable = false;
     usbStorage.onConnect(connectionCallback);
-
+    Serial.println("USB drive disconnected.");
 }
 // Function to run a given method periodically
 void runPeriodically(void (*method)(), unsigned long interval, unsigned long* variable) {
@@ -88,7 +88,6 @@ void moveDataToQSPI() {
     sensorDataBuffer.clear();
   }
 }
-
 
 void performUpdate() {
   UFile logFile = internalStorage.getRootFolder().createFile("log.txt", FileMode::READ);
@@ -125,7 +124,6 @@ void performUpdate() {
   backupFile.close();
   logFile.close();
   lastUpdateFile.close();
-
 
   usbStorage.unmount();  // Unmount the USB storage
 
@@ -166,26 +164,21 @@ void backupToUSB() {
   } else {
     Arduino_UnifiedStorage::debugPrint("USB Mass storage is not available ");
   }
-
-
 }
 
 
 void setup() {
   randomSeed(analogRead(A0));
 
-  #if !defined(ARDUINO_OPTA)
-    Serial.begin(115200);
-    while(!Serial);
-  #else
-    beginRS485(115200);
-  #endif
+#if !defined(ARDUINO_OPTA)
+  Serial.begin(115200);
+  while(!Serial);
+#else
+  beginRS485(115200);
+#endif
 
   // toggle this to enable debugging output
   Arduino_UnifiedStorage::debuggingModeEnabled = false;
-
-  usbStorage = USBStorage();
-  internalStorage = InternalStorage();
 
   usbStorage.onConnect(connectionCallback);
   usbStorage.onDisconnect(disconnectionCallback);
@@ -195,20 +188,15 @@ void setup() {
   int formatted = internalStorage.format(FS_LITTLEFS);
   Arduino_UnifiedStorage::debugPrint("QSPI Format status: " + String(formatted));
 
-
-
   if (!internalStorage.begin()) {
     Arduino_UnifiedStorage::debugPrint("Failed to initialize internal storage ");
     return;
   } else {
     Arduino_UnifiedStorage::debugPrint("Initialized storage ");
   }
-
 }
 
 void loop() {
-
-  
   runPeriodically(logDataToRAM, 100, &lastLog);
   runPeriodically(moveDataToQSPI, 1000, &lastMove);
   runPeriodically(backupToUSB, 10000, &lastBackup);

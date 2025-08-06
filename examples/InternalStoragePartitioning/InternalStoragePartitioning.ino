@@ -23,7 +23,7 @@
 
     INSTRUCTIONS:
     1. Check compatibility with your board and make sure you have "POSIXStorage" and "Arduino_UnifiedStorage" installed
-    2. Connect your board to the serial monitor
+    2. Connect your board to the Serial monitor
     3. Wait for the sketch to run
     4. Modify the partitioning scheme according to your needs
 

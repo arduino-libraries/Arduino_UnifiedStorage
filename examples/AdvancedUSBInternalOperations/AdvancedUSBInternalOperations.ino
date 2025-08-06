@@ -4,7 +4,7 @@
     Demonstrates advanced usage of the "Arduino_UnifiedStorage" library with USB & internal storage, including file operations.
     Creates, copies, and moves files between storage types, and prints folder contents.
 
-    In the setup function, the code initializes serial communication, mounts both USB & internal storage and 
+    In the setup function, the code initializes Serial communication, mounts both USB & internal storage and 
     reformats the internal storage for a clean file system. Then, it creates a root directory in the internal storage
     and creates a subdirectory with a file inside it containing the string "Hello World!".
 
@@ -27,7 +27,6 @@
 // Two instances are made for the USB and internal storage respectively
 USBStorage usbStorage;
 InternalStorage internalStorage;
-
 
 // Helper function to prints the contents of a folder, including subdirectories (marked as "[D]") and files (marked as "[F]").
 void printFolderContents(Folder dir, int indentation = 0) {
@@ -54,17 +53,16 @@ void printFolderContents(Folder dir, int indentation = 0) {
   }
 }
 
-
-
 void setup() {
-  Serial.begin(115200);
-  while (!Serial);
+#if !defined(ARDUINO_OPTA)
+    Serial.begin(115200);
+    while(!Serial);
+#else
+    beginRS485(115200);
+#endif
 
   // toggle this to enable debugging output
   Arduino_UnifiedStorage::debuggingModeEnabled = false;
-
-  usbStorage = USBStorage();
-  internalStorage = InternalStorage();
 
   // Mount the USB storage
   if(usbStorage.begin()){
@@ -109,8 +107,8 @@ void setup() {
   }
 
   // Print contents of the USB storage
-  //Serial.println("USB storage contents:");
-  //printFolderContents(usbStorage.getRootFolder());
+  Serial.println("USB storage contents:");
+  printFolderContents(usbStorage.getRootFolder());
 
   // Print contents of the internal storage
   Serial.println("Internal storage contents:");

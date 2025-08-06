@@ -4,7 +4,7 @@
     This code demonstrates how the "Arduino_UnifiedStorage" can be used to access multiple partitions on the internal storage,
     and transfer information to a USB Mass storage device.
 
-    In the setup function, the code initializes serial communication, and registers a callback for the insertion of the USB Drive. 
+    In the setup function, the code initializes Serial communication, and registers a callback for the insertion of the USB Drive. 
     
     If the device is successfully mounted, a folder for this instance of a backup will be created on the USB Drive.
 
@@ -37,7 +37,6 @@ boolean done = false;
 volatile boolean connected = false;
 
 USBStorage thumbDrive;
-
 
 void addSomeFakeFiles(Folder * folder){
     Serial.println("Adding some fake files to: " + String(folder -> getPathAsString()));
@@ -72,19 +71,18 @@ void move(Folder * source, Folder * dest){
 }
 
 
-
-
-
 void setup(){
     randomSeed(analogRead(A0));
 
+#if !defined(ARDUINO_OPTA)
     Serial.begin(115200);
     while(!Serial);
+#else
+    beginRS485(115200);
+#endif
 
     // toggle this to enable debugging output
     Arduino_UnifiedStorage::debuggingModeEnabled = false;
-
-    thumbDrive = USBStorage();
 
     bool thumbMounted = thumbDrive.begin(FS_FAT);
     if(thumbMounted){
@@ -121,14 +119,9 @@ void setup(){
 
         thumbDrive.unmount();
     
-
         Serial.println("DONE, you can restart the board now");
     }
-
-
 }
 
-
 void loop(){
-
 }
