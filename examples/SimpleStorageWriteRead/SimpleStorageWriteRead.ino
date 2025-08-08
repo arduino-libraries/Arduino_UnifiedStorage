@@ -51,20 +51,20 @@ void printFolderContents(Folder dir, int indentation = 0) {
   // Print directories
   for (Folder subdir : directories) {
     for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
+      Arduino_UnifiedStorage::debugPrint("  ");
     }
-    Serial.print("[D] ");
-    Serial.println(subdir.getPath());
+    Arduino_UnifiedStorage::debugPrint("[D] ");
+    Arduino_UnifiedStorage::debugPrint(subdir.getPath());
     printFolderContents(subdir, indentation + 1);
   }
 
   // Print files
   for (UFile file : files) {
     for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
+      Arduino_UnifiedStorage::debugPrint("  ");
     }
-    Serial.print("[F] ");
-    Serial.println(file.getPath());
+    Arduino_UnifiedStorage::debugPrint("[F] ");
+    Arduino_UnifiedStorage::debugPrint(file.getPath());
   }
 }
 
@@ -79,10 +79,10 @@ void setup() {
 #endif
 
   // toggle this to enable debugging output
-  Arduino_UnifiedStorage::debuggingModeEnabled = false;
+  Arduino_UnifiedStorage::debuggingModeEnabled = true;
 
   if(!storage.begin()){
-    Serial.println("Error mounting storage device.");
+    Arduino_UnifiedStorage::debugPrint("Error mounting storage device.");
   }
   
   // Create a root directory in storage device
@@ -104,7 +104,7 @@ void setup() {
   file3.write("This is file 3.");
 
   // Read data from the files using seek and available
-  Serial.println("Reading data from files using seek and available:");
+  Arduino_UnifiedStorage::debugPrint("Reading data from files using seek and available:");
 
   // Close and open files in reading mode
   file1.changeMode(FileMode::READ);
@@ -116,25 +116,25 @@ void setup() {
   file1.seek(0); // Move the file pointer to the beginning
   while (file1.available()) {
   char data = file1.read();
-    Serial.write(data);
+    Arduino_UnifiedStorage::debugPrint(String(data));
   }
-  Serial.println();
+  Arduino_UnifiedStorage::debugPrint("\n");
 
   // Read data from file2
   file2.seek(0); // Move the file pointer to the beginning
   while (file2.available()) {
     char data = file2.read();
-    Serial.print(data);
+    Arduino_UnifiedStorage::debugPrint(String(data));
   }
-  Serial.println();
+  Arduino_UnifiedStorage::debugPrint("\n");
 
   // Read data from file3
   file3.seek(0); // Move the file pointer to the beginning
   while (file3.available()) {
     char data = file3.read();
-    Serial.print(data);
+    Arduino_UnifiedStorage::debugPrint(String(data));
   }
-  Serial.println();
+  Arduino_UnifiedStorage::debugPrint("\n");
 
   printFolderContents(storage.getRootFolder());
 }

@@ -39,11 +39,11 @@ volatile boolean connected = false;
 USBStorage thumbDrive;
 
 void addSomeFakeFiles(Folder * folder){
-    Serial.println("Adding some fake files to: " + String(folder -> getPathAsString()));
+    Arduino_UnifiedStorage::debugPrint("Adding some fake files to: " + String(folder -> getPathAsString()));
 
     for (int i = 0; i < random(0, 9); i++){
         UFile thisFile = folder -> createFile("File_"+ String(random(999)), FileMode::WRITE);
-        Serial.println("\t * " + thisFile.getPathAsString());
+        Arduino_UnifiedStorage::debugPrint("\t * " + thisFile.getPathAsString());
         thisFile.write("writing stuff to the file");
         thisFile.close();
     }
@@ -52,7 +52,7 @@ void addSomeFakeFiles(Folder * folder){
     Folder subfolder = folder -> createSubfolder("ChildFolder_"+ String(random(999)));
     for (int i = 0; i < random(0, 9); i++){
         UFile thisFile = subfolder.createFile("File_"+ String(random(999)), FileMode::WRITE);
-        Serial.println("\t * " + thisFile.getPathAsString());
+        Arduino_UnifiedStorage::debugPrint("\t * " + thisFile.getPathAsString());
         thisFile.write("writing stuff to the file");
         thisFile.close();
     }
@@ -60,12 +60,12 @@ void addSomeFakeFiles(Folder * folder){
 
 void move(Folder * source, Folder * dest){
     for(Folder f: source -> getFolders()){
-        Serial.println("Copying folder :" + String(f.getPathAsString()));
+        Arduino_UnifiedStorage::debugPrint("Copying folder :" + String(f.getPathAsString()));
         f.moveTo(*dest);
     }
 
     for(UFile f: source -> getFiles()){
-        Serial.println("Copying file :" + String(f.getPathAsString()));
+        Arduino_UnifiedStorage::debugPrint("Copying file :" + String(f.getPathAsString()));
         f.moveTo(*dest);
     }
 }
@@ -82,21 +82,21 @@ void setup(){
 #endif
 
     // toggle this to enable debugging output
-    Arduino_UnifiedStorage::debuggingModeEnabled = false;
+    Arduino_UnifiedStorage::debuggingModeEnabled = true;
 
     bool thumbMounted = thumbDrive.begin(FS_FAT);
     if(thumbMounted){
-        Serial.println("USB Thumb Drive has been mounted");
+        Arduino_UnifiedStorage::debugPrint("USB Thumb Drive has been mounted");
 
         Folder thumbRoot = thumbDrive.getRootFolder();
         String folderName = "InternalBackup_" + String(millis());
-        Serial.println(folderName);
+        Arduino_UnifiedStorage::debugPrint(folderName);
         Folder backupFolder = thumbRoot.createSubfolder(folderName);
 
         int partitionIndex = 0;
 
         std::vector<Partition> partitions = InternalStorage::readPartitions();
-        Serial.println("Found " + String(partitions.size()) + " partitions on internalStorage \n");
+        Arduino_UnifiedStorage::debugPrint("Found " + String(partitions.size()) + " partitions on internalStorage \n");
 
         for (auto part: partitions){
             partitionIndex++;
@@ -107,7 +107,7 @@ void setup(){
             thisPartition.begin();
 
             Folder partitionRootFolder = thisPartition.getRootFolder();
-            Serial.println(partitionRootFolder.getPathAsString());
+            Arduino_UnifiedStorage::debugPrint(partitionRootFolder.getPathAsString());
 
             if(createFakeFiles){
                 addSomeFakeFiles(&partitionRootFolder);
@@ -119,7 +119,7 @@ void setup(){
 
         thumbDrive.unmount();
     
-        Serial.println("DONE, you can restart the board now");
+        Arduino_UnifiedStorage::debugPrint("DONE, you can restart the board now");
     }
 }
 

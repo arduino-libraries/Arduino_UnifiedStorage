@@ -52,13 +52,13 @@ bool backingUP = false;
 void connectionCallback(){
     usbAvailable = true;
     usbStorage.removeOnConnectCallback();
-    Serial.println("USB drive connected.");
+    Arduino_UnifiedStorage::debugPrint("USB drive connected.");
 }
 
 void disconnectionCallback(){
     usbAvailable = false;
     usbStorage.onConnect(connectionCallback);
-    Serial.println("USB drive disconnected.");
+    Arduino_UnifiedStorage::debugPrint("USB drive disconnected.");
 }
 // Function to run a given method periodically
 void runPeriodically(void (*method)(), unsigned long interval, unsigned long* variable) {
@@ -178,7 +178,7 @@ void setup() {
 #endif
 
   // toggle this to enable debugging output
-  Arduino_UnifiedStorage::debuggingModeEnabled = false;
+  Arduino_UnifiedStorage::debuggingModeEnabled = true;
 
   usbStorage.onConnect(connectionCallback);
   usbStorage.onDisconnect(disconnectionCallback);
