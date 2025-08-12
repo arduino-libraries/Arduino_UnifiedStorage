@@ -51,24 +51,27 @@ void printFolderContents(Folder dir, int indentation = 0) {
   // Print directories
   for (Folder subdir : directories) {
     for (int i = 0; i < indentation; i++) {
-      Arduino_UnifiedStorage::debugPrint("  ");
+      Arduino_UnifiedStorage::testPrint("  ");
     }
-    Arduino_UnifiedStorage::debugPrint("[D] ");
-    Arduino_UnifiedStorage::debugPrint(subdir.getPath());
+    Arduino_UnifiedStorage::testPrint("[D] ");
+    Arduino_UnifiedStorage::testPrint(subdir.getPath());
     printFolderContents(subdir, indentation + 1);
   }
 
   // Print files
   for (UFile file : files) {
     for (int i = 0; i < indentation; i++) {
-      Arduino_UnifiedStorage::debugPrint("  ");
+      Arduino_UnifiedStorage::testPrint("  ");
     }
-    Arduino_UnifiedStorage::debugPrint("[F] ");
-    Arduino_UnifiedStorage::debugPrint(file.getPath());
+    Arduino_UnifiedStorage::testPrint("[F] ");
+    Arduino_UnifiedStorage::testPrint(file.getPath());
   }
 }
 
 void setup() {
+
+  uint8_t index = 0u;
+  char data[20];
 
 // if we are on the Arduino Opta, and have decided to log on an USB drive connected to the USB-C connecter, we have to output the serial data through the RJ45 channel.
 #if (defined(ARDUINO_OPTA)) && (defined(USE_USB_STORAGE) &&  (USE_USB_STORAGE == true))
@@ -79,10 +82,10 @@ void setup() {
 #endif
 
   // toggle this to enable debugging output
-  Arduino_UnifiedStorage::debuggingModeEnabled = true;
+  Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
   if(!storage.begin()){
-    Arduino_UnifiedStorage::debugPrint("Error mounting storage device.");
+    Arduino_UnifiedStorage::testPrint("Error mounting storage device.");
   }
   
   // Create a root directory in storage device
@@ -104,7 +107,8 @@ void setup() {
   file3.write("This is file 3.");
 
   // Read data from the files using seek and available
-  Arduino_UnifiedStorage::debugPrint("Reading data from files using seek and available:");
+  Arduino_UnifiedStorage::testPrint("Reading data from files using seek and available:");
+  Arduino_UnifiedStorage::testPrint("\n\r");
 
   // Close and open files in reading mode
   file1.changeMode(FileMode::READ);
@@ -114,27 +118,33 @@ void setup() {
 
   // Read data from file1
   file1.seek(0); // Move the file pointer to the beginning
+  //memset(data, 0u, sizeof(data));
+  std::fill(std::begin(data), std::end(data), 0u);
   while (file1.available()) {
-  char data = file1.read();
-    Arduino_UnifiedStorage::debugPrint(String(data));
+  data[index++] = file1.read();
   }
-  Arduino_UnifiedStorage::debugPrint("\n");
+  Arduino_UnifiedStorage::testPrint(data);
 
   // Read data from file2
   file2.seek(0); // Move the file pointer to the beginning
+  index = 0u;
+  //memset(data, 0u, sizeof(data));
+  std::fill(std::begin(data), std::end(data), 0u);
   while (file2.available()) {
-    char data = file2.read();
-    Arduino_UnifiedStorage::debugPrint(String(data));
+    data[index++] = file2.read();
   }
-  Arduino_UnifiedStorage::debugPrint("\n");
+  Arduino_UnifiedStorage::testPrint(data);
 
   // Read data from file3
   file3.seek(0); // Move the file pointer to the beginning
+  index = 0u;
+  //memset(data, 0u, sizeof(data));
+  std::fill(std::begin(data), std::end(data), 0u);
   while (file3.available()) {
-    char data = file3.read();
-    Arduino_UnifiedStorage::debugPrint(String(data));
+    data[index++] = file3.read();
   }
-  Arduino_UnifiedStorage::debugPrint("\n");
+  Arduino_UnifiedStorage::testPrint(data);
+  Arduino_UnifiedStorage::testPrint("\n\r");
 
   printFolderContents(storage.getRootFolder());
 }

@@ -52,13 +52,13 @@ bool backingUP = false;
 void connectionCallback(){
     usbAvailable = true;
     usbStorage.removeOnConnectCallback();
-    Arduino_UnifiedStorage::debugPrint("USB drive connected.");
+    Arduino_UnifiedStorage::testPrint("USB drive connected.");
 }
 
 void disconnectionCallback(){
     usbAvailable = false;
     usbStorage.onConnect(connectionCallback);
-    Arduino_UnifiedStorage::debugPrint("USB drive disconnected.");
+    Arduino_UnifiedStorage::testPrint("USB drive disconnected.");
 }
 // Function to run a given method periodically
 void runPeriodically(void (*method)(), unsigned long interval, unsigned long* variable) {
@@ -97,10 +97,10 @@ void performUpdate() {
   backingUP = true;
   unsigned lastUpdateBytes = lastUpdateFile.readAsString().toInt();  // Read the last update size from the file
 
-  Arduino_UnifiedStorage::debugPrint("Last update bytes: " + String(lastUpdateBytes));
+  Arduino_UnifiedStorage::testPrint("Last update bytes: " + String(lastUpdateBytes));
 
   if (lastUpdateBytes >= bytesWritten) {
-    Arduino_UnifiedStorage::debugPrint("No new data to copy. ");
+    Arduino_UnifiedStorage::testPrint("No new data to copy. ");
     backupFile.close();
     lastUpdateFile.close();
     backingUP = false;
@@ -109,14 +109,14 @@ void performUpdate() {
 
   logFile.seek(lastUpdateBytes);  // Move the file pointer to the last update position
   unsigned long totalBytesToMove = bytesWritten - lastUpdateBytes;
-  Arduino_UnifiedStorage::debugPrint("New update bytes: " + String(totalBytesToMove));
+  Arduino_UnifiedStorage::testPrint("New update bytes: " + String(totalBytesToMove));
 
   uint8_t* buffer = new uint8_t[totalBytesToMove];
 
   size_t bytesRead = logFile.read(buffer, totalBytesToMove);
   size_t bytesMoved = backupFile.write(buffer, bytesRead);  // Only write the bytes that haven't been backed up yet
 
-  Arduino_UnifiedStorage::debugPrint("Successfully copied " + String(bytesMoved) + " new bytes. ");
+  Arduino_UnifiedStorage::testPrint("Successfully copied " + String(bytesMoved) + " new bytes. ");
 
   lastUpdateFile.changeMode(FileMode::WRITE);  // Open the last update file in write mode
   lastUpdateFile.write(String(lastUpdateBytes + bytesMoved));  // Update the last update size
@@ -137,32 +137,32 @@ void performUpdate() {
 void backupToUSB() {
   if(usbAvailable && !usbIntialized){
       usbStorage.begin();
-      Arduino_UnifiedStorage::debugPrint("First drive insertion, creating folders... ");
+      Arduino_UnifiedStorage::testPrint("First drive insertion, creating folders... ");
       Folder usbRoot = usbStorage.getRootFolder();
       String folderName = "LoggerBackup" + String(random(9999));
       backupFolder = usbRoot.createSubfolder(folderName);
-      Arduino_UnifiedStorage::debugPrint("Successfully created backup folder: " + backupFolder.getPathAsString());
+      Arduino_UnifiedStorage::testPrint("Successfully created backup folder: " + backupFolder.getPathAsString());
       usbStorage.unmount();
       usbIntialized = true;
   }
   else if(usbAvailable && usbIntialized) {
-    Arduino_UnifiedStorage::debugPrint("USB Mass storage is available ");
+    Arduino_UnifiedStorage::testPrint("USB Mass storage is available ");
     delay(100);
     if (!usbStorage.isMounted()) {
 
-      Arduino_UnifiedStorage::debugPrint("Mounting USB Mass Storage ");
+      Arduino_UnifiedStorage::testPrint("Mounting USB Mass Storage ");
       digitalWrite(USB_MOUNTED_LED, LOW);
       if(usbStorage.begin()){
         performUpdate();
       } 
 
     } else if (usbStorage.isMounted()) {
-      Arduino_UnifiedStorage::debugPrint("USB Mass storage is connected, performing update ");
+      Arduino_UnifiedStorage::testPrint("USB Mass storage is connected, performing update ");
       performUpdate();
 
     }
   } else {
-    Arduino_UnifiedStorage::debugPrint("USB Mass storage is not available ");
+    Arduino_UnifiedStorage::testPrint("USB Mass storage is not available ");
   }
 }
 
@@ -178,21 +178,21 @@ void setup() {
 #endif
 
   // toggle this to enable debugging output
-  Arduino_UnifiedStorage::debuggingModeEnabled = true;
+  Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
   usbStorage.onConnect(connectionCallback);
   usbStorage.onDisconnect(disconnectionCallback);
 
   pinMode(USB_MOUNTED_LED, OUTPUT);
-  Arduino_UnifiedStorage::debugPrint("Formatting internal storage... ");
+  Arduino_UnifiedStorage::testPrint("Formatting internal storage... ");
   int formatted = internalStorage.format(FS_LITTLEFS);
-  Arduino_UnifiedStorage::debugPrint("QSPI Format status: " + String(formatted));
+  Arduino_UnifiedStorage::testPrint("QSPI Format status: " + String(formatted));
 
   if (!internalStorage.begin()) {
-    Arduino_UnifiedStorage::debugPrint("Failed to initialize internal storage ");
+    Arduino_UnifiedStorage::testPrint("Failed to initialize internal storage ");
     return;
   } else {
-    Arduino_UnifiedStorage::debugPrint("Initialized storage ");
+    Arduino_UnifiedStorage::testPrint("Initialized storage ");
   }
 }
 
