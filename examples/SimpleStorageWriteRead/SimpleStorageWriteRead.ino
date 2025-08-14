@@ -29,6 +29,20 @@
 
 #include "Arduino_UnifiedStorage.h"
 
+// Set one of the following to "true" and the rest to "false" in order to select one storage medium
+#define USE_SD_STORAGE              false
+#define USE_USB_STORAGE             false
+#define USE_INTERNAL_STORAGE        true
+
+#if defined(USE_SD_STORAGE) && (USE_SD_STORAGE == true)
+SDStorage storage;             // Create an instance for interacting with SD card storage
+#elif defined(USE_USB_STORAGE) && (USE_USB_STORAGE == true)
+USBStorage storage;            // Create an instance for interacting with USB storage
+#elif defined(USE_INTERNAL_STORAGE) && (USE_INTERNAL_STORAGE == true)
+InternalStorage storage;
+#else
+#error "No valid storage option defined! Please define one of USE_SD_STORAGE, USE_USB_STORAGE, or USE_INTERNAL_STORAGE as true."
+#endif
 
 void printFolderContents(Folder dir, int indentation = 0) {
   std::vector<Folder> directories = dir.getFolders();
@@ -37,44 +51,41 @@ void printFolderContents(Folder dir, int indentation = 0) {
   // Print directories
   for (Folder subdir : directories) {
     for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
+      Arduino_UnifiedStorage::testPrint("  ");
     }
-    Serial.print("[D] ");
-    Serial.println(subdir.getPath());
+    Arduino_UnifiedStorage::testPrint("[D] ");
+    Arduino_UnifiedStorage::testPrint(subdir.getPath());
     printFolderContents(subdir, indentation + 1);
   }
 
   // Print files
   for (UFile file : files) {
     for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
+      Arduino_UnifiedStorage::testPrint("  ");
     }
-    Serial.print("[F] ");
-    Serial.println(file.getPath());
+    Arduino_UnifiedStorage::testPrint("[F] ");
+    Arduino_UnifiedStorage::testPrint(file.getPath());
   }
 }
 
-
-// Uncomment one of the three lines below to select between SD card, USB or internal storage
-//SDStorage storage;             // Create an instance for interacting with SD card storage
-//USBStorage storage;            // Create an instance for interacting with USB storage
-InternalStorage storage;
-
-
 void setup() {
-  Serial.begin(115200);
-  while (!Serial);
+
+  uint8_t index = 0u;
+  char data[20];
+
+// if we are on the Arduino Opta, and have decided to log on an USB drive connected to the USB-C connecter, we have to output the serial data through the RJ45 channel.
+#if (defined(ARDUINO_OPTA)) && (defined(USE_USB_STORAGE) &&  (USE_USB_STORAGE == true))
+    beginRS485(115200);
+#else
+    Serial.begin(115200);
+    while (!Serial);
+#endif
 
   // toggle this to enable debugging output
   Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
-
-  storage = InternalStorage();
-  // storage = SDStorage(); // Uncomment this line to use SD card storage
-  // storage = USBStorage(); // Uncomment this line to use USB storage
-
   if(!storage.begin()){
-    Serial.println("Error mounting storage device.");
+    Arduino_UnifiedStorage::testPrint("Error mounting storage device.");
   }
   
   // Create a root directory in storage device
@@ -96,7 +107,8 @@ void setup() {
   file3.write("This is file 3.");
 
   // Read data from the files using seek and available
-  Serial.println("Reading data from files using seek and available:");
+  Arduino_UnifiedStorage::testPrint("Reading data from files using seek and available:");
+  Arduino_UnifiedStorage::testPrint("\n\r");
 
   // Close and open files in reading mode
   file1.changeMode(FileMode::READ);
@@ -106,27 +118,33 @@ void setup() {
 
   // Read data from file1
   file1.seek(0); // Move the file pointer to the beginning
+  //memset(data, 0u, sizeof(data));
+  std::fill(std::begin(data), std::end(data), 0u);
   while (file1.available()) {
-  char data = file1.read();
-    Serial.write(data);
+  data[index++] = file1.read();
   }
-  Serial.println();
+  Arduino_UnifiedStorage::testPrint(data);
 
   // Read data from file2
   file2.seek(0); // Move the file pointer to the beginning
+  index = 0u;
+  //memset(data, 0u, sizeof(data));
+  std::fill(std::begin(data), std::end(data), 0u);
   while (file2.available()) {
-    char data = file2.read();
-    Serial.print(data);
+    data[index++] = file2.read();
   }
-  Serial.println();
+  Arduino_UnifiedStorage::testPrint(data);
 
   // Read data from file3
   file3.seek(0); // Move the file pointer to the beginning
+  index = 0u;
+  //memset(data, 0u, sizeof(data));
+  std::fill(std::begin(data), std::end(data), 0u);
   while (file3.available()) {
-    char data = file3.read();
-    Serial.print(data);
+    data[index++] = file3.read();
   }
-  Serial.println();
+  Arduino_UnifiedStorage::testPrint(data);
+  Arduino_UnifiedStorage::testPrint("\n\r");
 
   printFolderContents(storage.getRootFolder());
 }

@@ -4,7 +4,7 @@
     Demonstrates advanced usage of the "Arduino_UnifiedStorage" library with USB & internal storage, including file operations.
     Creates, copies, and moves files between storage types, and prints folder contents.
 
-    In the setup function, the code initializes serial communication, mounts both USB & internal storage and 
+    In the setup function, the code initializes Serial communication, mounts both USB & internal storage and 
     reformats the internal storage for a clean file system. Then, it creates a root directory in the internal storage
     and creates a subdirectory with a file inside it containing the string "Hello World!".
 
@@ -28,7 +28,6 @@
 USBStorage usbStorage;
 InternalStorage internalStorage;
 
-
 // Helper function to prints the contents of a folder, including subdirectories (marked as "[D]") and files (marked as "[F]").
 void printFolderContents(Folder dir, int indentation = 0) {
   std::vector<Folder> directories = dir.getFolders();
@@ -37,46 +36,45 @@ void printFolderContents(Folder dir, int indentation = 0) {
   // Print directories
   for (Folder subdir : directories) {
     for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
+      Arduino_UnifiedStorage::debugPrint("  ");
     }
-    Serial.print("[D] ");
-    Serial.println(subdir.getPath());
+    Arduino_UnifiedStorage::debugPrint("[D] ");
+    Arduino_UnifiedStorage::debugPrint(subdir.getPath());
     printFolderContents(subdir, indentation + 1);
   }
 
   // Print files
   for (UFile file : files) {
     for (int i = 0; i < indentation; i++) {
-      Serial.print("  ");
+      Arduino_UnifiedStorage::debugPrint("  ");
     }
-    Serial.print("[F] ");
-    Serial.println(file.getPath());
+    Arduino_UnifiedStorage::debugPrint("[F] ");
+    Arduino_UnifiedStorage::debugPrint(file.getPath());
   }
 }
 
-
-
 void setup() {
-  Serial.begin(115200);
-  while (!Serial);
+#if !defined(ARDUINO_OPTA)
+    Serial.begin(115200);
+    while(!Serial);
+#else
+    beginRS485(115200);
+#endif
 
   // toggle this to enable debugging output
-  Arduino_UnifiedStorage::debuggingModeEnabled = false;
-
-  usbStorage = USBStorage();
-  internalStorage = InternalStorage();
+  Arduino_UnifiedStorage::debuggingModeEnabled = true;
 
   // Mount the USB storage
   if(usbStorage.begin()){
-    Serial.println("USB storage mounted.");
+    Arduino_UnifiedStorage::debugPrint("USB storage mounted.");
   } else {
-    Serial.println(errno);
+    Arduino_UnifiedStorage::debugPrint(String(errno));
   }
 
   if(internalStorage.begin()){
-      Serial.println("Internal storage mounted.");
+      Arduino_UnifiedStorage::debugPrint("Internal storage mounted.");
   } else {
-     Serial.println(errno);
+     Arduino_UnifiedStorage::debugPrint(String(errno));
   }
 
   // Create a root directory in the internal storage
@@ -93,27 +91,27 @@ void setup() {
   // Copy the file from internal storage to USB storage
   bool success = file.copyTo(usbStorage.getRootFolder(), true);
   if (success) {
-    Serial.println("File copied successfully from internal storage to USB storage.");
+    Arduino_UnifiedStorage::debugPrint("File copied successfully from internal storage to USB storage.");
   } else {
-    Serial.println("Failed to copy file from internal storage to USB storage.");
-    Serial.println(getErrno());
+    Arduino_UnifiedStorage::debugPrint("Failed to copy file from internal storage to USB storage.");
+    Arduino_UnifiedStorage::debugPrint(getErrno());
   }
 
   // Move the subdirectory from internal storage to USB storage
   success = subdir.moveTo(usbStorage.getRootFolder(), true);
   if (success) {
-    Serial.println("Subdirectory moved successfully from internal storage to USB storage.");
+    Arduino_UnifiedStorage::debugPrint("Subdirectory moved successfully from internal storage to USB storage.");
   } else {
-    Serial.println("Failed to move subdirectory from internal storage to USB storage.");
-    Serial.println(getErrno());
+    Arduino_UnifiedStorage::debugPrint("Failed to move subdirectory from internal storage to USB storage.");
+    Arduino_UnifiedStorage::debugPrint(getErrno());
   }
 
   // Print contents of the USB storage
-  //Serial.println("USB storage contents:");
-  //printFolderContents(usbStorage.getRootFolder());
+  Arduino_UnifiedStorage::debugPrint("USB storage contents:");
+  printFolderContents(usbStorage.getRootFolder());
 
   // Print contents of the internal storage
-  Serial.println("Internal storage contents:");
+  Arduino_UnifiedStorage::debugPrint("Internal storage contents:");
   printFolderContents(internalStorage.getRootFolder());
 }
 

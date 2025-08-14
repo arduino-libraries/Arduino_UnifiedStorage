@@ -4,7 +4,7 @@
     This code demonstrates how the "Arduino_UnifiedStorage" can be used to access multiple partitions on the internal storage,
     and transfer information to a USB Mass storage device.
 
-    In the setup function, the code initializes serial communication, and registers a callback for the insertion of the USB Drive. 
+    In the setup function, the code initializes Serial communication, and registers a callback for the insertion of the USB Drive. 
     
     If the device is successfully mounted, a folder for this instance of a backup will be created on the USB Drive.
 
@@ -38,13 +38,12 @@ volatile boolean connected = false;
 
 USBStorage thumbDrive;
 
-
 void addSomeFakeFiles(Folder * folder){
-    Serial.println("Adding some fake files to: " + String(folder -> getPathAsString()));
+    Arduino_UnifiedStorage::testPrint("Adding some fake files to: " + String(folder -> getPathAsString()));
 
     for (int i = 0; i < random(0, 9); i++){
         UFile thisFile = folder -> createFile("File_"+ String(random(999)), FileMode::WRITE);
-        Serial.println("\t * " + thisFile.getPathAsString());
+        Arduino_UnifiedStorage::testPrint("\t * " + thisFile.getPathAsString());
         thisFile.write("writing stuff to the file");
         thisFile.close();
     }
@@ -53,7 +52,7 @@ void addSomeFakeFiles(Folder * folder){
     Folder subfolder = folder -> createSubfolder("ChildFolder_"+ String(random(999)));
     for (int i = 0; i < random(0, 9); i++){
         UFile thisFile = subfolder.createFile("File_"+ String(random(999)), FileMode::WRITE);
-        Serial.println("\t * " + thisFile.getPathAsString());
+        Arduino_UnifiedStorage::testPrint("\t * " + thisFile.getPathAsString());
         thisFile.write("writing stuff to the file");
         thisFile.close();
     }
@@ -61,44 +60,43 @@ void addSomeFakeFiles(Folder * folder){
 
 void move(Folder * source, Folder * dest){
     for(Folder f: source -> getFolders()){
-        Serial.println("Copying folder :" + String(f.getPathAsString()));
+        Arduino_UnifiedStorage::testPrint("Copying folder :" + String(f.getPathAsString()));
         f.moveTo(*dest);
     }
 
     for(UFile f: source -> getFiles()){
-        Serial.println("Copying file :" + String(f.getPathAsString()));
+        Arduino_UnifiedStorage::testPrint("Copying file :" + String(f.getPathAsString()));
         f.moveTo(*dest);
     }
 }
 
 
-
-
-
 void setup(){
     randomSeed(analogRead(A0));
 
+#if !defined(ARDUINO_OPTA)
     Serial.begin(115200);
     while(!Serial);
+#else
+    beginRS485(115200);
+#endif
 
     // toggle this to enable debugging output
     Arduino_UnifiedStorage::debuggingModeEnabled = false;
 
-    thumbDrive = USBStorage();
-
     bool thumbMounted = thumbDrive.begin(FS_FAT);
     if(thumbMounted){
-        Serial.println("USB Thumb Drive has been mounted");
+        Arduino_UnifiedStorage::testPrint("USB Thumb Drive has been mounted");
 
         Folder thumbRoot = thumbDrive.getRootFolder();
         String folderName = "InternalBackup_" + String(millis());
-        Serial.println(folderName);
+        Arduino_UnifiedStorage::testPrint(folderName);
         Folder backupFolder = thumbRoot.createSubfolder(folderName);
 
         int partitionIndex = 0;
 
         std::vector<Partition> partitions = InternalStorage::readPartitions();
-        Serial.println("Found " + String(partitions.size()) + " partitions on internalStorage \n");
+        Arduino_UnifiedStorage::testPrint("Found " + String(partitions.size()) + " partitions on internalStorage \n");
 
         for (auto part: partitions){
             partitionIndex++;
@@ -109,7 +107,7 @@ void setup(){
             thisPartition.begin();
 
             Folder partitionRootFolder = thisPartition.getRootFolder();
-            Serial.println(partitionRootFolder.getPathAsString());
+            Arduino_UnifiedStorage::testPrint(partitionRootFolder.getPathAsString());
 
             if(createFakeFiles){
                 addSomeFakeFiles(&partitionRootFolder);
@@ -121,14 +119,9 @@ void setup(){
 
         thumbDrive.unmount();
     
-
-        Serial.println("DONE, you can restart the board now");
+        Arduino_UnifiedStorage::testPrint("DONE, you can restart the board now");
     }
-
-
 }
 
-
 void loop(){
-
 }

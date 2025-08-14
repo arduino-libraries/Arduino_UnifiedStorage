@@ -180,20 +180,20 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
               fatProbeFileSystem -> unmount();
               partition.fileSystemType = FS_FAT;
               partitions.push_back(partition);
-
+			  delete mbrBlocKDevice;
+        	  delete fatProbeFileSystem;
           } else if (littleFsProbeFilesystem -> mount(mbrBlocKDevice) == 0){
               Arduino_UnifiedStorage::debugPrint("[Partitioning][readPartitions][INFO] Partition " + String(partitionIndex) + " is formatted with LittleFS file system");
               littleFsProbeFilesystem -> unmount();
               partition.fileSystemType = FS_LITTLEFS;
               partitions.push_back(partition);
+	          delete mbrBlocKDevice;
+	          delete littleFsProbeFilesystem;
           } else {
               Arduino_UnifiedStorage::debugPrint("[Partitioning][readPartitions][INFO] Partition " + String(partitionIndex) + " is not formatted with a recognized file system");
           }
         }
 
-        delete mbrBlocKDevice;
-        delete fatProbeFileSystem;
-        delete littleFsProbeFilesystem;
     }
     blockDevice->deinit();
     delete[] buffer;
