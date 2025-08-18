@@ -8,7 +8,7 @@ profiles:
       - Arduino_USBHostMbed5 (0.3.1)
       - Arduino_POSIXStorage (1.2.1)
       - ArduinoRS485 (1.1.0)
-      - dir: ../../ # Relative path to the library root
+      - dir: ../../../ # Relative path to the library root
   arduino:renesas_portenta:portenta_c33:
     notes: Portenta C33
     fqbn: arduino:renesas_portenta:portenta_c33
@@ -17,7 +17,7 @@ profiles:
     libraries:
       - Arduino_POSIXStorage (1.2.1)
       - ArduinoRS485 (1.1.0)
-      - dir: ../../ # Relative path to the library root
+      - dir: ../../../ # Relative path to the library root
   arduino:mbed_opta:opta:
     notes: Portenta Opta family
     fqbn: arduino:mbed_opta:opta
@@ -27,4 +27,4 @@ profiles:
       - Arduino_USBHostMbed5 (0.3.1)
       - Arduino_POSIXStorage (1.2.1)
       - ArduinoRS485 (1.1.0)
-      - dir: ../../ # Relative path to the library root
+      - dir: ../../../ # Relative path to the library root
