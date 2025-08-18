@@ -95,6 +95,7 @@ Folder InternalStorage::getRootFolder(){
 
 bool InternalStorage::format(FileSystems fs){
     FileSystemType * tmpFileSystem = nullptr;
+	this -> begin();
     this -> unmount();
     this -> fileSystemType = fs;
 

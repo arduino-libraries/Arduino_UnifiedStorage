@@ -13,7 +13,6 @@
   - You can also customize the LED indicators for different boards according to your hardware configuration.
 */
 
-
 #include "Arduino_UnifiedStorage.h"
 
 #if defined(ARDUINO_PORTENTA_H7_M7)
@@ -27,17 +26,32 @@
 USBStorage usbStorage = USBStorage();
 
 void connectionCallback(){
+#if defined(ARDUINO_PORTENTA_H7_M7)
+    digitalWrite(CALLBACK_LED, LOW);
+#elif defined(ARDUINO_PORTENTA_C33)
+    digitalWrite(CALLBACK_LED, LOW);
+#elif defined(ARDUINO_OPTA)
     digitalWrite(CALLBACK_LED, HIGH);
+#endif
 }
 
 void disconnectionCallback(){
+#if defined(ARDUINO_PORTENTA_H7_M7)
+    digitalWrite(CALLBACK_LED, HIGH);
+#elif defined(ARDUINO_PORTENTA_C33)
+    digitalWrite(CALLBACK_LED, HIGH);
+#elif defined(ARDUINO_OPTA)
     digitalWrite(CALLBACK_LED, LOW);
+#endif
 }
 
 void setup(){
     pinMode(CALLBACK_LED, OUTPUT);
     usbStorage.onConnect(connectionCallback);
     usbStorage.onDisconnect(disconnectionCallback);
+#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_C33)
+    digitalWrite(CALLBACK_LED, HIGH);
+#endif
 }
 
 void loop(){
