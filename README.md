@@ -1,7 +1,7 @@
 # 💾 Unified Storage Library 
 
 [![Check Arduino](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/check-arduino.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/check-arduino.yml)
-[![Compile Examples](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/compile-examples-profiles.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/compile-examples-profiles.yml)
+[![Compile Examples](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/compile-examples.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/compile-examples.yml)
 [![Spell Check](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/spell-check.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/spell-check.yml)
 [![Sync Labels](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/sync-labels.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_UnifiedStorage/actions/workflows/sync-labels.yml)
 
