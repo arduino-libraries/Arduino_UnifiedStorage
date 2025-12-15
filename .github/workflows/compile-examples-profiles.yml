@@ -58,7 +58,7 @@ jobs:
           verbose: false
 
       - name: Save sketches report as workflow artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           if-no-files-found: error
           name: sketches-report-${{ matrix.board.artifact-name-suffix }}
