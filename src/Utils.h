@@ -7,7 +7,7 @@
 #include "Arduino_POSIXStorage.h"
 #include <iostream>
 
-#if !defined(HAS_SERIAL) && defined(HAS_RS485)
+#if !defined(HAS_SERIAL) && defined(HAS_RS485) && __has_include(<ArduinoRS485.h>)
 #include <ArduinoRS485.h>
 
 
