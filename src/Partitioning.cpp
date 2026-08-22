@@ -155,6 +155,7 @@ std::vector<Partition> Partitioning::readPartitions(BlockDeviceType * blockDevic
     for (auto const& entry : table->entries) {
         partitionIndex ++;
         Partition partition;
+        partition.index = partitionIndex;
 
         /*This code calculates the size of a partition in kilobytes.
         It takes the Logical Block Address (LBA) size of the partition,

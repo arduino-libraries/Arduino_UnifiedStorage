@@ -10,12 +10,12 @@ InternalStorage::InternalStorage(){
         partitionsAvailable = Partitioning::readPartitions(QSPIFBlockDeviceType::get_default_instance());
     }
 
-    int lastPartitionNumber = partitionsAvailable.size();
-    FileSystems lastPartitionFileSystem = partitionsAvailable.back().fileSystemType;
-    //Arduino_UnifiedStorage::debugPrint("[InternalStorage][INFO] Found " + String(lastPartitionNumber) + " partitions, using last partition as internal storage");
+    Partition lastPartition = partitionsAvailable.back();
 
-    this -> partitionNumber = lastPartitionNumber;
-    this -> fileSystemType = lastPartitionFileSystem;
+    //Arduino_UnifiedStorage::debugPrint("[InternalStorage][INFO] Found " + String(partitionsAvailable.size()) + " partitions, using last partition as internal storage");
+
+    this -> partitionNumber = lastPartition.index;
+    this -> fileSystemType = lastPartition.fileSystemType;
     this -> partitionName = (char *)"internal";
     this -> blockDevice = BlockDeviceType::get_default_instance();
     this -> mbrBlockDevice = new MBRBlockDeviceType(this -> blockDevice, this->partitionNumber);

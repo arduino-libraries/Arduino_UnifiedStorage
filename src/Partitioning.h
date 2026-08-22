@@ -19,6 +19,7 @@ constexpr uint8_t mbrMagicNumbers[] = {0x55, 0xAA};
 struct Partition {
     int size;
     FileSystems fileSystemType;
+    int index;
 };
 
 struct __attribute__((packed)) mbrEntry {
